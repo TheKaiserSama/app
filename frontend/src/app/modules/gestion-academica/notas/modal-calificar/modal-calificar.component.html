@@ -1,0 +1,35 @@
+<div class="row">
+    <div class="col-md-4 col-sm-12">
+        <app-card
+            [values]="(notaService.listNotas$ | async).notasMaximas"
+            [styles]="stylesMax">
+        </app-card>
+    </div>
+    <div class="col-md-4 col-sm-12">
+        <app-card-indicador
+            [values]="(notaService.listNotas$ | async).notaPromedio"
+            [styles]="stylesPro">
+        </app-card-indicador>
+    </div>
+    <div class="col-md-4 col-sm-12">
+        <app-card
+            [values]="(notaService.listNotas$ | async).notasMinimas"
+            [styles]="stylesMin">
+        </app-card>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="center-h margin">
+            <h5>Asignar notas a estudiantes</h5>
+            <button
+                [disabled]="!calificarActividadesService.selectedActividad"
+                (click)="guardarNotasActividades()"
+                class="btn btn-primary">
+                <i class="fa fa-floppy-o" aria-hidden="true"></i> Subir notas
+            </button>
+        </div>
+        <app-listar-estudiantes></app-listar-estudiantes>
+    </div>
+</div>

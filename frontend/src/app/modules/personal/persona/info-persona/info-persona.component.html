@@ -1,0 +1,24 @@
+<div class="container">
+    <app-form-persona
+        [rolList]="roles$"
+        (statusForm)="handleStatusForm($event)"
+        (emitRol)="handleRol($event)"
+        [button]="button">
+    </app-form-persona>
+
+    <div class="form-row">
+        <button
+            *ngIf="personaService.shouldCreate$ | async"
+            class="btn btn-danger col"
+            [ngClass]="{ 'mr-1': personaService.shouldCreate$ | async }"
+            (click)="resetFormPersona()">
+            Limpiar formulario
+        </button>
+        <button
+            class="btn btn-primary col"
+            [disabled]="statusForm"
+            (click)="handleChangeTab()">
+            {{ (personaService.shouldCreate$ | async) && (personaService.rol?.nombre.toLowerCase() != 'otro') ? 'Siguiente' : 'Guardar' }}
+        </button>
+    </div>
+</div>

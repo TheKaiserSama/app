@@ -1,0 +1,32 @@
+<td class="text-center">{{ index + 1 }}</td>
+<td *ngFor="let periodo of periodos">
+    <div class="center-horizontally" *ngIf="periodo[index]">
+        <span>{{ valueDataCell(periodo[index]) }}</span>
+        <button
+            class="btn btn-sm btn-primary"
+            (click)="openModalLogro(modalActividades, periodo[index])">
+            <i class="fa fa-pencil-square-o" aria-hidden="true"></i> Detalles
+        </button>
+    </div>
+</td>
+
+<ng-template #modalActividades let-modal>
+    <div class="modal-header">
+        <h6 class="modal-title" id="modal-basic-title">
+            Actividades por logro
+        </h6>
+        <button
+            type="button"
+            class="close"
+            aria-label="close"
+            (click)="modal.dismiss()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+
+    <div class="modal-body">
+        <app-modal-actividades-logro
+            [logro]="logro">
+        </app-modal-actividades-logro>
+    </div>
+</ng-template>

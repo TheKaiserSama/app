@@ -1,0 +1,226 @@
+<div class="modal-header">
+	<h5 class="modal-title">Plantilla para crear boletín</h5>
+	<button
+	  	type="button"
+	  	class="close"
+	  	aria-label="Close"
+	  	(click)="activeModal.dismiss('Cross click')">
+	  	<span aria-hidden="true">&times;</span>
+	</button>
+</div>
+
+<div class="modal-body">
+    <div class="contenedor_principal">
+        <div class="hoja_tamanio_oficio">
+            <div class="header_institucion">
+                <p class="reset_p nombre_institucion">{{ HEADER_INSTITUCION.nombre }}</p>
+                <p class="reset_p niveles_institucion">{{ HEADER_INSTITUCION.niveles }}</p>
+                <p class="reset_p sedes_institucion">{{ HEADER_INSTITUCION.sedes }}</p>
+                <p class="reset_p resolucion_institucion">{{ HEADER_INSTITUCION.resolucion }}</p>
+                <p class="reset_p nit_institucion">{{ HEADER_INSTITUCION.nit }}</p>
+                <p class="reset_p ubicacion_institucion">{{ HEADER_INSTITUCION.ubicacion }}</p>
+            </div>
+
+            <div class="header_boletin">
+                <p class="reset_p header_boletin__nombre">{{ getPeriodoBoletin() }}</p>
+                <p class="reset_p header_boletin__ciclo">
+                    CURSO {{ matricula.curso.grado.grado }}° {{ matricula.curso.grupo.descripcion }} - AÑO LECTIVO {{ currentYear }}
+                </p>
+                <p class="reset_p header_boletin__sede">{{ matricula.curso.sede.nombre }}</p>
+            </div>
+
+            <div class="alumno">
+                <p class="reset_p alumno_nombre">
+                    ALUMNO(A): {{ matricula.estudiante.persona.primer_nombre }} {{ matricula.estudiante.persona.segundo_nombre }} {{ matricula.estudiante.persona.primer_apellido }} {{ matricula.estudiante.persona.segundo_apellido }}
+                </p>
+            </div>
+
+            <div class="valoracion_formativa">
+                <table class="tabla_valoracion_formativa">
+                    <thead class="header_tabla">
+                        <tr class="header_tabla__primario">
+                            <th rowspan="2" class="center_cell_xy">Nº</th>
+                            <th rowspan="2" class="center_cell_xy">Valoración formativa</th>
+                            <th colspan="3" class="center_cell_xy resaltar_azul">Valoración cualitativa</th>
+                        </tr>
+                        <tr class="header_tabla__secundario">
+                            <th class="header_tabla__no_bold center_cell_xy">Nunca</th>
+                            <th class="header_tabla__no_bold center_cell_xy">A veces</th>
+                            <th class="header_tabla__no_bold center_cell_xy">Siempre</th>
+                        </tr>
+                    </thead>
+                    
+                    <tbody class="body_tabla">
+                        <tr *ngFor="let valCuali of valoracionesCualitativas; let i = index;">
+                            <td class="valoracion_formativa__id center_cell_xy">{{ (i + 1) < 10 ? '0' + (i + 1) : i + 1 }}</td>
+                            <td class="valoracion_formativa__desc">{{ valCuali.valoracion_formativa.descripcion }}</td>
+                            <td class="center_cell_xy bold cursor_hand" (click)="nunca(valCuali)">
+                                <div *ngIf="valCuali.nunca">
+                                    X
+                                </div>
+                            </td>
+                            <td class="center_cell_xy bold cursor_hand" (click)="aVeces(valCuali)">
+                                <div *ngIf="valCuali.a_veces">
+                                    X
+                                </div>
+                            </td>
+                            <td class="center_cell_xy bold cursor_hand" (click)="siempre(valCuali)">
+                                <div *ngIf="valCuali.siempre">
+                                    X
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="valoracion_area__titulo">
+                <p class="reset_p">
+                    VALORACIÓN POR ÁREA
+                </p>
+            </div>
+
+            <div class="valoracion_area__tabla">
+                <table class="tabla_valoracion_area">
+                    <thead class="">
+                        <tr>
+                            <th rowspan="3" class="center_cell_xy valoracion_area__tabla_n">Nº</th>
+                            <th rowspan="3" class="center_cell_xy valoracion_area__tabla_area">ÁREAS</th>
+                            <th colspan="6" class="center_cell_xy valoracion_area__tabla_val_cuant resaltar_azul">VALORACIÓN CUANTITATIVA</th>
+                        </tr>
+                        <tr>
+                            <th class="center_cell_xy valoracion_area__tabla_val_final" colspan="4">VALORACIÓN FINAL</th>
+                            <th class="center_cell_xy valoracion_area__tabla_n_faltas" colspan="2">FALTAS</th>
+                        </tr>
+                        <tr>
+                            <th class="center_cell_xy valoracion_area__tabla_desempenio">D.S.</th>
+                            <th class="center_cell_xy valoracion_area__tabla_desempenio">D.A.</th>
+                            <th class="center_cell_xy valoracion_area__tabla_desempenio">D.B.</th>
+                            <th class="center_cell_xy valoracion_area__tabla_desempenio">D.b.</th>
+                            <th class="center_cell_xy valoracion_area__tabla_desempenio">JUST</th>
+                            <th class="center_cell_xy valoracion_area__tabla_desempenio">S.J.</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let notaFinal of notasFinales; let i = index;">
+                            <td class="valoracion_area__tabla_id center_cell_xy">{{ (i + 1) < 10 ? '0' + (i + 1) : i + 1 }}</td>
+                            <td class="valoracion_area__tabla_nombre">{{ notaFinal.materia.nombre }}</td>
+                            <td class="center_cell_xy bold">
+                                <div *ngIf="notaFinal.nota_final >= 4.6 && notaFinal.nota_final <= 5">
+                                    {{ notaFinal.nota_final | number: '1.1-1' | removeComma }}
+                                </div>
+                            </td>
+                            <td class="center_cell_xy bold">
+                                <div *ngIf="notaFinal.nota_final >= 4 && notaFinal.nota_final < 4.6">
+                                    {{ notaFinal.nota_final | number: '1.1-1' | removeComma }}
+                                </div>
+                            </td>
+                            <td class="center_cell_xy bold">
+                                <div *ngIf="notaFinal.nota_final >= 3 && notaFinal.nota_final < 4">
+                                    {{ notaFinal.nota_final | number: '1.1-1' | removeComma }}
+                                </div>
+                            </td>
+                            <td class="center_cell_xy bold">
+                                <div *ngIf="notaFinal.nota_final >= 1 && notaFinal.nota_final < 3">
+                                    {{ notaFinal.nota_final | number: '1.1-1' | removeComma }}
+                                </div>
+                            </td>
+                            <td class="center_cell_xy bold">
+                                <div *ngIf="notaFinal.faltas.justificadas">
+                                    {{ notaFinal.faltas.justificadas }}
+                                </div>
+                            </td>
+                            <td class="center_cell_xy bold">
+                                <div *ngIf="notaFinal.faltas.sin_justificar">
+                                    {{ notaFinal.faltas.sin_justificar }}
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="valoracion_area__tabla_id center_cell_xy">{{ notasFinales?.length + 1 }}</td>
+                            <td class="valoracion_area__tabla_nombre">Total Faltas de Asistencia</td>
+                            <td class="center_cell_xy bold"></td>
+                            <td class="center_cell_xy bold"></td>
+                            <td class="center_cell_xy bold"></td>
+                            <td class="center_cell_xy bold"></td>
+                            <td class="center_cell_xy bold">{{ totalFaltas.justificadas == 0 ? '' : totalFaltas.justificadas }}</td>
+                            <td class="center_cell_xy bold">{{ totalFaltas.sin_justificar == 0 ? '' : totalFaltas.sin_justificar }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="observaciones">
+                <p class="reset_p">OBSERVACIONES: {{ boletin.observaciones }}
+                    <button class="button_observaciones" (click)="openModalObservaciones()">
+                        <i class="fa fa-plus" aria-hidden="true"></i>
+                    </button>
+                </p>
+            </div>
+
+            <div class='desempenio'>
+                <div class='container'>
+                    <div class='filler'></div>
+                    <span class='desempenio_desc'>D.S.: DESEMPEÑO SUPERIOR</span>
+                    <span class='desempenio_rango'>DE 4.6 A 5.0</span>
+                </div>
+                <div class='container'>
+                    <div class='filler'></div>
+                    <span class='desempenio_desc'>D.A.: DESEMPEÑO ALTO</span>
+                    <span class='desempenio_rango'>DE 4.0 A 4.5</span>
+                </div>
+                <div class='container'>
+                    <div class='filler'></div>
+                    <span class='desempenio_desc'>D.B.: DESEMPEÑO BASICO</span>
+                    <span class='desempenio_rango'>DE 3.0 A 3.9</span>
+                </div>
+                <div class='container'>
+                    <div class='filler'></div>
+                    <span class='desempenio_desc'>D.b.: DESEMPEÑO BAJO</span>
+                    <span class='desempenio_rango'>DE 1.0 A 2.9</span>
+                </div>
+            </div>
+
+            <div class="pegar_final">
+                <div class="firmas">
+                    <div class="firma_rector">
+                        <div class="firma_rector__container">
+                            <p class="reset_p firmas_nombre">{{ DIRECTIVOS_INSTITUCION.rector.abrev }} {{ DIRECTIVOS_INSTITUCION.rector.nombre }}</p>
+                            <p class="reset_p firmas_cargo">Rector</p>
+                        </div>
+                    </div>
+    
+                    <div class="firma_otras">
+                        <div class="firma_otras__container firma_coordinador__container">
+                            <p class="reset_p firmas_nombre">{{ DIRECTIVOS_INSTITUCION.coordinador.abrev }} {{ DIRECTIVOS_INSTITUCION.coordinador.nombre }}</p>
+                            <p class="reset_p firmas_cargo">Coordinadora</p>
+                        </div>
+    
+                        <div class="firma_otras__container firma_dinamizador__container">
+                            <p class="reset_p firmas_nombre">FABIOLA VALLECILLA PINEDA</p>
+                            <p class="reset_p firmas_cargo">Dinamizador de grupo</p>
+                        </div>
+                    </div>
+                </div>
+    
+                <div class="footer_institucion">
+                    <p class="reset_p footer_institucion__direccion">{{ FOOTER_INSTITUCION.direccion }}</p>
+                    <p class="reset_p footer_institucion__otros">
+                        <span class="footer_institucion__celular">Celular: {{ FOOTER_INSTITUCION.celular }}</span>
+                        <span class="footer_institucion__correo">Correo electrónico: {{ FOOTER_INSTITUCION.correo }}</span>
+                    </p>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="guardar_boletin">
+            <button
+                [disabled]="checkValidacionesCualitativas()"
+                class="btn btn-primary"
+                (click)="guardarBoletin()">
+                    <i class="fa fa-floppy-o" aria-hidden="true"> Guardar boletín</i>
+            </button>
+        </div>
+    </div>
+</div>

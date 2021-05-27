@@ -1,0 +1,70 @@
+<div class="contenedor-filtros">
+    <span class="contenedor-filtros__titulo">Vigente:</span>
+    <select
+        class="form-control form-control-sm contenedor-filtros__control"
+        name="ctrVigente"
+        [formControl]="ctrVigente"
+        (ngModelChange)="handleVigente($event)">
+        <option value="null" selected>Todos</option>
+        <option [ngValue]="true">Si</option>
+        <option [ngValue]="false">No</option>
+    </select>
+</div>
+
+<div class="table-responsive tableFixHead">
+	<table class="table table-sm table-hover">
+        <thead class="text-white encabezados-tabla">
+            <tr>
+                <th scope="col" class="text-center">N°</th>
+                <th scope="col" class="text-center">Descripción</th>
+                <th scope="col" class="text-center">Vigente</th>
+                <th scope="col" class="text-center">Acciones</th>
+			</tr>	
+        </thead>
+    
+        <tbody class="contenido-tabla">
+            <tr 
+                *ngFor="let valoracionFormativa of valoracionesFormativas$ | async; index as i">
+                <td class="text-center">{{ (i + 1) }}</td>
+                <td>{{ valoracionFormativa.descripcion }}</td>
+                <td class="text-center">
+                    <span class="badge" [ngClass]="{
+                        'badge-primary': valoracionFormativa.vigente,
+                        'badge-danger': !valoracionFormativa.vigente
+                    }">
+                        {{ valoracionFormativa.vigente ? 'Si' : 'No'}}
+                    </span>
+                </td>
+                <td class="text-center">
+                    <button
+                        (click)="updateValoracionFormativa(valoracionFormativa)"
+                        class="btn btn-sm btn-info mr-1"
+                        placement="left"
+                        ngbTooltip="Actualizar valoracion formativa">
+                        <i class="fa fa-pencil" aria-hidden="true"></i>
+                    </button>
+                    <button
+                        (click)="deleteValoracionFormativa(valoracionFormativa)"
+                        class="btn btn-sm btn-danger"
+                        placement="right"
+                        ngbTooltip="Eliminar valoracion formativa">
+                        <i class="fa fa-trash" aria-hidden="true"></i>
+                    </button>
+                </td>
+            </tr>  
+        </tbody>
+    </table>
+</div>
+
+<div *ngIf="(valoracionFormativaService.loading$ | async)" class="d-flex w-100 flex-column justify-content-center align-items-center">
+    <div class="spinner-border" role="status" aria-hidden="true"></div>
+    <strong class="text-dark">Cargando...</strong>
+</div>
+
+<ng-container *ngIf="(valoracionesFormativas$ | async)?.length == 0">
+    <p>
+        <ngb-alert [type]="'info'" [dismissible]="false">
+            <strong>Nota!</strong> No hay valoraciones formativas para mostrar.
+        </ngb-alert>
+    </p>
+</ng-container>

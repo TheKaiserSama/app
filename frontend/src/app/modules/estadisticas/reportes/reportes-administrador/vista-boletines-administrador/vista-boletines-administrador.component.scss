@@ -1,0 +1,55 @@
+.seleccion {
+    margin-bottom: 10px;
+    width: 100%;
+}
+
+.contenido-tabla {
+    font-size: 14px;
+}
+
+.encabezados-tabla tr th {
+    color: white;
+    font-size: 14px;
+    background-color: #373A3C;
+    // height: 38px;
+}
+
+.tableFixHead { overflow-y: auto; height: 427px; }
+.tableFixHead thead th { position: sticky; top: 0; }
+
+.btn-sm {
+    font-size: 10px;
+}
+
+.director-grupo {
+    display: flex;
+    justify-content: space-between;
+}
+
+.container_controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.container-control {
+    margin: 0;
+    padding: 0;
+}
+
+.info_institucion, .info_docente {
+    display: flex;
+    justify-content: space-between;
+}
+
+.descripcion {
+    color: #666666;
+}
+
+@media (min-width: 758px) {
+    .seleccion {
+        margin: 0;
+        width: 30%;
+    }
+}

@@ -1,0 +1,156 @@
+<form autocomplete="off">
+    <div class="form-row busqueda">
+        <div class="col-md-6 busqueda__campo">
+            <div class="input-group input-group-sm">
+                <div class="input-group-prepend">
+                    <span class="input-group-text">
+                        <i class="fa fa-search" aria-hidden="true"></i>
+                    </span>
+                </div>
+                <input
+                    type="text"
+                    class="form-control"
+                    [formControl]="ctrFilter"
+                    placeholder="Nombre de area o materia">
+            </div>
+        </div>
+
+        <div class="form-group col-md-3 container-control">
+            <select
+                class="form-control form-control-sm"
+                name="ctrAnioLectivo"
+                [formControl]="ctrAnioLectivo"
+                (ngModelChange)="handleAnioLectivo($event)">
+                <option value="null" selected disabled>Seleccione año lectivo</option>
+                <option
+                    *ngFor="let anioLectivo of aniosLectivos$ | async"
+                    [ngValue]="anioLectivo">
+                    {{ anioLectivo.anio_actual }}
+                </option>
+            </select>
+        </div>
+
+        <div class="form-group col-md-3 ml-md-auto container-control">
+            <select
+                class="form-control form-control-sm"
+                [(ngModel)]="planDocenteService.pageSize"
+                name="seleccion"
+                (change)="onChangePageSize($event.target.value)">
+                <option [value]="10">10 registros</option>
+                <option [value]="15">15 registros</option>
+                <option [value]="20">20 registros</option>
+            </select>
+        </div>
+    </div>
+</form>
+
+<div
+    class="table-responsive"
+    [ngClass]="{'tableFixHead': authService.isAdmin()}">
+	<table class="table table-sm">
+        <thead class="encabezados-tabla">
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Area</th>
+                <th scope="col">Materia</th>
+                <th scope="col">Curso</th>
+                <th scope="col">Año lectivo/Periodo</th>
+                <th scope="col">Fecha ingreso</th>
+                <th scope="col">Sede</th>
+                <th scope="col">Accion</th>
+			</tr>	
+        </thead>
+    
+        <tbody class="contenido-tabla" *ngIf="(storePlanDocentes$ | async)?.length > 0; else loading">
+            <tr 
+                [ngClass]="{'table-primary': logroService.selectedCarAcad?.id == planDocente.id }"
+                *ngFor="let planDocente of (storePlanDocentes$ | async); index as i">
+                <th scope="row">{{ planDocente.index }}</th>
+                <td>
+                    <ngb-highlight
+                        [highlightClass]="'resaltar'"
+                        [result]="planDocente.materia.area.nombre"
+                        [term]="ctrFilter.value">
+                    </ngb-highlight>
+                </td>
+                <td>
+                    <ngb-highlight
+                        [highlightClass]="'resaltar'"
+                        [result]="planDocente.materia.nombre"
+                        [term]="ctrFilter.value">
+                    </ngb-highlight>
+                </td>
+                <td>{{ planDocente.curso.grado.grado }}º. {{ planDocente.curso.grupo.descripcion }}</td>
+                <td>{{ planDocente.anio_lectivo.anio_actual }} Periodo: {{ planDocente.periodo.numero }}</td>
+                <td>{{ planDocente.fecha_ingreso }}</td>
+                <td>{{ planDocente.sede.nombre }}</td>
+                <td *ngIf="authService.isAdmin(); else docente">
+                    <button
+                        class="btn btn-danger btn-sm mr-1"
+                        (click)="destroyPlanDocente(planDocente)">
+                        <i class="fa fa-trash" aria-hidden="true"></i>
+                    </button>
+                </td>
+
+                <ng-template #docente>
+                    <td>
+                        <button
+                            class="btn btn-primary btn-sm mr-1"
+                            (click)="verLogros(planDocente)"
+                            placement="left"
+                            ngbTooltip="Ver logros">
+                            <i class="fa fa-eye" aria-hidden="true"></i>
+                        </button>
+                    </td>
+                </ng-template>
+            </tr>  
+        </tbody>
+    </table>
+</div> 
+
+<ng-template #loading>
+    <div class="d-flex w-100 flex-column justify-content-center align-items-center" *ngIf="planDocenteService.loading$ | async">
+        <div class="spinner-border" role="status" aria-hidden="true"></div>
+        <strong class="text-dark">Cargando...</strong>
+    </div>
+</ng-template>
+
+<ng-container *ngIf="((storePlanDocentes$ | async)?.length == 0) && planDocenteService.searchTerm == ''">
+    <p>
+        <ngb-alert
+            [type]="'info'"
+            [dismissible]="false">
+            <strong>Nota!</strong> No hay datos para mostrar.
+        </ngb-alert>
+    </p>
+</ng-container>
+
+<ngb-alert
+    *ngIf="((collectionSize$ | async) === 0) && planDocenteService.searchTerm != ''"
+    [type]="'warning'"
+    [dismissible]="false">
+    No se encontraron resultados para el termino: "{{ planDocenteService.searchTerm }}"
+</ngb-alert>
+
+<div class="d-flex justify-content-between pt-2">
+    <ngb-pagination
+        [collectionSize]="collectionSize$ | async"
+        [(page)]="planDocenteService.page"
+        [pageSize]="planDocenteService.pageSize"
+        (pageChange)="onPageChange($event)"
+        [maxSize]="5"
+        [rotate]="true"
+        [ellipses]="false"
+        [boundaryLinks]="true">
+    </ngb-pagination>
+
+    <div *ngIf="(collectionSize$ | async) === 0; then thenBlock else elseBlock"></div>
+    <ng-template #thenBlock>
+        <div>Mostrando 0 a 0 de 0 resultados</div>
+    </ng-template>
+    <ng-template #elseBlock>
+        <div>
+            Mostrando {{ (offset$ | async) + 1 }} a {{ validateOffset() }} de {{ collectionSize$ | async }} resultados
+        </div>
+    </ng-template>
+</div>

@@ -1,0 +1,121 @@
+<div class="container">
+    <form
+        [formGroup]="formDocente"
+        (ngSubmit)="sendFormDocente()"
+        autocomplete="off">
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                <label for="titulo">Titulo</label>
+                <input
+                    type="text"
+                    class="form-control form-control-sm"
+                    id="titulo"
+                    name="titulo"
+                    formControlName="titulo">
+            </div>
+
+            <div class="form-group col-md-6">
+                <label for="fecha_registro">Fecha de ingreso</label>
+                <div class="input-group">
+                    <input
+                        type="text"
+                        class="form-control form-control-sm"
+                        placeholder="yyyy-mm-dd"
+                        ngbDatepicker
+                        #d2="ngbDatepicker"
+                        id="fecha_ingreso"
+                        name="fecha_ingreso"
+                        formControlName="fecha_ingreso"
+                        (dateSelect)="onDateSelect($event)">
+                    <div class="input-group-append">
+                        <button 
+                            class="calendario btn btn-outline-primary form-control-sm"
+                            (click)="d2.toggle()"
+                            type="button">
+                            <i class="fa fa-calendar"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                <label for="fecha_registro">Fecha de registro</label>
+                <div class="input-group">
+                    <input
+                        type="text"
+                        class="form-control form-control-sm"
+                        placeholder="yyyy-mm-dd"
+                        ngbDatepicker
+                        #d="ngbDatepicker"
+                        id="fecha_registro"
+                        name="fecha_registro"
+                        formControlName="fecha_registro"
+                        (dateSelect)="onDateSelect($event)">
+                    <div class="input-group-append">
+                        <button 
+                            class="calendario btn btn-outline-primary form-control-sm"
+                            (click)="d.toggle()"
+                            type="button">
+                            <i class="fa fa-calendar"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group col-md-6">
+                <label for="estado_docente">Estado docente</label>
+                <select 
+                    class="form-control form-control-sm"
+                    id="estado_docente"
+                    name="estado_docente"
+                    formControlName="estado_docente"
+                    [compareWith]="compareFn">
+                    <option value="null" selected disabled>Seleccione estado docente</option>
+                    <option
+                        *ngFor="let estadoDocente of estadosDocente$ | async"
+                        [ngValue]="estadoDocente">
+                        {{ estadoDocente.descripcion }}
+                    </option>
+                </select>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <div class="col-md-12">
+                <mat-slide-toggle
+                    class="form-control-sm"
+                    [labelPosition]="'before'"
+                    [color]="'primary'"
+                    formControlName="vigente">
+                    Vigente
+                </mat-slide-toggle>
+            </div>
+        </div>
+        
+        <div class="row">
+            <button
+                class="btn btn-primary col"
+                [ngClass]="{'mr-1': !(docenteService.shouldCreate$ | async)}"
+                type="button"
+                [disabled]="formDocente.invalid"
+                (click)="previousTab()">
+                Anterior
+            </button>
+            <button
+                *ngIf="docenteService.shouldCreate$ | async"
+                class="btn btn-danger col mx-1"
+                type="button"
+                (click)="resetFormDocente()">
+                Limpiar formulario
+            </button>
+            <button
+                class="btn btn-primary col"
+                type="submit"
+                [disabled]="formDocente.invalid">
+                {{ button.text }}
+            </button>
+        </div>
+    </form>
+</div>

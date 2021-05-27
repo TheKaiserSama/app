@@ -1,0 +1,125 @@
+<!-- Titulo -->
+<div class1="administracion">
+    <div class="contenedor__titulo">
+        <h3 class="administracion__titulo">Lista de inasistencias</h3>
+    </div>
+</div>
+<hr>
+
+<!-- Filtros de busqueda -->
+<div class="form-row busqueda">
+    <div class="col-2 seleccion">
+        <select
+            class="form-control form-control-sm"
+            name="ctrCurso"
+            [formControl]="ctrCurso"
+            (ngModelChange)="handleCurso($event)">
+            <option value="null" selected>Todos los curso</option>
+            <option
+                *ngFor="let curso of cursos$ | async" 
+                [ngValue]="curso">
+                {{ curso.grado.grado }}° {{ curso.grupo.descripcion }} {{ curso.jornada.nombre }}
+            </option>
+        </select>
+    </div>
+
+    <div class="col-2 seleccion">
+        <select
+            class="form-control form-control-sm"
+            name="ctrMateria"
+            [formControl]="ctrMateria"
+            (ngModelChange)="handleMateria($event)">
+            <option value="null" selected>Todas las materias</option>
+            <option
+                *ngFor="let materia of materias$ | async" 
+                [ngValue]="materia">
+                {{ materia.materia.nombre }}
+            </option>
+        </select>
+    </div>
+
+    <!-- <div class="col-3 seleccion">
+        <select
+            class="form-control form-control-sm"
+            [(ngModel)]="personaService.pageSize"
+            name="seleccion"
+            (change)="onChange($event.target.value)">
+            <option [value]="10">10 registros</option>
+            <option [value]="15">15 registros</option>
+            <option [value]="20">20 registros</option>
+        </select>
+    </div> -->
+</div>
+
+<!-- Tabla de inasistencias - estudiante -->
+<div class="table-responsive">
+	<table class="table table-sm table-striped">
+        <thead class="bg-dark encabezados-tabla">
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Fecha</th>
+                <th scope="col">Falta justificada</th>
+                <th scope="col">Sede</th>
+                <th scope="col">Año lectivo / Periodo</th>
+                <th scope="col">Curso</th>
+                <th scope="col">Materia</th>
+			</tr>
+        </thead>
+    
+        <tbody class="contenido-tabla" *ngIf="(inasistencias$ | async)?.length > 0">
+            <tr *ngFor="let inasistencia of (inasistencias$ | async); index as i">
+                <th scope="row">{{ inasistencia.index }}</th>
+                <td>{{ inasistencia.fecha}}</td>
+                <td>
+                    <span
+                        class="badge"
+                        [ngClass]="{'badge-success': inasistencia.justificado, 'badge-danger': !inasistencia.justificado}">
+                        {{ inasistencia.justificado ? 'Si' : 'No' }}
+                    </span>
+                </td>
+                <td>{{ inasistencia.plan_docente.sede.nombre }}</td>
+                <td>{{ inasistencia.plan_docente.anio_lectivo.anio_actual }} / {{ inasistencia.plan_docente.periodo.numero }}</td>
+                <td>
+                    {{ inasistencia.plan_docente.curso.grado.grado }}°
+                    {{ inasistencia.plan_docente.curso.grupo.descripcion }} -
+                    {{ inasistencia.plan_docente.curso.jornada.nombre }}
+                </td>
+                <td>{{ inasistencia.plan_docente.materia.nombre }}</td>
+            </tr>  
+        </tbody>
+    </table>
+</div>
+
+<div class="d-flex flex-column justify-content-center align-items-center" *ngIf="inasistenciaEstudianteService.loading$ | async">
+    <div class="spinner-border" role="status" aria-hidden="true"></div>
+    <strong class="text-dark">Cargando...</strong>
+</div>
+
+<ng-container *ngIf="(inasistencias$ | async)?.length == 0">
+    <p>
+        <ngb-alert [type]="'info'" [dismissible]="false">
+            Nota! No hay inasistencias para mostrar.
+        </ngb-alert>
+    </p>
+</ng-container>
+
+<div class="d-flex justify-content-between p-2">
+    <ngb-pagination
+        [collectionSize]="collectionSize$ | async"
+        [(page)]="inasistenciaEstudianteService.page"
+        [pageSize]="inasistenciaEstudianteService.pageSize"
+        (pageChange)="onPageChange($event)"
+        [maxSize]="5"
+        [rotate]="true"
+        [ellipses]="false"
+        [boundaryLinks]="true">
+    </ngb-pagination>
+
+    <div *ngIf="(collectionSize$ | async) === 0; then thenBlock else elseBlock"></div>
+    <ng-template #thenBlock>
+        <div>Mostrando 0 a 0 de 0 resultados</div>
+    </ng-template>
+    <ng-template #elseBlock>
+        <div>Mostrando {{ (offset$ | async) + 1 }} a {{ validateOffset() }} de {{ collectionSize$ | async }} resultados</div>
+    </ng-template>
+</div>

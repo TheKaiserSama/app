@@ -1,0 +1,34 @@
+<div class="administracion">
+	<div class="contenedor__titulo">
+		<h4 class="administracion__titulo">Administración de personas</h4>
+	</div>
+	<div class="contenedor__agregar">
+		<button
+			class="btn btn-outline-dark administracion__agregar"
+			(click)="open(content)">
+			Crear persona
+		</button>
+	</div>
+</div>
+<hr>
+
+<app-listar-personas (editar)="editar($event, content)"></app-listar-personas>
+
+<ng-template #content let-modal>
+	<div class="modal-header">
+		<h6 class="modal-title" id="modal-basic-title">
+			Registro de personas
+		</h6>
+		<button 
+			type="button"
+			class="close"
+			aria-label="Close"
+			(click)="modal.dismiss()">
+			<span aria-hidden="true">&times;</span>
+		</button>
+	</div>
+		
+	<div class="modal-body">
+		<app-form-gestion-usuario></app-form-gestion-usuario>
+	</div>
+</ng-template>

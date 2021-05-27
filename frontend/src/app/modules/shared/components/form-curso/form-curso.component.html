@@ -1,0 +1,125 @@
+<form
+	[formGroup]="formCurso"
+	(ngSubmit)="sendFormCurso()"
+	autocomplete="off">
+	<div class="form-row">
+		<div class="form-group col-md-6">
+			<label for="sede">Sede</label>
+			<select
+				class="form-control form-control-sm"
+				id="sede"
+				name="sede"
+				formControlName="sede"
+				[compareWith]="compareFn">
+				<option value="null" selected disabled>Seleccione sede</option>
+				<option
+                    *ngFor="let sede of sedes$ | async"
+                    [ngValue]="sede">
+                    {{ sede.nombre }}
+                </option>
+			</select>  
+		</div>
+		
+		<div class="form-group col-md-6">
+			<label for="anio_lectivo">Año lectivo</label>
+			<select
+				class="form-control form-control-sm"
+				id="anio_lectivo"
+				name="anio_lectivo"
+				formControlName="anio_lectivo"
+				[compareWith]="compareFn">
+				<option value="null" selected disabled>Seleccione año lectivo</option>
+				<option
+                    *ngFor="let anioLectivo of aniosLectivos$ | async"
+                    [ngValue]="anioLectivo">
+                    {{ anioLectivo.anio_actual }}
+                </option>
+			</select>
+        </div>
+	</div>
+
+    <div class="form-row">
+		<div class="form-group col-md-6">
+			<label for="grado">Grado</label>
+			<select
+				class="form-control form-control-sm"
+				id="grado"
+				name="grado"
+                formControlName="grado"
+				[compareWith]="compareFn">
+				<option value="null" selected disabled>Seleccione grado</option>
+				<option
+                    *ngFor="let grado of grados$ | async"
+                    [ngValue]="grado">
+                    {{ grado.grado }}
+                </option>
+			</select>  
+        </div>
+
+        <div class="form-group col-md-6">
+			<label for="grupo">Grupo</label>
+			<select
+				class="form-control form-control-sm"
+				id="grupo"
+				name="grupo"
+				formControlName="grupo"
+				[compareWith]="compareFn">
+				<option value="null" selected disabled>Seleccione grupo</option>
+				<option     
+                    *ngFor="let grupo of grupos$ | async"
+					[ngValue]="grupo"> 
+					{{ grupo.descripcion }}
+				</option>
+			</select>  
+        </div>
+    </div>
+    
+    <div class="form-row">
+		<div class="form-group col-md-6">
+			<label for="jornada">Jornada</label>
+			<select
+				class="form-control form-control-sm"
+				id="jornada"
+				name="jornada"
+				formControlName="jornada"
+				[compareWith]="compareFn">
+				<option value="null" selected disabled>Seleccione jornada</option>
+				<option
+                    *ngFor="let jornada of jornadas$ | async"
+                    [ngValue]="jornada">
+                    {{ jornada.nombre }}
+                </option>
+			</select>  
+		</div>
+		
+        <div class="form-group col-md-6 controles">
+			<label for="cupo_maximo">Cupo maximo</label>
+			<input  
+				type="number"
+				class="form-control form-control-sm"
+				id="cupo_maximo"
+				name="cupo_maximo"
+                formControlName="cupo_maximo"
+				placeholder="Cupo maximo">
+			<div class="contenedor-error col-md-12">
+				<div
+					*ngIf="cupo_maximo.invalid &&
+					(cupo_maximo.dirty || cupo_maximo.touched)">
+					<small *ngIf="cupo_maximo.errors.noNegativeNumbers">
+						No se permiten valores negativos
+					</small>
+				</div>
+			</div>
+		</div>
+    </div>
+
+	<div class="form-group">
+		<button
+			*ngIf="estilosBoton.show"
+            type="submit"
+            [disabled]="formCurso.invalid"
+            [ngClass]="estilosBoton.class">
+            {{ estilosBoton.text }}
+        </button>
+    </div>
+</form>

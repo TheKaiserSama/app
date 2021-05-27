@@ -1,0 +1,25 @@
+<ng-template #content let-modal>
+	<div class="modal-header">
+		<h6 class="modal-title" id="modal-basic-title">
+			Administración de cargas academicas
+		</h6>
+		<button 
+			type="button"
+			class="close"
+			aria-label="Close"
+			(click)="modal.dismiss()">
+			<span aria-hidden="true">&times;</span>
+		</button>
+	</div>
+		
+	<div class="modal-body">
+		<div class="row">
+            <div class="col-4">
+                <app-form-carga-academica-docente></app-form-carga-academica-docente>
+            </div>
+            <div class="col-8">
+				<app-listar-plan-docente-admin></app-listar-plan-docente-admin>
+            </div>
+        </div>
+	</div>
+</ng-template>

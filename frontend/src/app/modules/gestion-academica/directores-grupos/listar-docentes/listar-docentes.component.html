@@ -1,0 +1,97 @@
+<div class="modal-header">
+	<h5 class="modal-title">Asignar director de grupo</h5>
+	<button
+	  	type="button"
+	  	class="close"
+	  	aria-label="Close"
+	  	(click)="activeModal.dismiss('Cross click')">
+	  	<span aria-hidden="true">&times;</span>
+	</button>
+</div>
+
+<div class="modal-body">
+    <div class="row">   
+        <div class="form-group col-md-3 ml-md-auto container-control">
+            <select
+                class="form-control form-control-sm"
+                [(ngModel)]="pageSize"
+                name="seleccion"
+                (change)="handlePageSizeChange($event)">
+                <option [value]="10">10 registros</option>
+                <option [value]="15">15 registros</option>
+                <option [value]="20">20 registros</option>
+            </select>
+        </div>
+    </div>
+    
+    <div class="table-responsive">
+        <table class="table table-sm table-striped">
+            <thead class="bg-dark encabezados-tabla">
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">N° documento</th>
+                    <th scope="col">Nombres</th>
+                    <th scope="col">Apellidos</th>
+                    <th scope="col">Titulo</th>
+                    <th scope="col">Acción</th>
+                </tr>	
+            </thead>
+        
+            <tbody class="contenido-tabla" *ngIf="docentes.length > 0">
+                <tr *ngFor="let docente of docentes; index as i">
+                    <th scope="row">{{ ((page - 1) * pageSize) + (i + 1) }}</th>
+                    <td>{{ docente.persona.documento }}</td>
+                    <td>{{ docente.persona.primer_nombre }} {{ docente.persona.segundo_nombre }}</td>
+                    <td>{{ docente.persona.primer_apellido }} {{ docente.persona.segundo_apellido }}</td>
+                    <td>{{ docente.titulo }}</td>
+                    <td>
+                        <button
+                            [disabled]="disabledButton"
+                            class="btn btn-info btn-sm mr-1"
+                            (click)="asignarDirector(docente)"
+                            placement="right"
+                            ngbTooltip="Elegir">
+                            <i class="fa fa-check" aria-hidden="true"></i>
+                        </button>
+                    </td>
+                </tr>  
+            </tbody>
+        </table>
+    </div>
+    
+    <div class="d-flex justify-content-center" *ngIf="isLoading">
+        <strong class="text-dark">Cargando...</strong>
+        <div class="spinner-border text-dark ml-2" role="status" aria-hidden="true"></div>
+    </div>
+    
+    <ng-container *ngIf="docentes.length == 0">
+        <p>
+            <ngb-alert [type]="'info'" [dismissible]="false">
+                <strong>Nota!</strong> No hay docentes para mostrar.
+            </ngb-alert>
+        </p>
+    </ng-container>
+
+    <div class="d-flex justify-content-between p-2">
+        <ngb-pagination
+            [collectionSize]="count"
+            [(page)]="page"
+            [pageSize]="pageSize"
+            (pageChange)="handlePageChange($event)"
+            [maxSize]="5"
+            [rotate]="true"
+            [ellipses]="false"
+            [boundaryLinks]="true">
+        </ngb-pagination>
+    
+        <div *ngIf="count === 0; then thenBlock else elseBlock"></div>
+        <ng-template #thenBlock>
+            <div>Mostrando 0 a 0 de 0 resultados</div>
+        </ng-template>
+        <ng-template #elseBlock>
+            <div>
+                Mostrando {{ getOffset() + 1 }} a {{ validateOffset() }} de {{ count }} resultados
+            </div>
+        </ng-template>
+    </div>
+</div>

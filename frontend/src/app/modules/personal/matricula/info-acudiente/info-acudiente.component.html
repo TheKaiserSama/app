@@ -1,0 +1,34 @@
+<div *ngIf="matriculaService.showSearchAcudiente">
+    <app-search-persona
+        (numeroDocumento)="handleNumeroDocumento($event)">
+    </app-search-persona>
+    <hr>
+</div>
+    
+<app-form-persona
+    [rolList]="roles$"
+    (statusForm)="handleStatusForm($event)"
+    [button]="button">
+</app-form-persona>
+
+<div class="row">
+    <button
+        class="btn btn-primary col"
+        [ngClass]="{'mr-1': !(matriculaService.shouldCreate$ | async)}"
+        [disabled]="statusForm"
+        (click)="handleChangeTab(1)">
+        Anterior
+    </button>
+    <button
+        *ngIf="matriculaService.shouldCreate$ | async"
+        class="btn btn-danger col mx-1"
+        (click)="resetFormPersona()">
+        Limpiar formulario
+    </button>
+    <button
+        class="btn btn-primary col"
+        [disabled]="statusForm"
+        (click)="handleChangeTab(3)">
+        Siguiente
+    </button>
+</div>

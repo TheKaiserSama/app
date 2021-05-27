@@ -1,0 +1,8 @@
+update();
+    Return: Promise<Array<number, number>>
+    The promise returns an array with one or two elements. The first element is always the number of affected rows,
+    while the second element is the actual affected rows (only supported in postgres with options.returning true).
+
+destroy();
+    Return: Promise<number>
+    The number of destroyed rows.

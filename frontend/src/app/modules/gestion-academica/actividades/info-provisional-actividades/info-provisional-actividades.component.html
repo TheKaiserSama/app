@@ -1,0 +1,72 @@
+<div class="container-space-between" *ngIf="selectedLogro">
+    <div>
+        <h4>Actividades agregadas</h4>
+    </div>
+    <div>
+        <!-- <button type="button" class="btn btn-sm btn-primary mr-1 no-pointer">
+            Materia: <span class="badge badge-light">{{ selectedCarAcad.materia.nombre }}</span>
+        </button>
+
+        <button type="button" class="btn btn-sm btn-primary no-pointer">
+            Curso: <span class="badge badge-light">{{ selectedCarAcad.curso.grado_grupo.grado.descripcion }}º. {{ selectedCarAcad.curso.grado_grupo.grupo.descripcion }}</span>
+        </button> -->
+    </div>
+</div>
+
+<div
+    class="table-responsive tableFixHead">
+	<table class="table table-sm">
+        <thead class="encabezados-tabla">
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Nombre</th>
+                <th scope="col">Descripcion</th>
+                <th scope="col" class="text-center">Porcentaje</th>
+                <th scope="col" class="text-center">Accion</th>
+			</tr>
+        </thead>
+    
+        <tbody class="contenido-tabla">
+            <tr
+                [ngClass]="{'table-success': (actividadService.actividad$ | async)?.index == i }"
+                *ngFor="let actividad of actividadService.listActividades$ | async; index as i">
+                <th scope="row">{{ i + 1 }}</th>
+                <td>{{ actividad.nombre }}</td>
+                <td>{{ actividad.descripcion }}</td>
+                <td class="text-center">{{ actividad.porcentaje | number:'1.2-2' | removeComma }}%</td>
+                <td class="text-center">
+                    <button
+                        class="btn btn-success btn-sm mr-1"
+                        (click)="editActividad(actividad)">
+                        <i class="fa fa-pencil" aria-hidden="true"></i>
+                    </button>
+                    <button
+                        class="btn btn-danger btn-sm mr-1"
+                        (click)="removeActividad(actividad)">
+                        <i class="fa fa-times" aria-hidden="true"></i>
+                    </button>
+                </td>
+            </tr>  
+        </tbody>
+    </table>
+</div>
+
+<ng-container *ngIf="(actividadService.listActividades$ | async)?.length == 0">
+    <p>
+        <ngb-alert
+            [type]="'ligth'"
+            [dismissible]="false">
+            <strong>Nota!</strong> No hay datos para mostrar.
+        </ngb-alert>
+    </p>
+</ng-container>
+
+<p>
+    <ngb-alert
+        [type]="'success'"
+        [dismissible]="false"
+        class="container-space-between">
+        <div><strong>Nota!</strong> La suma total de los logros debe ser 100%.</div>
+        <div><span>{{ actividadService.porcentaje }}%/100%</span></div>
+    </ngb-alert>
+</p>

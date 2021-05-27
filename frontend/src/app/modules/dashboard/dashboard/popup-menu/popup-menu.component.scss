@@ -1,0 +1,135 @@
+* {
+    box-sizing: border-box;
+    text-decoration: none;
+    list-style: none;
+    margin: 0;
+	padding: 0;
+}
+
+.navbar__custom_menu-lista {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.navbar__custom_menu-lista > li {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 40px;
+    height: 50px;
+    color: white;
+    font-size: 14px;
+}
+
+.navbar__custom_menu-lista > li:hover {
+    background-color: #0061FF;
+    cursor: pointer;
+}
+
+.nav-pills .nav-link.active, .nav-pills .show > .nav-link{
+    background-color: #2780E3;
+}
+
+.container-icons {
+    height: 100%;
+}
+
+.dropdown-menu {
+    top: 60px;
+    right: 0px;
+    left: unset;
+    width: 460px;
+    box-shadow: 0px 5px 7px -1px #c1c1c1;
+    padding-bottom: 0px;
+    padding: 0px;
+}
+
+.dropdown-menu:before {
+    content: "";
+    position: absolute;
+    top: -20px;
+    right: 12px;
+    border:10px solid #343A40;
+    border-color: transparent transparent #343A40 transparent;
+}
+
+.head {
+    padding:5px 15px;
+    border-radius: 3px 3px 0px 0px;
+}
+
+.footer {
+    padding:5px 15px;
+    border-radius: 0px 0px 3px 3px; 
+}
+
+.notification-box {
+    padding: 10px 0px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+}
+
+.notification-box:hover {
+    background-color: #eee;
+}
+
+.style-bell {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 20px;
+}
+
+.style-point {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 10px;
+}
+
+.link-custom {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.center-xy {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.rol_name {
+    font-size: 20px;
+    text-transform: uppercase;
+}
+
+.cambiar_clave {
+    margin-top: 20px;
+}
+
+.item-box:hover {
+    background-color: #eee;
+}
+
+@media (max-width: 640px) {
+    .dropdown-menu{
+        top: 50px;
+        left: -16px;  
+        width: 290px;
+    }
+
+    .nav{
+        display: block;
+    }
+    
+    .nav .nav-item,.nav .nav-item a{
+        padding-left: 0px;
+    }
+
+    .message{
+        font-size: 13px;
+    }
+}

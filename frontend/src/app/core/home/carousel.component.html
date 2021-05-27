@@ -1,0 +1,19 @@
+<ngb-carousel 
+	#carousel
+	interval="2000"
+	[pauseOnHover]="pauseOnHover">
+	<ng-template
+		ngbSlide
+	    *ngFor="let img of images; index as i">
+	  	<!-- <div class="carousel-caption">
+			<h3>My slide {{i + 1}} title</h3>
+			<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+		</div> -->
+		<div class="picsum-img-wrapper">
+			<img 
+				class="img-slider"
+				[src]="img"
+				alt="My image {{i + 1}} description">
+		</div>
+	</ng-template>
+</ngb-carousel>

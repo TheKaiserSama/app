@@ -1,0 +1,46 @@
+<form
+    [formGroup]="formGrupo"
+    (ngSubmit)="sendFormGrupo()"
+    ngNativeValidate>
+
+    <div class="form-group">
+        <label for="descripcion">Descripción</label>
+        <input
+            type="number"
+            class="form-control form-control-sm"
+            id="descripcion"
+            aria-describedby="emailHelp"
+            placeholder="Numero del grupo"
+            id="descripcion"
+            name="descripcion"
+            formControlName="descripcion">
+            <div
+                class="contenedor-error col-md-12"
+                *ngIf="descripcion.invalid && (descripcion.dirty || descripcion.touched)">
+                <small *ngIf="descripcion.errors.noNegativeNumbers">
+                    No se permiten valores negativos
+                </small>
+            </div>
+    </div>
+    
+    <div class="form-group row">
+        <div class="col-md-12">
+            <mat-slide-toggle
+                class="form-control-sm"
+                [labelPosition]="'before'"
+                [color]="'primary'"
+                formControlName="vigente">
+                Vigente
+            </mat-slide-toggle>
+        </div>
+    </div>
+    
+    <div class="form-group">
+        <button
+            type="submit"
+            [disabled]="formGrupo.invalid"
+            class="btn btn-primary col-md-12">
+            Guardar
+        </button>
+    </div>
+</form>

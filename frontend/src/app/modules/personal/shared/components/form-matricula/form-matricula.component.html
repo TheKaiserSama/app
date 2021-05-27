@@ -1,0 +1,37 @@
+<ul 
+	ngbNav #nav="ngbNav"
+	[(activeId)]="tabActive"
+	class="nav-tabs">
+
+	<li [ngbNavItem]="1" [disabled]="true" [destroyOnHide]="false">
+		<a ngbNavLink>Información de estudiante</a>
+		
+		<ng-template ngbNavContent>
+			<app-info-estudiante></app-info-estudiante>
+		</ng-template>
+	</li>
+
+	<li [ngbNavItem]="2" [disabled]="true" [destroyOnHide]="true">
+		<a ngbNavLink>Información de acudiente</a>
+
+		<ng-template ngbNavContent>
+			<app-info-acudiente></app-info-acudiente>
+		</ng-template>
+	</li>
+
+	<li [ngbNavItem]="3" [disabled]="true" [destroyOnHide]="true">
+		<a ngbNavLink>Información de matrícula</a>
+
+		<ng-template ngbNavContent>
+			<div *ngIf="(matriculaService.shouldCreate$ | async); then crearMatricula else editarMatricula"></div>
+			<ng-template #crearMatricula>
+				<app-crear-matricula></app-crear-matricula>
+			</ng-template>
+			<ng-template #editarMatricula>
+				<app-editar-matricula></app-editar-matricula>
+			</ng-template>
+		</ng-template>
+	</li>
+</ul>
+
+<div [ngbNavOutlet]="nav" class="my-3 mx-5"></div>

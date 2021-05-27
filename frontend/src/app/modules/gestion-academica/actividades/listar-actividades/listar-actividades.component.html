@@ -1,0 +1,141 @@
+<div class="container-actividad">
+    <div>
+        <h4>Listado de actividades</h4>
+    </div>
+    <div>
+        <button
+            [disabled]="!actividadService.selectedLogro || (collectionSize$ | async) > 0"
+            class="btn btn-primary btn mr-1"
+            (click)="openModalCrearActividad()">
+            <i class="fa fa-floppy-o" aria-hidden="true"></i><span> Crear</span>
+        </button>
+        <button
+            [disabled]="!actividadService.selectedLogro || (collectionSize$ | async) == 0"
+            class="btn btn-info btn mr-1"
+            (click)="openModalEditarActividad()">
+            <i class="fa fa-edit" aria-hidden="true"></i><span> Editar</span>
+        </button>
+        <button
+            [disabled]="!actividadService.selectedLogro || (collectionSize$ | async) == 0"
+            class="btn btn-danger btn mr-1"
+            (click)="destroyActividad()">
+            <i class="fa fa-trash" aria-hidden="true"></i><span> Eliminar</span>
+        </button>
+    </div>
+</div>
+
+<form autocomplete="off">
+    <div class="form-row busqueda">
+        <div class="col-6 busqueda__campo">
+            <div class="input-group input-group-sm">
+                <div class="input-group-prepend">
+                    <span class="input-group-text">
+                        <i class="fa fa-search" aria-hidden="true"></i>
+                    </span>
+                </div>
+                <input
+                    type="text"
+                    class="form-control"
+                    [formControl]="ctrFilter"
+                    placeholder="Nombre o descripción actividad">
+            </div>
+        </div>
+
+        <div class="form-group col-md-3 ml-md-auto container-control">
+            <select
+                class="form-control form-control-sm"
+                [(ngModel)]="actividadService.pageSize"
+                name="seleccion"
+                (change)="onChangePageSize($event.target.value)">
+                <option [value]="10">10 registros</option>
+                <option [value]="15">15 registros</option>
+                <option [value]="20">20 registros</option>
+            </select>
+        </div>
+    </div>
+</form>
+
+<div class="table-responsive">
+	<table class="table table-sm table-striped">
+        <thead class="text-white encabezados-tabla">
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Actividad</th>
+                <th scope="col">Descripción</th>
+                <th scope="col">Porcentaje</th>
+			</tr>	
+        </thead>
+    
+        <tbody
+            class="contenido-tabla"
+            *ngIf="(storeActividades$ | async)?.length > 0; else loading">
+            <tr *ngFor="let actividad of storeActividades$ | async; index as i">
+                <th scope="row">{{ actividad.index + 1 }}</th>
+                <td>
+                    <ngb-highlight
+                        [highlightClass]="'resaltar'"
+                        [result]="actividad.nombre"
+                        [term]="ctrFilter.value">
+                    </ngb-highlight>
+                </td>
+                <td>
+                    <ngb-highlight
+                        [highlightClass]="'resaltar'"
+                        [result]="actividad.descripcion"
+                        [term]="ctrFilter.value">
+                    </ngb-highlight>
+                </td>
+                <th>{{ actividad.porcentaje | number:'1.2-2' | removeComma }}%</th>
+            </tr>  
+        </tbody>
+    </table>
+</div>
+
+<ng-template #loading>
+    <div class="d-flex w-100 flex-column justify-content-center align-items-center" *ngIf="actividadService.loading$ | async">
+        <div class="spinner-border" role="status" aria-hidden="true"></div>
+        <strong class="text-dark">Cargando...</strong>
+    </div>
+</ng-template>
+
+<ng-container *ngIf="((storeActividades$ | async)?.length == 0) && actividadService.searchTerm == ''">
+    <p>
+        <ngb-alert
+            [type]="'info'"
+            [dismissible]="false">
+            <strong>Nota!</strong> No hay actividades para mostrar.
+        </ngb-alert>
+    </p>
+</ng-container>
+
+<ngb-alert
+    *ngIf="((collectionSize$ | async) === 0) && actividadService.searchTerm != ''"
+    [type]="'warning'"
+    [dismissible]="false">
+    No se encontraron resultados para el termino: "{{ actividadService.searchTerm }}"
+</ngb-alert>
+
+<div class="d-flex justify-content-between pt-2">
+    <ngb-pagination
+        [collectionSize]="collectionSize$ | async"
+        [(page)]="actividadService.page"
+        [pageSize]="actividadService.pageSize"
+        (pageChange)="onPageChange($event)"
+        [maxSize]="5"
+        [rotate]="true"
+        [ellipses]="false"
+        [boundaryLinks]="true">
+    </ngb-pagination>
+
+    <div *ngIf="(collectionSize$ | async) === 0; then thenBlock else elseBlock"></div>
+    <ng-template #thenBlock>
+        <div>Mostrando 0 a 0 de 0 resultados</div>
+    </ng-template>
+    <ng-template #elseBlock>
+        <div>
+            Mostrando {{ (offset$ | async) + 1 }} a {{ validateOffset() }} de {{ collectionSize$ | async }} resultados
+        </div>
+    </ng-template>
+</div>
+
+<app-modal-actividades></app-modal-actividades>

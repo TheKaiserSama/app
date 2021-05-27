@@ -1,0 +1,387 @@
+/*
+CONSIDERACIONES
+    1. Un salto de linea equivale a 20px.
+*/
+
+.modal-body {
+    background-color: #B4B4B4;
+}
+
+.contenedor_principal {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    margin: 0;
+    padding: 0;
+    width: 816px;
+    height: 1400px;
+    background-color: #FFF;
+}
+
+.hoja_tamanio_oficio {
+    width: 816px;
+    height: 1344px;
+    padding: 20px 55px;
+    border: 1px solid #B4B4B4;
+    display: flex;
+    flex-direction: column;
+}
+
+.guardar_boletin {
+    width: 816px;
+    height: 56px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.reset_p {
+    margin: 0;
+    padding: 0;
+}
+
+.nombre_institucion {
+    font-family: 'Calibri Bold';
+    font-size: 28pt;
+    display: flex;
+    justify-content: center;
+    color: #B4B4B4;
+}
+
+.niveles_institucion {
+    font-family: 'Calibri Bold';
+    font-size: 10pt;
+    display: flex;
+    justify-content: center;
+    color: #B4B4B4;
+}
+
+.sedes_institucion {
+    font-family: 'Calibri Bold';
+    font-size: 10pt;
+    display: flex;
+    justify-content: center;
+    color: #B4B4B4;
+}
+
+.resolucion_institucion {
+    font-family: 'Calibri Bold';
+    font-size: 9pt;
+    display: flex;
+    justify-content: center;
+    color: #B4B4B4;
+}
+
+.nit_institucion {
+    font-family: 'Arial Bold';
+    font-size: 9pt;
+    display: flex;
+    justify-content: center;
+    color: #B4B4B4;
+}
+
+.ubicacion_institucion {
+    font-family: 'Arial Bold';
+    font-size: 9pt;
+    display: flex;
+    justify-content: center;
+    color: #B4B4B4;
+}
+
+.header_boletin {
+    margin-top: 40px;
+}
+
+.header_boletin__nombre, .header_boletin__ciclo, .header_boletin__sede {
+    font-family: 'Arial Bold';
+    font-size: 12pt;
+    display: flex;
+    justify-content: center;
+    text-transform: uppercase;
+}
+
+.alumno_nombre {
+    font-family: 'Arial Bold';
+    font-size: 12pt;
+    margin-top: 20px;
+    text-transform: uppercase;
+}
+
+/* Estilos Tabla => VALORACION FORMATIVA - VALORACION CUALITATIVA */
+table, th, td {
+    border: 1px solid black;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+table {
+    width: 100%;
+}
+
+/* Asiganndo ancho de las columnas */
+
+.tabla_valoracion_formativa td:nth-child(1) {
+    width: 41px;
+}
+
+.tabla_valoracion_formativa td:nth-child(3) {
+    width: 59px;
+}
+
+.tabla_valoracion_formativa td:nth-child(4) {
+    width: 70px;
+}
+
+.tabla_valoracion_formativa td:nth-child(5) {
+    width: 76px;
+}
+
+.tabla_valoracion_area td:nth-child(1) {
+    width: 41px;
+}
+
+.tabla_valoracion_area td:nth-child(3),
+.tabla_valoracion_area td:nth-child(4),
+.tabla_valoracion_area td:nth-child(5),
+.tabla_valoracion_area td:nth-child(6),
+.tabla_valoracion_area td:nth-child(7),
+.tabla_valoracion_area td:nth-child(8) {
+    width: 50px;
+}
+
+.header_tabla {
+    font-family: 'Arial Bold';
+    font-size: 10pt;
+    text-transform: uppercase;
+}
+
+.header_tabla__secundario th.header_tabla__no_bold {
+    font-family: 'Arial';
+    font-size: 10pt;
+    font-weight: normal;
+}
+
+.center_cell_xy {
+    text-align: center;
+    vertical-align: middle;
+}
+
+.resaltar_azul {
+    background-color: #4F81BD;
+}
+
+td.valoracion_formativa__id, td.valoracion_formativa__desc {
+    padding: 0 10px;
+}
+
+td.valoracion_formativa__id {
+    font-family: 'Arial';
+    font-size: 10pt;
+}
+
+td.valoracion_formativa__desc {
+    font-family: 'Calibri';
+    font-size: 11pt;
+}
+
+.bold {
+    font-family: 'Arial Bold';
+    font-size: 11pt;
+    font-weight: bold;
+}
+
+/* Estilos Tabla => VALORACIÓN POR ÁREA */
+
+.valoracion_area__titulo {
+    font-family: 'Arial Bold';
+    font-size: 12pt;
+    margin-top: 30px;
+    display: flex;
+    justify-content: center;
+}
+.valoracion_area__tabla_n, .valoracion_area__tabla_area {
+    font-family: 'Arial Bold';
+    font-size: 12pt;
+}
+
+.valoracion_area__tabla_val_cuant {
+    font-family: 'Arial Bold';
+    font-size: 10pt;
+}
+
+.valoracion_area__tabla_val_final, .valoracion_area__tabla_n_faltas {
+    font-family: 'Arial Bold';
+    font-size: 8pt;
+}
+
+.valoracion_area__tabla_desempenio {
+    font-family: 'Arial';
+    font-size: 8pt;
+    font-weight: normal;
+}
+
+td.valoracion_area__tabla_id, td.valoracion_area__tabla_nombre {
+    padding: 0 10px;
+}
+
+td.valoracion_area__tabla_id {
+    font-family: 'Arial';
+    font-size: 10pt;
+}
+
+td.valoracion_area__tabla_nombre {
+    font-family: 'Calibri';
+    font-size: 11pt;
+}
+
+// Observaciones
+.observaciones {
+    font-family: 'Arial Bold';
+    font-size: 10pt;
+    margin: 20px 0;
+}
+
+// Niveles de desempeño
+
+.desempenio {
+    display: inline-block;
+    *display: inline;
+    zoom: 1;
+    position: relative;
+    clip: auto;
+    overflow: hidden;
+    width: 100%;
+}
+
+.container {
+    position: relative;
+    text-align: right;
+    white-space: nowrap;
+    margin: 0;
+    padding: 0;
+    height: 20px;
+}
+
+.filler {
+    position: absolute;
+    left: 0;
+    right: 0;
+    border-bottom: 1px dotted #000;
+    height: 70%;
+}
+
+.desempenio_desc {
+    background: white;
+    float: left;
+    margin-right: 20px;
+    padding-right: 4px;
+    position: relative;
+}
+
+.desempenio_rango {
+    background: white;
+    padding-left: 4px;
+    position: relative;
+}
+
+.desempenio_desc, .desempenio_rango {
+    font-family: 'Arial';
+    font-size: 10pt;
+}
+
+/* Directores */
+
+.firmas {
+    // background-color: antiquewhite;
+    margin: 40px 40px 50px 40px;
+}
+
+.firma_rector {
+    display: flex;
+    justify-content: center;
+}
+
+.firma_rector__container {
+    width: 220px;
+    border-top: 1px solid #000;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.firmas_nombre {
+    font-family: 'Arial Bold';
+    font-size: 10pt;
+    text-transform: uppercase;
+}
+
+.firmas_cargo {
+    font-family: 'Arial';
+    font-weight: normal;
+    font-size: 10pt;
+}
+
+.firma_otras {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 50px;
+}
+
+.firma_coordinador__container {
+    width: 240px;
+}
+
+.firma_dinamizador__container {
+    width: 200px;
+}
+
+.firma_otras__container {
+    border-top: 1px solid #000;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* Footer Institucional */
+
+.pegar_final {
+    margin-top: auto;
+}
+
+.footer_institucion__container {
+    height: 50px;
+}
+
+.footer_institucion__direccion {
+    display: flex;
+    justify-content: center;
+    font-family: 'Calibri';
+    font-size: 11pt;
+    color: #B4B4B4;
+}
+
+.footer_institucion__otros {
+    display: flex;
+    justify-content: center;
+}
+
+.footer_institucion__celular, .footer_institucion__correo {
+    margin-left: 5px;
+    font-family: 'Arial Bold';
+    font-size: 8pt;
+    color: #B4B4B4;
+}
+
+.cursor_hand:hover {
+    cursor: pointer;
+}
+
+.button_observaciones {
+    background-color: #2780E3;
+    color: white;
+    width: 25px;
+    border: none;
+    border-color: #2780E3;
+    margin-left: 5px;
+}

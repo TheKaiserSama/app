@@ -1,0 +1,37 @@
+.administracion {
+    padding: 5px;
+    margin: 0;
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
+
+.contenedor__titulo {
+    margin-left: 0.9375rem;
+    display: flex;
+    align-items: center;
+}
+
+.contenedor__agregar {
+    margin-right: 0.9375rem;
+}
+
+.administracion__titulo {
+    font-size: 1.125rem;
+    margin: 0;
+    padding: 0;
+}
+
+.administracion__agregar {
+    font-size: 0.875rem;
+}
+
+@media (min-width: 768px) {
+    .administracion__titulo {
+        font-size: 1.25rem;
+    }
+
+    .administracion__agregar {
+        font-size: 1rem;
+    }
+}

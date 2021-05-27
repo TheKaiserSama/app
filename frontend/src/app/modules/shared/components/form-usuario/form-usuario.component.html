@@ -1,0 +1,77 @@
+<form
+	[formGroup]="formUsuario"
+    autocomplete="off">
+
+    <div class="form-row">
+		<div class="form-group col-md-12 controles">
+			<label for="username">Nombre de usuario</label>
+			<input
+				type="text"
+				required
+				class="form-control form-control-sm"
+				[ngClass]="displayFieldCss('username')"
+				id="username"
+				name="username"
+				formControlName="username">
+			<app-field-error-display [displayError]="isFieldValid('username')" errorMsg="Por favor, ingrese el nombre de usuario">
+			</app-field-error-display>
+		</div>
+    </div>
+	
+    <div class="form-row">
+		<div class="form-group col-md-12 controles">
+			<label for="password">Ingrese contraseña</label>
+			<input 
+				type="password"
+				required
+				minlength="4"
+				class="form-control form-control-sm"
+				[ngClass]="displayFieldCss('password')"		
+				id="password"
+				name="password"
+				formControlName="password">
+			<app-field-error-display [displayError]="isFieldValid('password')" errorMsg="Campo obligatorio y longitud minima de 4 caracteres">
+			</app-field-error-display>
+		</div>
+    </div>
+    
+    <div class="form-row">
+		<div class="form-group col-md-12 controles">
+			<label for="confirm_password">Repita contraseña</label>
+			<input 
+				type="password"
+				required
+				class="form-control form-control-sm"
+				[ngClass]="displayFieldCss('confirm_password')"
+				id="confirm_password"
+				name="confirm_password"
+				formControlName="confirm_password">
+			<app-field-error-display [displayError]="isFieldValid('confirm_password')" errorMsg="Por favor, repita la contraseña">
+			</app-field-error-display>
+		</div>
+	</div>
+	
+	<div class="form-row">
+		<button
+			*ngIf="personaService.shouldCreate$ | async"
+			class="btn btn-primary col"
+			[ngClass]="{'mr-1': !(personaService.shouldCreate$ | async)}"
+			type="button"
+			[disabled]="formUsuario.invalid"
+			(click)="previousTab()">
+			Anterior
+		</button>
+		<button
+			*ngIf="personaService.shouldCreate$ | async"
+			class="btn btn-danger col mx-1"
+			type="button"
+			(click)="resetFormUsuario()">
+			Limpiar formulario
+		</button>
+		<button
+			class="btn btn-primary col"
+			(click)="sendFormUsuario()">
+			{{ button.text }}
+		</button>
+	</div>
+</form>

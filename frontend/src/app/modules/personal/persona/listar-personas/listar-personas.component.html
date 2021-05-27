@@ -1,0 +1,207 @@
+<form autocomplete="off">
+    <div class="form-row busqueda">
+        <div class="col-6 busqueda__campo">
+            <div class="input-group input-group-sm">
+                <div class="input-group-prepend">
+                    <span class="input-group-text">
+                        <i class="fa fa-search" aria-hidden="true"></i>
+                    </span>
+                </div>
+                <input
+                    type="text"
+                    class="form-control"
+                    [formControl]="filter"
+                    placeholder="Primer nombre, primer apellido o N° de documento">
+            </div>
+        </div>
+
+        <div class="col-3 seleccion">
+            <select
+                class="form-control form-control-sm"
+                name="rol"
+                [formControl]="rol"
+                (ngModelChange)="handleRol($event)">
+                <option value="null" selected>Rol - Todos</option>
+                <option
+                    *ngFor="let rol of roles$ | async" 
+                    [ngValue]="rol">
+                    {{ rol.nombre }}
+                </option>
+            </select>
+        </div>
+
+        <div class="col-3 seleccion">
+            <select
+                class="form-control form-control-sm"
+                [(ngModel)]="personaService.pageSize"
+                name="seleccion"
+                (change)="onChange($event.target.value)">
+                <option [value]="10">10 registros</option>
+                <option [value]="15">15 registros</option>
+                <option [value]="20">20 registros</option>
+            </select>
+        </div>
+    </div>
+</form>
+
+<div class="table-responsive">
+	<table class="table table-sm table-striped">
+        <thead class="bg-dark encabezados-tabla">
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">N° documento</th>
+                <th scope="col">Nombres</th>
+                <th scope="col">Apellidos</th>
+                <th scope="col">Sexo</th>
+                <th scope="col">Fecha nacimiento</th>
+                <th scope="col">Municipio</th>
+                <th scope="col">N° Telefono</th>
+                <th scope="col">N° Celular</th>
+                <th scope="col">Dirección</th>
+                <th class="text-center" scope="col">Rol</th>
+                <th scope="col">Acción</th>
+			</tr>
+        </thead>
+    
+        <tbody class="contenido-tabla" *ngIf="(personas$ | async)?.length > 0">
+            <tr *ngFor="let persona of (personas$ | async); index as i">
+                <th scope="row">{{ persona.index }}</th>
+                <td>
+                    <ngb-highlight
+                        [highlightClass]="'resaltar'"
+                        [result]="persona.documento"
+                        [term]="filter.value">
+                    </ngb-highlight>
+                </td>
+                <td>
+                    <ngb-highlight
+                        [highlightClass]="'resaltar'"
+                        [result]="persona.primer_nombre"
+                        [term]="filter.value">
+                    </ngb-highlight> {{ persona.segundo_nombre }}
+                </td>
+                <td>
+                    <ngb-highlight
+                        [highlightClass]="'resaltar'"
+                        [result]="persona.primer_apellido"
+                        [term]="filter.value">
+                    </ngb-highlight> {{ persona.segundo_apellido }}
+                </td>
+                <td>{{ persona.sexo.nombre }}</td>
+                <td>{{ persona.fecha_nacimiento }}</td>
+                <td>{{ persona.municipio.nombre }}</td>
+                <td>{{ persona.numero_telefono }}</td>
+                <td>{{ persona.numero_celular }}</td>
+                <td>{{ persona.direccion }}</td>
+                <th class="centrar_celda">
+                    <span 
+                        class="badge"
+                        [ngClass]="{
+                            'badge-info': persona.rol.id === 1,
+                            'badge-warning': persona.rol.id === 2,
+                            'badge-primary': persona.rol.id === 3,
+                            'badge-danger': persona.rol.id === 4
+                        }">
+                        {{ persona.rol.nombre }}
+                    </span>
+                </th>
+                <td>
+                    <button
+                        class="btn btn-info btn-sm mr-1"
+                        (click)="updatePersona(persona)"
+                        placement="top"
+                        ngbTooltip="Actualizar persona">
+                        <i class="fa fa-pencil" aria-hidden="true"></i>
+                    </button>
+                    <button
+                        class="btn btn-danger btn-sm mr-1"
+                        (click)="destroyPersona(persona)"
+                        placement="top"
+                        ngbTooltip="Eliminar persona">
+                        <i class="fa fa-times" aria-hidden="true"></i>
+                    </button>
+                    <button
+                        *ngIf="persona.usuario && persona.usuario.id"
+                        class="btn btn-warning btn-sm mr-1"
+                        (click)="openModalUsuario(contentUsuario, persona.usuario)"
+                        placement="top"
+                        ngbTooltip="Actualizar usuario">
+                        <i class="fa fa-user-circle-o" aria-hidden="true"></i>
+                    </button>
+                    <button
+                        *ngIf="persona.usuario && persona.usuario.id"
+                        class="btn btn-primary btn-sm mr-1"
+                        (click)="destroyUsuario(persona.usuario)"
+                        placement="left"
+                        ngbTooltip="Eliminar cuenta de usuario">
+                        <i class="fa fa-times" aria-hidden="true"></i>
+                    </button>
+                </td>
+            </tr>  
+        </tbody>
+    </table>
+</div>
+
+<div class="d-flex flex-column justify-content-center align-items-center" *ngIf="personaService.loading$ | async">
+    <div class="spinner-border" role="status" aria-hidden="true"></div>
+    <strong class="text-dark">Cargando...</strong>
+</div>
+
+<ng-container *ngIf="((personas$ | async)?.length == 0) && personaService.searchTerm == ''">
+    <p>
+        <ngb-alert [type]="'info'" [dismissible]="false">
+            <strong>Nota!</strong> No hay personas para mostrar.
+        </ngb-alert>
+    </p>
+</ng-container>
+
+<ngb-alert
+    *ngIf="((collectionSize$ | async) === 0) && personaService.searchTerm != ''"
+    [type]="'warning'"
+    [dismissible]="false">
+    No se encontraron resultados para el termino: "{{ personaService.searchTerm }}"
+</ngb-alert>
+
+<div class="d-flex justify-content-between p-2">
+    <ngb-pagination
+        [collectionSize]="collectionSize$ | async"
+        [(page)]="personaService.page"
+        [pageSize]="personaService.pageSize"
+        (pageChange)="onPageChange($event)"
+        [maxSize]="5"
+        [rotate]="true"
+        [ellipses]="false"
+        [boundaryLinks]="true">
+    </ngb-pagination>
+
+    <div *ngIf="(collectionSize$ | async) === 0; then thenBlock else elseBlock"></div>
+    <ng-template #thenBlock>
+        <div>Mostrando 0 a 0 de 0 resultados</div>
+    </ng-template>
+    <ng-template #elseBlock>
+        <div>Mostrando {{ (offset$ | async) + 1 }} a {{ validateOffset() }} de {{ collectionSize$ | async }} resultados</div>
+    </ng-template>
+</div>
+
+<ng-template #contentUsuario let-modalUsuario>
+	<div class="modal-header">
+		<h6 class="modal-title" id="modal-basic-title">
+			Editar usuario
+		</h6>
+		<button
+			type="button"
+			class="close"
+			aria-label="Close"
+			(click)="modalUsuario.dismiss()">
+			<span aria-hidden="true">&times;</span>
+		</button>
+	</div>
+		
+	<div class="modal-body">
+		<div class="row">
+			<div class="col-md-12">
+				<app-editar-usuario></app-editar-usuario>
+			</div>
+        </div>
+	</div>
+</ng-template>

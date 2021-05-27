@@ -1,0 +1,82 @@
+<form
+    [formGroup]="formSede"
+    (ngSubmit)="sendFormSede()"
+    autocomplete="off">
+
+    <div class="form-group">
+        <label for="institucion">Institución</label>
+        <select
+            class="form-control form-control-sm"
+            id="institucion"
+            name="institucion"
+            formControlName="institucion"
+            [compareWith]="compareFn">
+            <option
+                selected
+                [ngValue]="(institucion$ | async)"> 
+                {{ (institucion$ | async)?.nombre || '' }}
+            </option>
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label for="nombre">Nombre</label>
+        <input
+            type="text"
+            class="form-control form-control-sm"
+            id="nombre"
+            id="nombre"
+            name="nombre"
+            formControlName="nombre">
+            <div
+                class="contenedor-error col-md-12"
+                *ngIf="nombre.invalid && (nombre.dirty || nombre.touched)">
+                <small *ngIf="nombre.errors.required">
+                    *El nombre es obligatorio
+                </small>
+            </div>
+    </div>
+    
+    <div class="form-group">
+        <label for="direccion">Dirección</label>
+        <input
+            type="text"
+            class="form-control form-control-sm"
+            id="direccion"
+            id="direccion"
+            name="direccion"
+            formControlName="direccion">
+    </div>
+
+    <div class="form-group">
+        <label for="telefono">Telefono</label>
+        <input
+            type="text"
+            class="form-control form-control-sm"
+            id="telefono"
+            id="telefono"
+            name="telefono"
+            formControlName="telefono">
+    </div>
+
+    <div class="form-group">
+        <label for="descripcion">Descripción</label>
+        <textarea
+            class="form-control form-control-sm"
+            id="descripcion"
+            name="descripcion"
+            formControlName="descripcion"
+            rows="3"
+            placeholder="Por favor, ingrese la descripción de la sede">
+        </textarea>
+    </div>
+
+    <div class="form-group">
+        <button
+            type="submit"
+            [disabled]="formSede.invalid"
+            class="btn btn-primary col-md-12">
+            Guardar
+        </button>
+    </div>
+</form>

@@ -1,0 +1,56 @@
+<div class="container-sidebar">
+	<div class="container-menu">
+		<div class="row home">
+			<div class="col-12 home__icono">
+				<i class="fa fa-home"></i>
+			</div>
+		</div>
+
+		<div id="accordion" role="tablist">
+			<div class="card" *ngFor="let _menu of menu; let i=index">
+				<div class="card-header" role="tab" [id]="'heading'+i">
+					<a class="menu_item" [ngClass]="{'collapsed': i != 0}" data-toggle="collapse" [attr.href]="'#collapse'+i" [attr.aria-expanded]="i == 0 ? true : false" [attr.aria-controls]="'collapse'+i">
+						<div class="row menu">
+							<div class="col-1 menu__icon-left">
+								<i [ngClass]="_menu.icono" aria-hidden="true"></i>
+							</div>
+							<div class="col-10 menu__titulo">
+								<a>{{ _menu.titulo }}</a>
+							</div>
+							<div
+								class="col-1 menu__icon-right"
+								*ngIf="_menu.opciones.length > 0">
+								<i class="fa fa-chevron-down" aria-hidden="true"></i>
+							</div>
+						</div>
+					</a>
+				</div>
+				
+				<div class="container-sub-menu" [id]="'collapse'+i" class="collapse" [ngClass]="{'show': i == 0}" role="tabpanel" [attr.aria-labelledby]="'heading'+i">
+					<div class="card-body p-0">
+						<ul class="list-group cat-list">
+							<li *ngFor="let opcion of _menu.opciones; let idx=index" class="list-group-item">
+								<a class="row sub-menu" [routerLink]="['/dashboard/'+funcMenuURL(_menu.titulo)+'/'+funcMenuURL(opcion.titulo)]">
+									<div class="col-1 sub-menu__icono">
+										<i class="fa fa-circle-o" aria-hidden="true"></i>
+									</div>
+									<div class="col-11 sub-menu__titulo">
+										<a>{{ opcion.titulo }}</a>
+									</div>
+								</a>
+							</li>
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="container-salir">
+		<div class="row">
+			<button class="btn btn-danger col-12 btn-salir" (click)="cerrarSesion()">
+				<i class="fa fa-power-off icon-salir" aria-hidden="true"></i><span class="text-salir">Cerrar sesión</span>
+			</button>
+		</div>
+	</div>
+</div>

@@ -1,0 +1,58 @@
+<form
+    [formGroup]="formMateria"
+    (ngSubmit)="sendFormMateria()"
+    autocomplete="off">
+
+    <div class="form-group">
+        <label for="nombre">Nombre</label>
+        <input
+            type="text"
+            class="form-control"
+            id="nombre"
+            aria-describedby="emailHelp"
+            placeholder="Nombre de materia"
+            id="nombre"
+            name="nombre"
+            formControlName="nombre">    
+    </div>
+
+    <div class="form-group">
+        <label for="area">Area</label>
+        <select
+            class="form-control"
+            id="area"
+            name="area"
+            formControlName="area"
+            [compareWith]="compareFn">
+            <option value="null" selected disabled>Seleccione area</option>
+            <option
+                *ngFor="let area of areas$ | async"
+                [ngValue]="area"> 
+                {{ area.nombre }}
+            </option>
+        </select>
+    </div>
+
+    <div class="form-row">
+        <div class="form-group col-md-12">
+            <textarea
+                class="form-control"
+                id="descripcion"
+                name="descripcion"
+                formControlName="descripcion"
+                rows="4"
+                placeholder="Por favor, ingrese la descripción de la materia">
+            </textarea>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <button
+            *ngIf="estilosBoton.show"
+            type="submit"
+            [disabled]="formMateria.invalid"
+            [ngClass]="estilosBoton.class">
+            {{ estilosBoton.text }}
+        </button>
+    </div>
+</form>

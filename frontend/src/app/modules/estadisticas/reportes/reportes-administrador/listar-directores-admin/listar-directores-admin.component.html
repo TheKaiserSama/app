@@ -1,0 +1,176 @@
+<form autocomplete="off">
+    <div class="form-row busqueda">
+        <div class="col-md-5 busqueda__campo">
+            <div class="input-group input-group-sm">
+                <div class="input-group-prepend">
+                    <span class="input-group-text">
+                        <i class="fa fa-search" aria-hidden="true"></i>
+                    </span>
+                </div>
+                <input
+                    type="text"
+                    class="form-control"
+                    [formControl]="ctrFilter"
+                    placeholder="Nombre, apellido, cedula docente">
+            </div>
+        </div>
+
+        <div class="form-group col-md-2 container-control">
+            <select
+                class="form-control form-control-sm"
+                name="ctrSede"
+                [formControl]="ctrSede"
+                (ngModelChange)="handleSede($event)">
+                <option value="null" selected>Todas las sedes</option>
+                <option
+                    *ngFor="let sede of sedes$ | async"
+                    [ngValue]="sede">
+                    {{ sede.nombre }}
+                </option>
+            </select>
+        </div>
+
+        <div class="form-group col-md-2 container-control">
+            <select
+                class="form-control form-control-sm"
+                name="ctrAnioLectivo"
+                [formControl]="ctrAnioLectivo"
+                (ngModelChange)="handleAnioLectivo($event)">
+                <option value="null" selected>Todos los años lectivo</option>
+                <option
+                    *ngFor="let anioLectivo of aniosLectivos$ | async"
+                    [ngValue]="anioLectivo">
+                    {{ anioLectivo.anio_actual }}
+                </option>
+            </select>
+        </div>
+
+        <div class="form-group col-md-2 container-control">
+            <select
+                class="form-control form-control-sm"
+                name="ctrCurso"
+                [formControl]="ctrCurso"
+                (ngModelChange)="handleCurso($event)">
+                <option value="null" selected>Todos los cursos</option>
+                <option
+                    *ngFor="let curso of cursos$ | async"
+                    [ngValue]="curso">
+                    {{ curso.grado.grado }}° {{ curso.grupo.descripcion }} -
+                    {{ curso.jornada.nombre }}
+                </option>
+            </select>
+        </div>
+
+        <div class="form-group col-md-1 ml-md-auto container-control">
+            <select
+                class="form-control form-control-sm"
+                [(ngModel)]="directorGrupoAdminService.pageSize"
+                name="seleccion"
+                (change)="onChangePageSize($event.target.value)">
+                <option [value]="10">10 registros</option>
+                <option [value]="15">15 registros</option>
+                <option [value]="20">20 registros</option>
+            </select>
+        </div>
+    </div>
+</form>
+
+<div
+    class="table-responsive">
+	<table class="table table-sm table-striped">
+        <thead class="bg-dark encabezados-tabla">
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Documento</th>
+                <th scope="col">Nombres</th>
+                <th scope="col">Apellidos</th>
+                <th scope="col">Sede</th>
+                <th scope="col">Año lectivo</th>
+                <th scope="col">Curso</th>
+                <th scope="col">Elegir</th>
+			</tr>
+        </thead>
+    
+        <tbody class="contenido-tabla" *ngIf="(directoresGrupo$ | async)?.length > 0;">
+            <tr *ngFor="let directorGrupo of (directoresGrupo$ | async); index as i">
+                <th scope="row">{{ directorGrupo.index }}</th>
+                <td>
+                    <ngb-highlight
+                        [highlightClass]="'resaltar'"
+                        [result]="directorGrupo.docente.persona.documento"
+                        [term]="ctrFilter.value">
+                    </ngb-highlight>
+                </td>
+                <td>
+                    <ngb-highlight
+                        [highlightClass]="'resaltar'"
+                        [result]="directorGrupo.docente.persona.primer_nombre"
+                        [term]="ctrFilter.value">
+                    </ngb-highlight> {{ directorGrupo.docente.persona.segundo_nombre }}
+                </td>
+                <td>
+                    <ngb-highlight
+                        [highlightClass]="'resaltar'"
+                        [result]="directorGrupo.docente.persona.primer_apellido"
+                        [term]="ctrFilter.value">
+                    </ngb-highlight> {{ directorGrupo.docente.persona.segundo_apellido }}
+                </td>
+                <td>{{ directorGrupo.curso.sede.nombre }}</td>
+                <td>{{ directorGrupo.anio_lectivo.anio_actual }}</td>
+                <td>{{ directorGrupo.curso.grado.grado }}° {{ directorGrupo.curso.grupo.descripcion }} -
+                    {{ directorGrupo.curso.jornada.nombre }}
+                </td>
+                <td *ngIf="botonElegirBoletin">
+                    <button class="btn btn-sm btn-primary" (click)="loadCursoDirectorGrupo(directorGrupo)">
+                        <i class="fa fa-check-circle" aria-hidden="true"></i>
+                    </button>
+                </td>
+                <td *ngIf="botonElegirConsolidado">
+                    <button class="btn btn-sm btn-primary" (click)="loadConsolidadosPorDirector(directorGrupo)">
+                        <i class="fa fa-check-circle" aria-hidden="true"></i>
+                    </button>
+                </td>
+            </tr>  
+        </tbody>
+    </table>
+</div> 
+
+<ng-container *ngIf="((directoresGrupo$ | async)?.length == 0) && directorGrupoAdminService.searchTerm == ''">
+    <p>
+        <ngb-alert
+            [type]="'info'"
+            [dismissible]="false">
+            <strong>Nota!</strong> No hay datos para mostrar.
+        </ngb-alert>
+    </p>
+</ng-container>
+
+<ngb-alert
+    *ngIf="((collectionSize$ | async) === 0) && directorGrupoAdminService.searchTerm != ''"
+    [type]="'warning'"
+    [dismissible]="false">
+    No se encontraron resultados para el termino: "{{ directorGrupoAdminService.searchTerm }}"
+</ngb-alert>
+
+<div class="d-flex justify-content-between pt-2">
+    <ngb-pagination
+        [collectionSize]="collectionSize$ | async"
+        [(page)]="directorGrupoAdminService.page"
+        [pageSize]="directorGrupoAdminService.pageSize"
+        (pageChange)="onPageChange($event)"
+        [maxSize]="5"
+        [rotate]="true"
+        [ellipses]="false"
+        [boundaryLinks]="true">
+    </ngb-pagination>
+
+    <div *ngIf="(collectionSize$ | async) === 0; then thenBlock else elseBlock"></div>
+    <ng-template #thenBlock>
+        <div>Mostrando 0 a 0 de 0 resultados</div>
+    </ng-template>
+    <ng-template #elseBlock>
+        <div>
+            Mostrando {{ (offset$ | async) + 1 }} a {{ validateOffset() }} de {{ collectionSize$ | async }} resultados
+        </div>
+    </ng-template>
+</div>

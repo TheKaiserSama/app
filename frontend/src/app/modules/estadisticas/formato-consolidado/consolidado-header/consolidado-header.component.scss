@@ -1,0 +1,18 @@
+// Header Consolidado
+.reset_p {
+    margin: 0;
+    padding: 0;
+}
+
+.header_consolidado {
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.header_consolidado__nombre, .header_consolidado__anio {
+    font-family: 'Arial Bold';
+    font-size: 11pt;
+    display: flex;
+    justify-content: center;
+    text-transform: uppercase;
+}

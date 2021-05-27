@@ -1,0 +1,78 @@
+<div class="modal-header">
+	<h5 class="modal-title">Plantilla para administrar consolidado</h5>
+	<button
+	  	type="button"
+	  	class="close"
+	  	aria-label="Close"
+	  	(click)="activeModal.dismiss('Cross click')">
+	  	<span aria-hidden="true">&times;</span>
+	</button>
+</div>
+
+<div class="modal-body">
+    <app-consolidado-header-institucion
+        [HEADER_INSTITUCION]="HEADER_INSTITUCION">
+    </app-consolidado-header-institucion>
+
+    <app-consolidado-header
+        [titulo]="getPeriodoConsolidado()" [curso]="curso">
+    </app-consolidado-header>
+
+    <div class="table-responsive tableFixHead tabla_consolidado">
+        <table class="table table-sm table-hover">
+            <thead class="text-white encabezados-tabla">
+                <tr>
+                    <th scope="col" class="text-center" *ngFor="let encabezado of encabezados">{{ encabezado }}</th>
+                </tr>	
+            </thead>
+        
+            <tbody class="contenido-tabla">
+                <tr *ngFor="let notaEstudiante of notasEstudiantes; index as i">
+                    <td class="text-center">{{ (i + 1) }}</td>
+                    <td>{{ getFullName(notaEstudiante.estudiante.persona) }}</td>
+                    <td *ngFor="let notas of notaEstudiante.notas" class="text-center">{{ notas.nota_final |  number: '1.1-1' | removeComma }}</td>
+                    <td class="text-center">{{ notaEstudiante.faltas_totales.justificadas }}</td>
+                    <td class="text-center">{{ notaEstudiante.faltas_totales.sin_justificar }}</td>
+                    <td class="text-center">
+                        <p class="reset_p"> 
+                            {{ getConsolidadoEstudiante(notaEstudiante.estudiante.id)?.observaciones }}
+                            <button class="button_observaciones"
+                                (click)="openModalObservacionesEstudiante(notaEstudiante.estudiante.id)">
+                                <i class="fa fa-plus" aria-hidden="true"></i>
+                            </button>
+                        </p>
+                    </td>
+                </tr>  
+            </tbody>
+        </table>
+    </div>
+
+    <div class="observaciones">
+        <p class="reset_p">OBSERVACIONES: {{ consolidado?.observaciones }}
+            <button class="button_observaciones" (click)="openModalObservaciones()">
+                <i class="fa fa-plus" aria-hidden="true"></i>
+            </button>
+        </p>
+    </div>
+
+    <div class="contenedor_firma_acciones">
+        <div class="firma_dinamizador_contenedor">
+            <span class="firma_dinamizador_titulo">Firma Dinamizador: </span>
+            <span class="firma_dinamizador_linea"></span>
+        </div>
+    
+        <div class="acciones_consolidado_contenedor">
+            <button
+                [disabled]="!consolidado?.id"
+                class="btn btn-sm btn-primary mr-1"
+                (click)="downloadExcelConsolidado()">
+                <i class="fa fa-print" aria-hidden="true"></i> Descargar
+            </button>
+            <button
+                class="btn btn-sm btn-primary"
+                (click)="guardarConsolidado()">
+                <i class="fa fa-floppy-o" aria-hidden="true"></i> Guardar
+            </button>
+        </div>
+    </div>
+</div>

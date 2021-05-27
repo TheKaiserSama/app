@@ -1,0 +1,59 @@
+<div class="grid">
+    <div class="content">
+        <form   [formGroup]="formLogin"
+                (ngSubmit)="login()"
+                class="login"
+                autocomplete="off">
+            <span class="form-title">
+                I.E. Integrada de Chilvi
+            </span>
+            <div class="wrap-input100">
+                <input  name="username"
+                        type="text"
+                        formControlName="username"
+                        class="input100"
+                        required
+                        placeholder="Nombre de usuario"
+                        autofocus>
+                <div    *ngIf="username.invalid && (username.dirty || username.touched)"
+                        class="alert alert-danger"
+                        role="alert">
+                    <small  class="form-text"
+                            *ngIf="username.errors.required">
+                        El username es obligatorio
+                    </small>
+                    <small  class="form-text"
+                            *ngIf="username.errors.minlength">
+                        El username debe tener al menos 3 caracteres
+                    </small>
+                </div>
+            </div>
+            <div class="wrap-input100">
+                <input  name="password"
+                        type="password"
+                        formControlName="password"
+                        class="input100"
+                        required
+                        placeholder="Contraseña de usuario">
+                <div    *ngIf="password.invalid && (password.dirty || password.touched)"
+                        class="alert alert-danger"
+                        role="alert">
+                    <small  class="form-text"
+                            *ngIf="password.errors.required">
+                        La contraseña es obligatorio
+                    </small>
+                    <small  class="form-text"
+                            *ngIf="password.errors.minlength">
+                        La contraseña debe tener al menos 3 caracteres
+                    </small>
+                </div>
+            </div>
+
+            <div class="container-login100-form-btn">
+                <button class="login100-form-btn">
+                    Ingresar
+                </button>
+            </div>
+        </form>
+    </div>
+</div>

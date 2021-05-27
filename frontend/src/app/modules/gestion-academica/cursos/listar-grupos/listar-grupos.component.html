@@ -1,0 +1,54 @@
+<div class="table-responsive tableFixHead">
+	<table class="table table-sm table-hover">
+        <thead class="text-white encabezados-tabla">
+            <tr>
+                <th scope="col" class="text-center">Grupo</th>
+                <th scope="col" class="text-center">Vigente</th>
+                <th scope="col" class="text-center">Acciones</th>
+			</tr>	
+        </thead>
+    
+        <tbody
+            class="contenido-tabla">
+            <tr 
+                *ngFor="let grupo of grupos$ | async; index as i">
+                <td class="text-center">{{ grupo.descripcion }}</td>
+                <td class="text-center">
+                    <span 
+                        class="badge"
+                        [ngClass]="{'badge-success': grupo.vigente, 'badge-danger': !grupo.vigente}">
+                        {{ grupo.vigente ? 'Si' : 'No' }}
+                    </span>
+                </td>
+                <td class="text-center">
+                    <button
+                        (click)="updateGrupo(grupo)"
+                        class="btn btn-sm btn-info mr-1"
+                        placement="left"
+                        ngbTooltip="Actualizar grupo">
+                        <i class="fa fa-pencil" aria-hidden="true"></i>
+                    </button>
+                    <button
+                        (click)="destroyGrupo(grupo)"
+                        class="btn btn-sm btn-danger"
+                        placement="right" ngbTooltip="Eliminar grupo">
+                        <i class="fa fa-trash" aria-hidden="true"></i>
+                    </button>
+                </td>
+            </tr>  
+        </tbody>
+    </table>
+</div>
+
+<div *ngIf="(grupoService.loading$ | async)" class="d-flex w-100 flex-column justify-content-center align-items-center">
+    <div class="spinner-border" role="status" aria-hidden="true"></div>
+    <strong class="text-dark">Cargando...</strong>
+</div>
+
+<ng-container *ngIf="((grupos$ | async)?.length == 0)">
+    <p>
+        <ngb-alert [type]="'info'" [dismissible]="false">
+            <strong>Nota!</strong> No hay grupos para mostrar.
+        </ngb-alert>
+    </p>
+</ng-container>

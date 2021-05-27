@@ -1,0 +1,154 @@
+<form autocomplete="off">
+    <div class="form-row busqueda">
+        <div class="col-4 busqueda__campo">
+            <div class="input-group input-group-sm">
+                <div class="input-group-prepend">
+                    <span class="input-group-text">
+                        <i class="fa fa-search" aria-hidden="true"></i>
+                    </span>
+                </div>
+                <input
+                    type="text"
+                    class="form-control"
+                    [formControl]="ctrSearch"
+                    placeholder="Nombre de área o materia">
+            </div>
+        </div>
+
+        <div class="col-3 seleccion">
+            <select
+                class="form-control form-control-sm"
+                name="ctrAnioLectivo"
+                [formControl]="ctrAnioLectivo"
+                [compareWith]="compareFn"
+                (ngModelChange)="handleAnioLectivo($event)">
+                <option value="null" selected>Todos los año lectivo</option>
+                <option
+                    *ngFor="let anioLectivo of aniosLectivos$ | async" 
+                    [ngValue]="anioLectivo">
+                    {{ anioLectivo.anio_actual }}
+                </option>
+            </select>
+        </div>
+
+        <div class="col-3 seleccion">
+            <select
+                class="form-control form-control-sm"
+                name="ctrGrado"
+                [formControl]="ctrGrado"
+                [compareWith]="compareFn"
+                (ngModelChange)="handleGrado($event)">
+                <option value="null" selected>Todos los grado</option>
+                <option
+                    *ngFor="let grado of grados$ | async" 
+                    [ngValue]="grado">
+                    {{ grado.grado }}
+                </option>
+            </select>
+        </div>
+
+        <div class="col-2 seleccion">
+            <select
+                class="form-control form-control-sm"
+                [(ngModel)]="gradoMateriaService.pageSize"
+                name="seleccion"
+                (change)="onChange($event.target.value)">
+                <option [value]="10">10 registros</option>
+                <option [value]="15">15 registros</option>
+                <option [value]="20">20 registros</option>
+            </select>
+        </div>
+    </div>
+</form>
+
+<div class="table-responsive tableFixHead">
+	<table class="table table-sm table-hover">
+        <thead class="encabezados-tabla">
+            <tr>
+                <th scope="col" class="text-center">Año lectivo</th>
+                <th scope="col" class="text-center">Grado</th>
+                <th scope="col" class="text-center">Área</th>
+                <th scope="col" class="text-center">Materia</th>
+                <th scope="col" class="text-center">Vigente</th>
+                <th scope="col" class="text-center">Acciones</th>
+			</tr>	
+        </thead>
+    
+        <tbody class="contenido-tabla">
+            <tr 
+                *ngFor="let cursoMateria of cursosMateria$ | async; index as i">
+                <td class="text-center">{{ cursoMateria.anio_lectivo.anio_actual }}</td>
+                <td class="text-center">{{ cursoMateria.grado.grado }}</td>
+                <td class="text-center">
+                    <ngb-highlight 
+                        [highlightClass]="'resaltar'"
+                        [result]="cursoMateria.materia.area.nombre"
+                        [term]="ctrSearch.value">
+                    </ngb-highlight>
+                </td>
+                <td class="text-center">
+                    <ngb-highlight 
+                        [highlightClass]="'resaltar'"
+                        [result]="cursoMateria.materia.nombre"
+                        [term]="ctrSearch.value">
+                    </ngb-highlight>
+                </td>
+                <td class="text-center">
+                    <span 
+                        class="badge"
+                        [ngClass]="{'badge-success': cursoMateria.vigente, 'badge-danger': !cursoMateria.vigente}">
+                        {{ cursoMateria.vigente ? 'Si' : 'No' }}
+                    </span>
+                </td>
+                <td class="text-center">
+                    <button
+                        (click)="updateGradoMateria(cursoMateria)"
+                        class="btn btn-sm btn-info mr-1"
+                        placement="right" ngbTooltip="Editar registro">
+                        <i class="fa fa-pencil" aria-hidden="true"></i>
+                    </button>
+                    <button
+                        (click)="destroyCursoMateria(cursoMateria)"
+                        class="btn btn-sm btn-danger"
+                        placement="right" ngbTooltip="Quitar materia">
+                        <i class="fa fa-trash" aria-hidden="true"></i>
+                    </button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<div *ngIf="(gradoMateriaService.loading$ | async)" class="d-flex w-100 flex-column justify-content-center align-items-center">
+    <div class="spinner-border" role="status" aria-hidden="true"></div>
+    <strong class="text-dark">Cargando...</strong>
+</div>
+
+<ng-container *ngIf="((cursosMateria$ | async)?.length == 0)">
+    <p>
+        <ngb-alert [type]="'info'" [dismissible]="false">
+            <strong>Nota!</strong> No hay registros para mostrar.
+        </ngb-alert>
+    </p>
+</ng-container>
+
+<div class="d-flex justify-content-between p-2">
+    <ngb-pagination
+        [collectionSize]="collectionSize$ | async"
+        [(page)]="gradoMateriaService.page"
+        [pageSize]="gradoMateriaService.pageSize"
+        (pageChange)="onPageChange($event)"
+        [maxSize]="5"
+        [rotate]="true"
+        [ellipses]="false"
+        [boundaryLinks]="true">
+    </ngb-pagination>
+
+    <div *ngIf="(collectionSize$ | async) === 0; then thenBlock else elseBlock"></div>
+    <ng-template #thenBlock>
+        <div>Mostrando 0 a 0 de 0 resultados</div>
+    </ng-template>
+    <ng-template #elseBlock>
+        <div>Mostrando {{ (offset$ | async) + 1 }} a {{ validateOffset() }} de {{ collectionSize$ | async }} resultados</div>
+    </ng-template>
+</div>

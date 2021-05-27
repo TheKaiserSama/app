@@ -1,0 +1,108 @@
+<form autocomplete="off">
+    <div class="contenedor-padre">
+        <div class="contenedor-busqueda">
+            <select
+                class="form-control form-control-sm mr-2"
+                name="ctrAnioLectivo"
+                [formControl]="ctrAnioLectivo"
+                (ngModelChange)="handleAnioLectivo($event)">
+                <option [ngValue]="null" selected>Todos los años lectivos</option>
+                <option
+                    *ngFor="let anioLectivo of anioLectivoService.aniosLectivos$ | async"
+                    [ngValue]="anioLectivo">
+                    {{ anioLectivo.anio_actual }}
+                </option>
+            </select>
+        </div>
+        
+        <div class="contenedor-paginas">
+            <select
+                class="form-control form-control-sm"
+                [(ngModel)]="periodoService.pageSize"
+                name="seleccion"
+                (change)="onChange($event.target.value)">
+                <option [value]="10">10 registros</option>
+                <option [value]="15">15 registros</option>
+                <option [value]="20">20 registros</option>
+            </select>
+        </div>
+    </div>
+</form>
+
+<div class="table-responsive">
+	<table class="table table-sm table-striped">
+        <thead class="bg-dark encabezados-tabla">
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col" class="text-center">Año lectivo</th>
+                <th scope="col" class="text-center">Numero</th>
+                <th scope="col" class="text-center">Fecha inicio</th>
+                <th scope="col" class="text-center">Fecha finalización</th>
+                <th scope="col" class="text-center">Descripción</th>
+                <th scope="col" class="text-center">Opciones</th>
+			</tr>	
+        </thead>
+    
+        <tbody class="contenido-tabla" *ngIf="(periodos$ | async)?.length > 0">
+            <tr *ngFor="let periodo of (periodos$ | async); index as i">
+                <th scope="row">{{ periodo.index }}</th>
+                <td class="text-center">{{ periodo.anio_lectivo.anio_actual }}</td>
+                <td class="text-center">{{ periodo.numero }}</td>
+                <td class="text-center">{{ periodo.fecha_inicio }}</td>
+                <td class="text-center">{{ periodo.fecha_finalizacion }}</td>
+                <td class="text-center">{{ periodo.descripcion }}</td>
+                <td class="text-center">
+                    <button
+                        class="btn btn-info btn-sm mr-1"
+                        (click)="updatePeriodo(periodo)"
+                        placement="top"
+                        ngbTooltip="Actualizar periodo">
+                        <i class="fa fa-pencil" aria-hidden="true"></i>
+                    </button>
+                    <button
+                        class="btn btn-danger btn-sm mr-1"
+                        (click)="destroyPeriodo(periodo)"
+                        placement="top"
+                        ngbTooltip="Eliminar periodo">
+                        <i class="fa fa-trash" aria-hidden="true"></i>
+                    </button>
+                </td>
+            </tr>  
+        </tbody>
+    </table>
+</div>
+
+<div
+    class="d-flex flex-column justify-content-center align-items-center" *ngIf="periodoService.loading$ | async">
+    <div class="spinner-border" role="status" aria-hidden="true"></div>
+    <strong class="text-dark">Cargando...</strong>
+</div>
+
+<ng-container *ngIf="((periodos$ | async)?.length == 0)">
+    <p>
+        <ngb-alert [type]="'info'" [dismissible]="false">
+            <strong>Nota!</strong> No hay periodos para mostrar.
+        </ngb-alert>
+    </p>
+</ng-container>
+
+<div class="d-flex justify-content-between p-2">
+    <ngb-pagination
+        [collectionSize]="collectionSize$ | async"
+        [(page)]="periodoService.page"
+        [pageSize]="periodoService.pageSize"
+        (pageChange)="onPageChange($event)"
+        [maxSize]="5"
+        [rotate]="true"
+        [ellipses]="false"
+        [boundaryLinks]="true">
+    </ngb-pagination>
+
+    <div *ngIf="(collectionSize$ | async) === 0; then thenBlock else elseBlock"></div>
+    <ng-template #thenBlock>
+        <div>Mostrando 0 a 0 de 0 resultados</div>
+    </ng-template>
+    <ng-template #elseBlock>
+        <div>Mostrando {{ (offset$ | async) + 1 }} a {{ validateOffset() }} de {{ collectionSize$ | async }} resultados</div>
+    </ng-template>
+</div>

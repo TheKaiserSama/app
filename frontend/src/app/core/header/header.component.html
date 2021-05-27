@@ -1,0 +1,30 @@
+<nav
+	class="navbar navbar-dark bg-primary d-flex bd-highlight flex-column flex-md-row"
+	*ngIf="navbarService.visible$ | async">
+	<div class="flex-md-grow-1">
+		<a	
+			class="navbar-brand m-0"
+			[routerLink]="['/home']">
+			GASOFT
+		</a>
+	</div>
+	
+	<ul class="navbar-nav d-flex flex-row p-1 bd-highlight">
+		<li class="nav-item bd-highlight px-2">
+			<a 
+				class="nav-link"
+				[routerLink]="['/home']"
+				routerLinkActive="active">
+				Home
+			</a>
+		</li>
+		<li class="nav-item bd-highlight px-2">
+			<a 	
+				class="nav-link"
+				[routerLink]="['/login']"
+				routerLinkActive="active">
+				Iniciar sesión
+			</a>
+		</li>
+	</ul>
+</nav>

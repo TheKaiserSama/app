@@ -1,0 +1,107 @@
+.busqueda {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 0;
+}
+
+.busqueda__etiqueta {
+    padding: 10px 0 5px 0;
+}
+
+.busqueda__campo {
+    margin: 5px 0;
+    width: 100%;
+}
+
+.seleccion {
+    margin-bottom: 10px;
+    width: 100%;
+}
+
+.container-control {
+    margin: 5px 0;
+}
+
+.encabezados-tabla {
+    color: white;
+    font-size: 14px;
+}
+
+.contenido-tabla {
+    font-size: 14px;
+}
+
+.paginacion {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 10px;
+}
+
+.filtros {
+    margin-bottom: 20px;
+}
+
+.warning-control {
+    border: 2px solid red;
+}
+
+/****************************************/
+table.scroll {
+    width: 1166px; /* 230px * 5 column + 16px scrollbar width */
+    border-spacing: 0;
+}
+
+table.scroll tbody,
+table.scroll thead tr { display: block; }
+
+table.scroll tbody {
+    height: 400px;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+table.scroll tbody td,
+table.scroll thead th {
+    width: 230px;
+}
+
+table.scroll thead th:last-child {
+    width: 246px; /* 230px + 16px scrollbar width */
+}
+
+thead tr th { 
+    height: 30px;
+    line-height: 30px;
+    // text-align: left;
+}
+
+tbody td:last-child, thead th:last-child {
+    border-right: none !important;
+}
+/****************************************/
+
+@media (min-width: 758px) {
+    .busqueda {
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        margin: 10px 0;
+    }
+
+    .busqueda__campo {
+        width: 50%;
+    }
+
+    .seleccion {
+        margin: 0;
+        width: 30%;
+    }
+
+    .paginacion {
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+    }
+}

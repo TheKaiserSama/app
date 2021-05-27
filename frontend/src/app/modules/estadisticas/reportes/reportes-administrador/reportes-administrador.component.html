@@ -1,0 +1,40 @@
+<div class="container_reportes">
+    <div>
+        <h4>Reportes</h4>
+    </div>
+
+    <div class="form-group col-md-2 container-control">
+        <select
+            class="form-control form-control-sm"
+            name="ctrTipoReporte"
+            [formControl]="ctrTipoReporte"
+            (ngModelChange)="handleTipoReporte($event)">
+            <option value="null" disabled selected>Seleccione tipo de reporte</option>
+            <option
+                *ngFor="let tipoReporte of tiposReportes"
+                [ngValue]="tipoReporte">
+                {{ tipoReporte.nombre }}
+            </option>
+        </select>
+    </div>
+</div>
+
+<hr>
+
+<div [ngSwitch]="tipoReporte.nombre">
+    <app-listar-directores-admin
+        *ngSwitchCase="TIPOS_REPORTES.BOLETINES.nombre"
+        [botonElegirBoletin]="botonElegirBoletin">
+    </app-listar-directores-admin>
+
+    <app-listar-directores-admin
+        *ngSwitchCase="TIPOS_REPORTES.CONSOLIDADOS.nombre"
+        [botonElegirConsolidado]="botonElegirConsolidado">
+    </app-listar-directores-admin>
+    
+    <div *ngSwitchDefault>
+        <ngb-alert [dismissible]="false" [type]="'info'">
+            <strong>Nota!</strong> Es necesario que seleccione un tipo de reporte.
+        </ngb-alert>
+    </div>
+</div>

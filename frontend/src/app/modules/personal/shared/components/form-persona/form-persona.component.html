@@ -1,0 +1,330 @@
+<form
+	[formGroup]="formPersona"
+	(ngSubmit)="sendFormPersona()"
+	autocomplete="off">
+	<div class="form-row">
+		<div class="form-group col-md-6">
+			<label for="tipo_documento">Tipo de documento</label>
+			<select
+				class="form-control form-control-sm"
+				id="tipo_documento"
+				name="tipo_documento"
+				formControlName="tipo_documento"
+				[compareWith]="compareFn">
+				<option value="null" selected disabled>Seleccione un tipo de documento</option>
+				<option     
+					*ngFor="let tipoDocumento of tiposDocumento$ | async"
+					[ngValue]="tipoDocumento"> 
+					{{ tipoDocumento.nombre }}
+				</option>
+			</select>  
+		</div>
+
+		<div class="form-group col-md-6 controles">
+			<label for="documento">Número</label>
+			<input 
+				type="text"
+				required
+				class="form-control form-control-sm"
+				id="documento"
+				name="documento"
+				formControlName="documento"
+				(keypress)="soloNumeros($event)"
+				(blur)="limpiarCarateresNoPermitidos(controls['documento'], false)">
+			<div class="contenedor-error">
+				<div
+					*ngIf="controls['documento'].invalid &&
+					(controls['documento'].dirty || controls['documento'].touched)">
+					<small *ngIf="controls['documento'].errors.required">
+						*Campo obligatorio
+					</small>
+					<small *ngIf="controls['documento'].errors.carateresNoPermitidos">
+						*Solo se permiten numeros
+					</small>
+					<!-- <small *ngIf="controls['documento'].errors.documentoDuplicado">
+						*Ya existe una persona con esa identificación
+					</small> -->
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="form-row">      
+		<div class="form-group col-md-6 controles">
+			<label for="primer_nombre">Primer nombre</label>
+			<input
+				type="text"
+				required
+				class="form-control form-control-sm"
+				id="primer_nombre"
+				name="primer_nombre"
+				formControlName="primer_nombre"
+				(keypress)="soloLetras($event)"
+				(blur)="limpiarCarateresNoPermitidos(controls['primer_nombre'])">
+			<div class="contenedor-error">
+				<div
+					*ngIf="controls['primer_nombre'].invalid &&
+					(controls['primer_nombre'].dirty || controls['primer_nombre'].touched)">
+					<small *ngIf="controls['primer_nombre'].errors.required">
+						*Campo obligatorio
+					</small>
+					<small *ngIf="controls['primer_nombre'].errors.minlength">
+						*Este campo requiere minimo 3 caracteres
+					</small>
+					<small *ngIf="controls['primer_nombre'].errors.carateresNoPermitidos">
+						*Solo se permiten letras
+					</small>
+				</div>
+			</div>
+		</div>
+
+		<div class="form-group col-md-6 controles">
+			<label for="segundo_nombre">Segundo nombre</label>
+			<input  
+				type="text"
+				class="form-control form-control-sm"
+				id="segundo_nombre"
+				name="segundo_nombre"
+				formControlName="segundo_nombre"
+				(keypress)="soloLetras($event)"
+				(blur)="limpiarCarateresNoPermitidos(controls['segundo_nombre'])">
+			<div class="contenedor-error">
+				<div 
+					*ngIf="controls['segundo_nombre'].invalid &&
+					(controls['segundo_nombre'].dirty || controls['segundo_nombre'].touched)">
+					<small *ngIf="controls['segundo_nombre'].errors.minlength">
+						*Este campo requiere minimo 3 caracteres
+					</small>
+					<small *ngIf="controls['segundo_nombre'].errors.carateresNoPermitidos">
+						*Solo se permiten letras
+					</small>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="form-row">
+		<div class="form-group col-md-6 controles">
+			<label for="primer_apellido">Primer apellido</label>
+			<input  
+				type="text"
+				class="form-control form-control-sm"
+				id="primer_apellido"
+				name="primer_apellido"
+				formControlName="primer_apellido"
+				(keypress)="soloLetras($event)"
+				(blur)="limpiarCarateresNoPermitidos(controls['primer_apellido'])">
+			<div class="contenedor-error">
+				<div
+					*ngIf="controls['primer_apellido'].invalid &&
+					(controls['primer_apellido'].dirty || controls['primer_apellido'].touched)">
+					<small *ngIf="controls['primer_apellido'].errors.required">
+						*Campo obligatorio
+					</small>
+					<small *ngIf="controls['primer_apellido'].errors.minlength">
+						*Este campo requiere minimo 3 caracteres
+					</small>
+					<small *ngIf="controls['primer_apellido'].errors.carateresNoPermitidos">
+						*Solo se permiten letras
+					</small>
+				</div>
+			</div>
+		</div>
+
+		<div class="form-group col-md-6 controles">
+			<label for="segundo_apellido">Segundo apellido</label>
+			<input  
+				type="text"
+				class="form-control form-control-sm"
+				id="segundo_apellido"
+				name="segundo_apellido"
+				formControlName="segundo_apellido"
+				(keypress)="soloLetras($event)"
+				(blur)="limpiarCarateresNoPermitidos(controls['segundo_apellido'])">
+			<div class="contenedor-error">
+				<div 
+					*ngIf="controls['segundo_apellido'].invalid &&
+					(controls['segundo_apellido'].dirty || controls['segundo_apellido'].touched)">
+					<small *ngIf="controls['segundo_apellido'].errors.required">
+						*Campo obligatorio
+					</small>
+					<small *ngIf="controls['segundo_apellido'].errors.minlength">
+						*Este campo requiere minimo 3 caracteres
+					</small>
+					<small *ngIf="controls['segundo_apellido'].errors.carateresNoPermitidos">
+						*Solo se permiten letras
+					</small>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	<div class="form-row">
+		<div class="form-group col-md-6">
+			<label for="sexo">Sexo</label>
+			<select 
+				class="form-control form-control-sm"
+				id="sexo"
+				name="sexo"
+				formControlName="sexo"
+				[compareWith]="compareFn">
+				<option value="null" selected disabled>Seleccione un sexo</option>
+				<option *ngFor="let sexo of sexos$ | async" [ngValue]="sexo">
+					{{ sexo.nombre }}
+				</option>
+			</select>
+		</div>
+
+		<div class="form-group col-md-6">
+			<label for="fecha_nacimiento">Fecha de Nacimiento</label>
+			<div class="input-group">
+				<input
+					type="text"
+					class="form-control form-control-sm"
+					placeholder="yyyy-mm-dd"
+					ngbDatepicker
+					#d="ngbDatepicker"
+					id="fecha_nacimiento"
+					name="fecha_nacimiento"
+					formControlName="fecha_nacimiento"
+					(dateSelect)="onDateSelect($event)"
+					[minDate]="minDate"
+					[maxDate]="maxDate">
+			<div class="input-group-append">
+				<button 
+					class="calendario btn btn-outline-primary form-control-sm"
+					(click)="d.toggle()"
+					type="button">
+					<i class="fa fa-calendar"></i>
+				</button>
+			</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="form-row">
+		<div class="form-group col-md-6">
+			<label for="departamento">Departamento</label>
+			<select 
+				class="form-control form-control-sm"
+				id="departamento"
+				name="departamento"
+				formControlName="departamento"
+				(ngModelChange)="handleDepartamento($event)"
+				[compareWith]="compareFn">
+				<option value="null" selected disabled>Seleccione un departamento</option>
+				<option 
+					*ngFor="let departamento of departamentos$ | async"
+					[ngValue]="departamento">
+					{{ departamento.nombre }}
+				</option>
+			</select>
+		</div>
+		
+		<div class="form-group col-md-6">
+			<label for="municipio">Municipio</label>
+			<select 
+				class="form-control form-control-sm"
+				id="municipio"
+				name="municipio"
+				formControlName="municipio"
+				[compareWith]="compareFn">
+				<option value="null" selected disabled>Seleccione un municipio</option>
+				<option *ngFor="let municipio of municipios$ | async"
+						[ngValue]="municipio">
+					{{ municipio.nombre }}
+				</option>
+			</select>
+		</div>
+	</div>
+
+	<div class="form-row">
+		<div class="form-group col-md-6">
+			<label for="numero_telefono">Telefono</label>
+			<input 
+				type="text"
+				class="form-control form-control-sm"
+				id="numero_telefono"
+				name="numero_telefono"
+				formControlName="numero_telefono"
+				(keypress)="soloNumeros($event)"
+				(blur)="limpiarCarateresNoPermitidos(controls['numero_telefono'], false)">
+			<div class="contenedor-error">
+				<div
+					*ngIf="controls['numero_telefono'].invalid &&
+					(controls['numero_telefono'].dirty || controls['numero_telefono'].touched)">
+					<small *ngIf="controls['numero_telefono'].errors.carateresNoPermitidos">
+						*Solo se permiten numeros
+					</small>
+				</div>
+			</div>
+		</div>
+
+		<div class="form-group col-md-6">
+			<label for="numero_celular">Celular</label>
+			<input 
+				type="text"
+				class="form-control form-control-sm"
+				id="numero_celular"
+				name="numero_celular"
+				formControlName="numero_celular"
+				(keypress)="soloNumeros($event)"
+				(blur)="limpiarCarateresNoPermitidos(controls['numero_celular'], false)">
+			<div class="contenedor-error">
+				<div
+					*ngIf="controls['numero_celular'].invalid &&
+					(controls['numero_celular'].dirty || controls['numero_celular'].touched)">
+					<small *ngIf="controls['numero_celular'].errors.carateresNoPermitidos">
+						*Solo se permiten numeros
+					</small>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="form-group row">
+		<label for="direccion" class="col-sm-2 col-form-label">Dirección</label>
+		<div class="col-sm-10">
+			<input 
+				type="text"
+				class="form-control form-control-sm"
+				id="direccion"
+				name="direccion"
+				formControlName="direccion">
+		</div>
+	</div>
+
+	<div class="form-row">
+		<div class="form-group col-md-6">
+			<label for="rol">Rol</label>
+			<select 
+				class="form-control form-control-sm"
+				id="rol"
+				name="rol"
+				formControlName="rol"
+				(ngModelChange)="handleRol($event)"
+				[compareWith]="compareFn">
+				<option value="null" selected disabled>Seleccione un rol</option>
+				<option *ngFor="let rol of roles$ | async"
+						[ngValue]="rol">
+					{{ rol.nombre }}
+				</option>
+			</select>
+		</div>
+	</div>
+
+	<button
+		*ngIf="button.show"
+		type="submit"
+		[disabled]="!formPersona.valid"
+		[ngClass]="button.class">
+		{{ button.text }}
+	</button>
+</form>
+
+<ng-template #loading>
+    <div class="d-flex flex-column justify-content-center align-items-center h-100">
+        <div class="spinner-border" role="status" aria-hidden="true"></div>
+        <h4 class="h4"><strong>Cargando...</strong></h4>
+    </div>
+</ng-template>

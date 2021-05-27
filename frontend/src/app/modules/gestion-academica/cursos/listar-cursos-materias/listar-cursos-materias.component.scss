@@ -1,0 +1,61 @@
+.busqueda {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 0;
+}
+
+.busqueda__campo {
+    margin: 5px 0;
+    width: 100%;
+}
+
+.paginacion {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 10px;
+}
+
+.seleccion {
+    margin-bottom: 10px;
+    width: 100%;
+}
+
+.contenido-tabla {
+    font-size: 14px;
+}
+
+.encabezados-tabla tr th {
+    color: white;
+    font-size: 14px;
+    background-color: #373A3C;
+    // height: 38px;
+}
+
+.tableFixHead { overflow-y: auto; height: 427px; }
+.tableFixHead thead th { position: sticky; top: 0; }
+
+@media (min-width: 758px) {
+    .busqueda {
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        margin: 10px 0;
+    }
+
+    .busqueda__campo {
+        width: 50%;
+    }
+
+    .seleccion {
+        margin: 0;
+        width: 30%;
+    }
+
+    .paginacion {
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+    }
+}

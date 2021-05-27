@@ -1,0 +1,73 @@
+<div class="table-responsive">
+	<table class="table table-sm table-hover">
+        <thead class="text-white encabezados-tabla">
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Actividad</th>
+                <th scope="col">Descripción</th>
+                <th scope="col">Porcentaje</th>
+                <th scope="col" class="text-center">Marcar</th>
+			</tr>	
+        </thead>
+    
+        <tbody
+            class="contenido-tabla"
+            *ngIf="(actividades$ | async)?.length > 0; else loading">
+            <tr 
+                [ngClass]="{'table-success': (calificarActividadesService.selectedActividad)?.id == actividad.id }"
+                *ngFor="let actividad of actividades$ | async; index as i">
+                <th scope="row">{{ i + 1 }}</th>
+                <td>{{ actividad.nombre }}</td>
+                <td>{{ actividad.descripcion }}</td>
+                <th>{{ actividad.porcentaje | number:'1.2-2' | removeComma }}%</th>
+                <th class="text-center">
+                    <i
+                        (click)="marcarActividad(contentCalificar, actividad)"
+                        class="fa fa-check-circle text-success custom-icon"
+                        aria-hidden="true">
+                    </i>
+                </th>
+            </tr>  
+        </tbody>
+    </table>
+</div>
+
+<ng-template #loading>
+    <div
+        class="d-flex w-100 flex-column justify-content-center align-items-center"
+        *ngIf="calificarActividadesService.loading$ | async">
+        <div class="spinner-border" role="status" aria-hidden="true"></div>
+        <strong class="text-dark">Cargando...</strong>
+    </div>
+</ng-template>
+
+<ng-container *ngIf="((actividades$ | async)?.length == 0)">
+    <p>
+        <ngb-alert
+            [type]="'info'"
+            [dismissible]="false">
+            <strong>Nota!</strong> No hay actividades para mostrar.
+        </ngb-alert>
+    </p>
+</ng-container>
+
+<ng-template #contentCalificar let-modal>
+    <div class="modal-header">
+        <h6
+            class="modal-title"
+            id="modal-basic-title">
+            Calificar estudiantes
+        </h6>
+        <button 
+            type="button"
+            class="close"
+            aria-label="Close"
+            (click)="modal.dismiss()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+        
+    <div class="modal-body">
+        <app-modal-calificar></app-modal-calificar>
+    </div>
+</ng-template>

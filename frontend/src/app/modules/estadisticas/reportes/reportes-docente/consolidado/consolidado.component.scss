@@ -1,0 +1,28 @@
+.container_boletin {
+    display: flex;
+    justify-content: space-between;
+}
+
+.filtros {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.seleccion {
+    margin-bottom: 10px;
+    width: 100%;
+
+}
+
+.btn-sm {
+    font-size: 10px;
+}
+
+@media (min-width: 758px) {
+    .seleccion {
+        margin: 0;
+        width: 30%;
+    }
+}

@@ -1,0 +1,31 @@
+<h4 class="py-2">BIENVENIDO</h4>
+
+<div class="row">
+    <div class="col-md-4 col-sm-12">
+        <app-card-welcome-admin
+            [value]="countSedes$"
+            [styles]="stylesSedes">
+        </app-card-welcome-admin>
+    </div>
+    <div class="col-md-4 col-sm-12">
+        <app-card-welcome-admin
+            [value]="countDocentes$"
+            [styles]="stylesDocentes">
+        </app-card-welcome-admin>
+    </div>
+    <div class="col-md-4 col-sm-12">
+        <app-card-welcome-admin
+            [value]="countEstudiantes$"
+            [styles]="stylesEstudiantes">
+        </app-card-welcome-admin>
+    </div>
+</div>
+
+<div class="row mt-5">
+    <div class="col-md-6">
+        <app-bar-chart-admin-welcome></app-bar-chart-admin-welcome>
+    </div>
+    <div class="col-md-6">
+        <app-pie-chart-admin-welcome></app-pie-chart-admin-welcome>
+    </div>
+</div>

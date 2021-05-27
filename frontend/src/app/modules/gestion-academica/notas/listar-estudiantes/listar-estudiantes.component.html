@@ -1,0 +1,59 @@
+<div class="table-responsive">
+	<table class="table table-sm scroll">
+        <thead class="bg-dark encabezados-tabla">
+            <tr>
+                <!-- <th scope="col">#</th> -->
+                <th scope="col">N° documento</th>
+                <th scope="col">Nombres</th>
+                <th scope="col">Apellidos</th>
+                <th scope="col" class="text-center">Nota</th>
+                <th scope="col" class="text-center">Estrellas</th>
+			</tr>	
+        </thead>
+    
+        <tbody class="contenido-tabla" *ngIf="(matriculas$ | async)?.length > 0">
+            <tr *ngFor="let matricula of (matriculas$ | async); index as i">
+                <!-- <th scope="row">{{ matricula.index }}</th> -->
+                <td>
+                    {{ matricula.estudiante['persona'].documento }}
+                </td>
+                <td>
+                    {{ matricula.estudiante['persona'].primer_nombre }}
+                    {{ matricula.estudiante['persona'].segundo_nombre }}
+                </td>
+                <td>
+                    {{ matricula.estudiante['persona'].primer_apellido }}
+                    {{ matricula.estudiante['persona'].segundo_apellido }}
+                </td>
+                <td class="center-field-nota">
+                    <input
+                        *ngIf="calificarActividadesService.selectedActividad"
+                        [ngClass]="{
+                            'warning-control': notaService.getControlNota(matricula.estudiante.id)?.invalid && (notaService.getControlNota(matricula.estudiante.id).dirty || notaService.getControlNota(matricula.estudiante.id).touched) && notaService.getControlNota(matricula.estudiante.id).errors.interval
+                        }"
+                        name="crtNota"
+                        [formControl]="notaService.getControlNota(matricula.estudiante.id)"
+                        type="number"
+                        (blur)="notaService.setStarts(matricula.estudiante.id)"
+                        min="0"
+                        max="5"
+                        step="0.2"
+                        placeholder="0">
+                </td>
+                <td class="text-center">
+                    <app-starts
+                        *ngIf="calificarActividadesService.selectedActividad"
+                        [currentRate]="(notasActividad$ | async)[notaService.getPos(matricula.estudiante.id)]?.nota">
+                    </app-starts>
+                </td>
+            </tr>  
+        </tbody>
+    </table>
+</div>
+
+<div
+    class="d-flex flex-column justify-content-center align-items-center"
+    *ngIf="calificarActividadesService.loading$ | async">
+    <div class="spinner-border" role="status" aria-hidden="true"></div>
+    <strong class="text-dark">Cargando...</strong>
+</div>

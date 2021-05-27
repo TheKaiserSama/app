@@ -1,0 +1,59 @@
+<div class="table-responsive tableFixHead">
+	<table class="table table-sm table-hover">
+        <thead class="text-white encabezados-tabla">
+            <tr>
+                <th scope="col" class="text-center">Año</th>
+                <th scope="col" class="text-center">Rango</th>
+                <th scope="col" class="text-center">Descripción</th>
+                <th scope="col" class="text-center">Vigente</th>
+                <th scope="col" class="text-center">Acciones</th>
+			</tr>	
+        </thead>
+    
+        <tbody
+            class="contenido-tabla">
+            <tr 
+                *ngFor="let anioLectivo of aniosLectivos$ | async; index as i">
+                <td class="text-center">{{ anioLectivo.anio_actual }}</td>
+                <td class="text-center">
+                    <span
+                        class="badge badge-primary">
+                        Minimo: {{ anioLectivo.rango.minimo }}
+                    </span> / 
+                    <span
+                        class="badge badge-danger">
+                        Maximo: {{ anioLectivo.rango.maximo }}
+                    </span>
+                </td>
+                <td class="text-center">{{ anioLectivo.descripcion }}</td>
+                <td class="text-center">
+                    <span 
+                        class="badge"
+                        [ngClass]="{'badge-success': anioLectivo.vigente, 'badge-danger': !anioLectivo.vigente}">
+                        {{ anioLectivo.vigente ? 'Si' : 'No' }}
+                    </span>
+                </td>
+                <td class="text-center">
+                    <button
+                        (click)="updateAnioLectivo(anioLectivo)"
+                        class="btn btn-sm btn-info mr-1"
+                        placement="left"
+                        ngbTooltip="Actualizar año lectivo">
+                        <i class="fa fa-pencil" aria-hidden="true"></i>
+                    </button>
+                    <button
+                        (click)="destroyAnioLectivo(anioLectivo)"
+                        class="btn btn-sm btn-danger"
+                        placement="right" ngbTooltip="Eliminar año lectivo">
+                        <i class="fa fa-trash" aria-hidden="true"></i>
+                    </button>
+                </td>
+            </tr>  
+        </tbody>
+    </table>
+</div>
+
+<div *ngIf="(anioLectivoService.loading$ | async)" class="d-flex w-100 flex-column justify-content-center align-items-center">
+    <div class="spinner-border" role="status" aria-hidden="true"></div>
+    <strong class="text-dark">Cargando...</strong>
+</div>

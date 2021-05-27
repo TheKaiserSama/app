@@ -1,0 +1,74 @@
+<div class="modal-header">
+	<h5 class="modal-title">Descargar consolidados</h5>
+	<button
+	  	type="button"
+	  	class="close"
+	  	aria-label="Close"
+	  	(click)="activeModal.dismiss('Cross click')">
+	  	<span aria-hidden="true">&times;</span>
+	</button>
+</div>
+
+<div class="modal-body">
+    <div class="info_institucion">
+        <p>
+            <span class="etiqueta">Sede: </span>
+            <span class="descripcion">
+                {{ directorGrupo.curso.sede.nombre }}
+            </span>
+        </p>
+        <p>
+            <span class="etiqueta">Curso: </span>
+            <span class="descripcion">
+                {{ directorGrupo.curso.grado.grado }}° {{ directorGrupo.curso.grupo.descripcion }}
+            </span>
+        </p>
+        <p>
+            <span class="etiqueta">Jornada: </span>
+            <span class="descripcion">
+                {{ directorGrupo.curso.jornada.nombre }}
+            </span>
+        </p>
+    </div>
+    <div class="info_docente">
+        <p>
+            <span class="etiqueta">Docente: </span>
+            <span class="descripcion">
+                {{ directorGrupo.docente.persona.primer_nombre }}
+                {{ directorGrupo.docente.persona.segundo_nombre }}
+                {{ directorGrupo.docente.persona.primer_apellido }}
+                {{ directorGrupo.docente.persona.segundo_apellido }}
+            </span>
+        </p>
+        <p>
+            <span class="etiqueta">Titulo: </span>
+            <span class="descripcion">{{ directorGrupo.docente.titulo }}</span>
+        </p>
+    </div>
+
+    <div class="container_controls">
+        <div class="form-group container-control">
+            <select
+                class="form-control form-control-sm"
+                name="ctrPeriodo"
+                [formControl]="ctrPeriodo">
+                <option value="null" disabled selected>Seleccione consolidado</option>
+                <option
+                    *ngFor="let periodo of periodos$ | async"
+                    [ngValue]="periodo">
+                    Consolidado {{ periodo.numero }}
+                </option>
+                <option value="null">Consolidado final</option>
+            </select>
+        </div>
+
+        <div class="container-btn">
+            <button
+                class="btn btn btn-success"
+                [disabled]="!ctrPeriodo.value"
+                (click)="downloadConsolidado()">
+                <i class="fa fa-download" aria-hidden="true"></i> Descargar
+            </button>
+        </div>
+    </div>
+</div>

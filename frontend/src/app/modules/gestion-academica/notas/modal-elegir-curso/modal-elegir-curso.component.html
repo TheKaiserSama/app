@@ -1,0 +1,106 @@
+<div class="form-row busqueda">
+    <div class="col-3 seleccion">
+        <select
+            class="form-control form-control-sm"
+            name="ctrCurso"
+            [formControl]="ctrCurso"
+            (ngModelChange)="handleCurso($event)">
+            <option value="null" selected>Todos los curso</option>
+            <option
+                *ngFor="let curso of cursos$ | async" 
+                [ngValue]="curso">
+                {{ curso.grado.grado }}° {{ curso.grupo.descripcion }} - {{ curso.jornada.nombre }}
+            </option>
+        </select>
+    </div>
+
+    <div class="col-3 seleccion">
+        <select
+            class="form-control form-control-sm"
+            name="ctrPeriodo"
+            [formControl]="ctrPeriodo"
+            (ngModelChange)="handlePeriodo($event)">
+            <option value="null" selected>Todos los periodos</option>
+            <option
+                *ngFor="let periodo of periodos$ | async" 
+                [ngValue]="periodo">
+                {{ periodo.numero }}
+            </option>
+        </select>
+    </div>
+
+    <!-- <div class="col-2 seleccion">
+        <select
+            class="form-control form-control-sm"
+            [(ngModel)]="notificacionDocenteService.pageSize"
+            name="seleccion"
+            (change)="onChange($event.target.value)">
+            <option [value]="10">10 registros</option>
+            <option [value]="15">15 registros</option>
+            <option [value]="20">20 registros</option>
+        </select>
+    </div> -->
+</div>
+
+<div class="table-responsive tableFixHead">
+	<table class="table table-sm table-hover">
+        <thead class="text-white encabezados-tabla">
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Materia</th>
+                <th scope="col">Curso</th>
+                <th scope="col">Periodo</th>
+                <th scope="col">Sede</th>
+                <th scope="col" class="text-center">Seleccionar</th>
+			</tr>	
+        </thead>
+    
+        <tbody class="contenido-tabla" *ngIf="(storePlanDocentes$ | async)?.length > 0; else loading">
+            <tr 
+                *ngFor="let planDocente of (storePlanDocentes$ | async); index as i">
+                <th scope="row">{{ planDocente.index }}</th>
+                <td>{{ planDocente.materia.nombre }}</td>
+                <td>{{ planDocente.curso.grado.grado }}º {{ planDocente.curso.grupo.descripcion }}</td>
+                <td>{{ planDocente.anio_lectivo.anio_actual }} Periodo: {{ planDocente.periodo.numero }}</td>
+                <td>{{ planDocente.sede.descripcion }}</td>
+                <td class="text-center">
+                    <i
+                        (click)="cargarEstudiantes(planDocente)"
+                        class="fa fa-check-circle fa-2x text-primary type-cursor"
+                        aria-hidden="true">
+                    </i>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<ng-template #loading>
+    <div class="d-flex w-100 flex-column justify-content-center align-items-center" *ngIf="calificarActividadesService.loading$ | async">
+        <div class="spinner-border" role="status" aria-hidden="true"></div>
+        <strong class="text-dark">Cargando...</strong>
+    </div>
+</ng-template>
+
+<div class="d-flex justify-content-between pt-2">
+    <ngb-pagination
+        [collectionSize]="collectionSize$ | async"
+        [(page)]="calificarActividadesService.page"
+        [pageSize]="calificarActividadesService.pageSize"
+        (pageChange)="onPageChange($event)"
+        [maxSize]="5"
+        [rotate]="true"
+        [ellipses]="false"
+        [boundaryLinks]="true">
+    </ngb-pagination>
+
+    <div *ngIf="(collectionSize$ | async) === 0; then thenBlock else elseBlock"></div>
+    <ng-template #thenBlock>
+        <div>Mostrando 0 a 0 de 0 resultados</div>
+    </ng-template>
+    <ng-template #elseBlock>
+        <div>
+            Mostrando {{ (offset$ | async) + 1 }} a {{ validateOffset() }} de {{ collectionSize$ | async }} resultados
+        </div>
+    </ng-template>
+</div>

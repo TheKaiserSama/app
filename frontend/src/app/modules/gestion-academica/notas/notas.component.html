@@ -1,0 +1,74 @@
+<div *ngIf="usuario.id_rol == ROL.DOCENTE.id">
+	<div class="administracion">
+		<div class="contenedor__titulo">
+			<h4 class="administracion__titulo">Administración de notas</h4>
+		</div>
+		
+		<div>
+			<button
+				[disabled]="(calificarActividadesService.logros$ | async).length === 0"
+				class="btn btn-primary mr-1"
+				(click)="openNotaFinal(modalNotaFinal)">
+				<i class="fa fa-floppy-o" aria-hidden="true"></i> Nota final
+			</button>
+			<button
+				class="btn btn-primary"
+				(click)="openPlanesDocente(modalCargaAcademica)">
+				<i class="fa fa-address-book" aria-hidden="true"></i> Carga académica
+			</button>
+		</div>
+	</div>
+	
+	<div class="row">
+		<div class="col-md-6">
+			<h5 class="content-header center-v">Logros</h5>
+			<app-listar-logros-simple></app-listar-logros-simple>
+		</div>
+		<div class="col-md-6">
+			<h5 class="content-header center-v">Actividades</h5>
+			<app-listar-actividades-simple></app-listar-actividades-simple>
+		</div>
+	</div>
+	
+	<ng-template #modalCargaAcademica let-modal>
+		<div class="modal-header">
+			<h6 class="modal-title" id="modal-basic-title">
+				Seleccione un curso
+			</h6>
+			<button 
+				type="button"
+				class="close"
+				aria-label="Close"
+				(click)="modal.dismiss()">
+				<span aria-hidden="true">&times;</span>
+			</button>
+		</div>
+			
+		<div class="modal-body">
+			<app-modal-elegir-curso></app-modal-elegir-curso>
+		</div>
+	</ng-template>
+	
+	<ng-template #modalNotaFinal let-modal>
+		<div class="modal-header">
+			<h6 class="modal-title" id="modal-basic-title">
+				Resumen logros y nota final
+			</h6>
+			<button 
+				type="button"
+				class="close"
+				aria-label="Close"
+				(click)="modal.dismiss()">
+				<span aria-hidden="true">&times;</span>
+			</button>
+		</div>
+			
+		<div class="modal-body">
+			<app-listar-resumen-logros></app-listar-resumen-logros>
+		</div>
+	</ng-template>
+</div>
+
+<div *ngIf="usuario.id_rol == ROL.ESTUDIANTE.id">
+	<app-notas-estudiante></app-notas-estudiante>
+</div>

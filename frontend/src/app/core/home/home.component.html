@@ -1,0 +1,68 @@
+<app-carousel
+	[images]="images"
+	[pauseOnHover]="pauseOnHover">
+</app-carousel>
+
+<div class="container">
+	<h1 class="nombre_institucion">Institución Educativa Integrada de Chilvi</h1>
+	<div class="card mb-3" style="width: 100%;">
+		<div class="row no-gutters pb-3">
+			<div class="col-md-6">
+				<img [src]="images[0]" class="card-img" alt="...">
+			</div>
+			<div class="col-md-6">
+				<div class="card-body contenedor_mision">
+					<h5 class="card-title">Misión</h5>
+					<p class="card-text">
+						{{ (institucion$ | async)?.mision }}
+					</p>
+				</div>
+			</div>
+		</div>
+
+		<div class="row no-gutters pb-3 d-flex">
+			<div class="col-md-6 order-0 order-md-1">
+				<img [src]="images[1]" class="card-img" alt="...">
+			</div>
+			<div class="col-md-6 order-1 order-md-0">
+				<div class="card-body contenedor_vision">
+					<h5 class="card-title">Vision</h5>
+					<p class="card-text">
+						{{ (institucion$ | async)?.vision }}
+					</p>
+				</div>
+			</div>
+		</div>
+
+		<div class="row no-gutters pb-3">
+			<div class="col-md-6">
+				<img [src]="images[2]" class="card-img" alt="...">
+			</div>
+			<div class="col-md-6">
+				<div class="card-body contenedor_valores_institucionales">
+					<h5 class="card-title">Valores Institucionales</h5>
+					<ul class="card-text">
+						<li>
+							Respeto.
+						</li>
+						<li>
+							Solidaridad.
+						</li>
+						<li>
+							Trabajo en equipo.
+						</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div
+	class="container"
+  	style="height: 500px;"
+  	leaflet 
+  	[leafletOptions]="options"
+  	[leafletLayersControl]="layersControl"
+  	[leafletLayers]="layers">
+</div>

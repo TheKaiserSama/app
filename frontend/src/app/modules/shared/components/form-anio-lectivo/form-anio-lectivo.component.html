@@ -1,0 +1,98 @@
+<form
+    [formGroup]="formAnioLectivo"
+    (ngSubmit)="sendFormAnioLectivo()"
+    autocomplete="off">
+
+    <div class="form-group">
+        <label for="anio_actual">Año</label>
+        <input
+            type="number"
+            class="form-control form-control-sm"
+            id="anio_actual"
+            aria-describedby="emailHelp"
+            placeholder="Año lectivo"
+            id="anio_actual"
+            name="anio_actual"
+            formControlName="anio_actual">    
+        <div class="col-md-12">
+            <div
+                class="contenedor-error"
+                *ngIf="anio_actual.invalid &&
+                (anio_actual.dirty || anio_actual.touched)">
+                <small *ngIf="anio_actual.errors.noNegativeNumbers">
+                    No se permiten valores negativos ni cero
+                </small>
+                <small *ngIf="anio_actual.errors.interval">
+                    El año debe estar en el intervalo {{ anio_actual.errors.requiredValue }}
+                </small>
+            </div>
+        </div>
+    </div>
+    
+    <div class="form-group">
+        <label for="rango">Rango</label>
+        <select
+            class="form-control form-control-sm"
+            id="rango"
+            name="rango"
+            formControlName="rango"
+            [compareWith]="compareFn">
+            <option value="null" selected disabled>Seleccione rango</option>
+            <option
+                *ngFor="let rango of rangos$ | async"
+                [ngValue]="rango"> 
+                Rango: {{ rango.minimo }} - {{ rango.maximo }}
+            </option>
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label for="estado_anio_lectivo">Estado año lectivo</label>
+        <select
+            class="form-control form-control-sm"
+            id="estado_anio_lectivo"
+            name="estado_anio_lectivo"
+            formControlName="estado_anio_lectivo"
+            [compareWith]="compareFn">
+            <option value="null" selected disabled>Seleccione estado año lectivo</option>
+            <option
+                *ngFor="let estadoAnioLectivo of estadosAniosLectivos$ | async"
+                [ngValue]="estadoAnioLectivo"> 
+                {{ estadoAnioLectivo.descripcion }}
+            </option>
+		</select>
+    </div>
+
+    <div class="form-group">
+        <label for="descripcion">Descripción</label>
+        <textarea
+            class="form-control"
+            id="descripcion"
+            name="descripcion"
+            formControlName="descripcion"
+            rows="4"
+            placeholder="Por favor, ingrese la descripción del año lectivo">
+        </textarea>
+    </div>
+
+    <div class="form-group row">
+        <div class="col-md-12">
+            <mat-slide-toggle
+                class="form-control-sm"
+                [labelPosition]="'before'"
+                [color]="'primary'"
+                formControlName="vigente">
+                Vigente
+            </mat-slide-toggle>
+        </div>
+    </div>
+    
+    <div class="form-group">
+        <button
+            type="submit"
+            [disabled]="formAnioLectivo.invalid"
+            class="btn btn-primary col-md-12">
+            Guardar
+        </button>
+    </div>
+</form>

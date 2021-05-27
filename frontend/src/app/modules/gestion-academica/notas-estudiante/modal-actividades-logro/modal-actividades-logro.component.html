@@ -1,0 +1,85 @@
+<div *ngIf="infoLogro$ | async">
+    <div class="space-between">
+        <p>Docente:
+            <span class="styles-texto">
+                {{ (infoLogro$ | async)?.plan_docente.docente.persona.primer_nombre }}
+                {{ (infoLogro$ | async)?.plan_docente.docente.persona.segundo_nombre }}
+                {{ (infoLogro$ | async)?.plan_docente.docente.persona.primer_apellido }}
+                {{ (infoLogro$ | async)?.plan_docente.docente.persona.segundo_apellido }}
+            </span>
+        </p>
+    </div>
+    <div class="space-between">
+        <p>Materia:
+            <span class="styles-texto">
+                {{ (infoLogro$ | async)?.plan_docente.materia.nombre }}
+            </span>
+        </p>
+        <p>Curso:
+            <span class="styles-texto">
+                {{ (infoLogro$ | async)?.plan_docente.curso.grado.grado }} - {{ (infoLogro$ | async)?.plan_docente.curso.grupo.descripcion }}
+            </span>
+        </p>
+        <p>Periodo:
+            <span class="styles-texto">
+                {{ (infoLogro$ | async)?.plan_docente.periodo.numero }}
+            </span>
+        </p>
+        <p>Año lectivo:
+            <span class="styles-texto">
+                {{ (infoLogro$ | async)?.plan_docente.anio_lectivo.anio_actual }}
+            </span>
+        </p>
+    </div>
+    <div>
+        <p>
+            Logro <span class="badge badge-primary">{{ (infoLogro$ | async)?.porcentaje }}%
+            </span>: <span class="styles-texto">{{ (infoLogro$ | async)?.descripcion }}</span>
+        </p>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12 table-responsive">
+        <table class="table table-sm">
+            <thead class="bg-dark encabezados-tabla">
+                <tr class="header-table">
+                    <th>Nombre</th>
+                    <th>Descripción</th>
+                    <th>Porcentaje</th>
+                    <th>Nota</th>
+                    <th>Nivel</th>
+                </tr>
+            </thead>
+            
+            <tbody>
+                <tr *ngFor="let actividad of actividades$ | async">
+                    <td>{{ actividad.nombre }}</td>
+                    <td>{{ actividad.descripcion }}</td>
+                    <td>{{ actividad.porcentaje }}</td>
+                    <td>{{ actividad.nota }}</td>
+                    <td>
+                        <span [ngClass]="classNivelNota(actividad.nota)">{{ nivelNota(actividad.nota) }}</span>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <ng-container *ngIf="(actividades$ | async)?.length == 0">
+            <p>
+                <ngb-alert [type]="'info'" [dismissible]="false">
+                    <strong>Nota!</strong> No hay actividades para mostrar.
+                </ngb-alert>
+            </p>
+        </ng-container>
+    </div>
+</div>
+
+<!-- Eliminar grafico sino hay datos : *ngIf="(notaEstudianteService.actividades$ | async)?.length > 0" -->
+
+<div class="row justify-content-md-center">
+    <div class="col-md-6">
+        <app-bar-chart-estudiante-actividades>
+        </app-bar-chart-estudiante-actividades>
+    </div>
+</div>

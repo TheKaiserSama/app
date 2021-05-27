@@ -1,0 +1,39 @@
+<div class="wrapper w-mobile-without-sidebar" id="wrapper">
+    
+    <!-- Logo -->
+    <div class="logo" id="logo" style="display: none;">
+        <a>GASOFT</a>
+    </div>
+
+    <!-- Header -->
+    <div class="header bg-primary">
+        <div
+            class="sidebar__toggle"
+            id="sidebar__toggle"
+            (click)="toggleMenu()">
+            <ul class="sidebar__toggle-lista">
+                <li>
+                    <a><i class="fa fa-bars" aria-hidden="true"></i></a>
+                </li>
+            </ul>
+        </div>
+
+        <div class="navbar__custom_menu">
+            <app-popup-menu [notificaciones]="notificaciones"></app-popup-menu>
+        </div>
+    </div>
+
+    <!-- Sidebar -->
+    <app-menu   
+        id="sidebar"
+        class="animated fadeIn sidebar"
+        style="display: none;"   
+        [menus]="menus"
+        [menuSinCaracteresEspeciales]="menuSinCaracteresEspeciales"> 
+    </app-menu>
+    
+    <!-- Main Content -->
+    <div class="content">
+        <router-outlet></router-outlet>
+    </div>
+</div>

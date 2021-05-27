@@ -1,0 +1,132 @@
+<form autocomplete="off">
+    <div class="contenedor-padre">
+        <div class="contenedor-busqueda">
+            <select
+                class="form-control form-control-sm mr-2"
+                name="ctrSede"
+                [formControl]="ctrSede"
+                (ngModelChange)="handleSede($event)">
+                <option [ngValue]="null" selected>Todas las sedes</option>
+                <option
+                    *ngFor="let sede of sedes$ | async"
+                    [ngValue]="sede">
+                    {{ sede.nombre }}
+                </option>
+            </select>
+            <select
+                class="form-control form-control-sm mr-2"
+                name="ctrAnioLectivo"
+                [formControl]="ctrAnioLectivo"
+                (ngModelChange)="handleAnioLectivo($event)">
+                <option [ngValue]="null" selected>Todos los años lectivos</option>
+                <option
+                    *ngFor="let anioLectivo of aniosLectivos$ | async"
+                    [ngValue]="anioLectivo">
+                    {{ anioLectivo.anio_actual }}
+                </option>
+            </select>
+            <select
+                class="form-control form-control-sm mr-2"
+                name="ctrAnioLectivo"
+                [formControl]="ctrGrado"
+                (ngModelChange)="handleGrado($event)">
+                <option [ngValue]="null" selected>Todos los grados</option>
+                <option 
+                    *ngFor="let grado of grados$ | async"
+                    [ngValue]="grado">
+                    {{ grado.grado }}
+                </option>
+            </select>
+        </div>
+        
+        <div class="contenedor-paginas">
+            <select
+                class="form-control form-control-sm"
+                [(ngModel)]="cursoService.pageSize"
+                name="seleccion"
+                (change)="onChange($event.target.value)">
+                <option [value]="10">10 registros</option>
+                <option [value]="15">15 registros</option>
+                <option [value]="20">20 registros</option>
+            </select>
+        </div>
+    </div>
+</form>
+
+<div class="table-responsive">
+	<table class="table table-sm table-striped">
+        <thead class="bg-dark encabezados-tabla">
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col" class="text-center">Sede</th>
+                <th scope="col" class="text-center">Año lectivo</th>
+                <th scope="col" class="text-center">Curso</th>
+                <th scope="col" class="text-center">Jornada</th>
+                <th scope="col" class="text-center">Cupo Total/Disponible</th>
+                <th scope="col" class="text-center">Opciones</th>
+			</tr>	
+        </thead>
+    
+        <tbody class="contenido-tabla" *ngIf="(cursos$ | async)?.length > 0">
+            <tr *ngFor="let curso of (cursos$ | async); index as i">
+                <th scope="row">{{ curso.index }}</th>
+                <td class="text-center">{{ curso.sede.nombre }}</td>
+                <td class="text-center">{{ curso.anio_lectivo.anio_actual }}</td>
+                <td class="text-center">{{ curso.grado.grado }}º. {{ curso.grupo.descripcion }}</td>
+                <td class="text-center">{{ curso.jornada.nombre }}</td>
+                <td class="text-center">{{ curso.cupo_maximo }}/{{ curso.cupo_utilizado }}</td>
+                <td class="text-center">
+                    <button
+                        class="btn btn-info btn-sm mr-1"
+                        (click)="updateCurso(curso)"
+                        placement="top"
+                        ngbTooltip="Actualizar curso">
+                        <i class="fa fa-pencil" aria-hidden="true"></i>
+                    </button>
+                    <button
+                        class="btn btn-danger btn-sm mr-1"
+                        (click)="destroyCurso(curso)"
+                        placement="top"
+                        ngbTooltip="Eliminar curso">
+                        <i class="fa fa-trash" aria-hidden="true"></i>
+                    </button>
+                </td>
+            </tr> 
+        </tbody>
+    </table>
+</div>
+
+<div
+    class="d-flex flex-column justify-content-center align-items-center" *ngIf="cursoService.loading$ | async">
+    <div class="spinner-border" role="status" aria-hidden="true"></div>
+    <strong class="text-dark">Cargando...</strong>
+</div>
+
+<ng-container *ngIf="((cursos$ | async)?.length == 0)">
+    <p>
+        <ngb-alert [type]="'info'" [dismissible]="false">
+            <strong>Nota!</strong> No hay cursos para mostrar.
+        </ngb-alert>
+    </p>
+</ng-container>
+
+<div class="d-flex justify-content-between p-2">
+    <ngb-pagination
+        [collectionSize]="collectionSize$ | async"
+        [(page)]="cursoService.page"
+        [pageSize]="cursoService.pageSize"
+        (pageChange)="onPageChange($event)"
+        [maxSize]="5"
+        [rotate]="true"
+        [ellipses]="false"
+        [boundaryLinks]="true">
+    </ngb-pagination>
+
+    <div *ngIf="(collectionSize$ | async) === 0; then thenBlock else elseBlock"></div>
+    <ng-template #thenBlock>
+        <div>Mostrando 0 a 0 de 0 resultados</div>
+    </ng-template>
+    <ng-template #elseBlock>
+        <div>Mostrando {{ (offset$ | async) + 1 }} a {{ validateOffset() }} de {{ collectionSize$ | async }} resultados</div>
+    </ng-template>
+</div>

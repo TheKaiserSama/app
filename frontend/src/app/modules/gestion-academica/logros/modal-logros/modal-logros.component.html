@@ -1,0 +1,27 @@
+<ng-template #content let-modal>
+	<div class="modal-header">
+		<h6
+			class="modal-title"
+			id="modal-basic-title">
+			Administración de logros
+		</h6>
+		<button
+			type="button"
+			class="close"
+			aria-label="Close"
+			(click)="closeModal(modal)">
+			<span aria-hidden="true">&times;</span>
+		</button>
+	</div>
+		
+	<div class="modal-body">
+		<div class="row">
+            <div class="col-4">
+                <app-form-logro></app-form-logro>
+            </div>
+            <div class="col-8">
+                <app-info-provisional-logros></app-info-provisional-logros>
+            </div>
+        </div>
+	</div>
+</ng-template>

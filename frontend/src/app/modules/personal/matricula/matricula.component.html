@@ -1,0 +1,34 @@
+<div class="administracion">
+	<div class="contenedor_titulo">
+		<h4 class="administracion__titulo">Gestión de matrículas</h4>
+	</div>
+	<div class="contenedor_agregar">
+		<button
+			class="administracion__agregar btn btn-outline-dark"
+			(click)="open(content)">
+			Crear matrícula
+		</button>
+	</div>
+</div>
+<hr>
+
+<app-listar-matricula (editar)="editar($event, content)"></app-listar-matricula>
+
+<ng-template #content let-modal>
+	<div class="modal-header">
+		<h6 class="modal-title" id="modal-basic-title">
+			Registro de matrículas
+		</h6>
+		<button 
+			type="button"
+			class="close"
+			aria-label="Close"
+			(click)="modal.dismiss()">
+			<span aria-hidden="true">&times;</span>
+		</button>
+	</div>
+		
+	<div class="modal-body">
+		<app-form-matricula></app-form-matricula>
+	</div>
+</ng-template>

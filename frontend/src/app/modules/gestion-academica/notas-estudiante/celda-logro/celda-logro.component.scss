@@ -1,0 +1,14 @@
+td {
+    border: 1px solid #CCC;
+    border-collapse: collapse;
+}
+
+.text-center {
+    background-color: #ECECEC;
+    text-align: center;
+}
+
+.center-horizontally {
+    display: flex;
+    justify-content: space-between;
+}

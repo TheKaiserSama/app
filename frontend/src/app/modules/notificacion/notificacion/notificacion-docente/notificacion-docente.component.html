@@ -1,0 +1,180 @@
+<hr>
+
+<div class="form-row busqueda">
+    <div class="col-6 busqueda__campo">
+        <div class="input-group input-group-sm">
+            <div class="input-group-prepend">
+                <span class="input-group-text">
+                    <i class="fa fa-search" aria-hidden="true"></i>
+                </span>
+            </div>
+            <input
+                type="text"
+                class="form-control"
+                name="ctrFilter"
+                [formControl]="ctrFilter"
+                placeholder="Primer nombre, primer apellido o N° de documento">
+        </div>
+    </div>
+
+    <!-- <div class="col-2 seleccion">
+        <select
+            class="form-control form-control-sm"
+            name="ctrSede"
+            [formControl]="ctrSede"
+            (ngModelChange)="handleSede($event)">
+            <option value="null" selected>Todas las sedes</option>
+            <option
+                *ngFor="let sede of sedes$ | async"
+                [ngValue]="sede">
+                {{ sede.nombre }}
+            </option>
+        </select>
+    </div> -->
+
+    <div class="col-2 seleccion">
+        <select
+            class="form-control form-control-sm"
+            name="ctrAnioLectivo"
+            [formControl]="ctrAnioLectivo"
+            (ngModelChange)="handleAnioLectivo($event)">
+            <option value="null" selected>Todos los años lectivos</option>
+            <option
+                *ngFor="let anioLectivo of aniosLectivos$ | async" 
+                [ngValue]="anioLectivo">
+                {{ anioLectivo.anio_actual }}
+            </option>
+        </select>
+    </div>
+
+    <div class="col-2 seleccion">
+        <select
+            class="form-control form-control-sm"
+            name="ctrCurso"
+            [formControl]="ctrCurso"
+            (ngModelChange)="handleCurso($event)">
+            <option value="null" selected>Todos los curso</option>
+            <option
+                *ngFor="let curso of cursos$ | async" 
+                [ngValue]="curso">
+                {{ curso.grado.grado }}° {{ curso.grupo.descripcion }} - {{ curso.jornada.nombre }}
+            </option>
+        </select>
+    </div>
+
+    <div class="col-2 seleccion">
+        <select
+            class="form-control form-control-sm"
+            [(ngModel)]="notificacionDocenteService.pageSize"
+            name="seleccion"
+            (change)="onChange($event.target.value)">
+            <option [value]="10">10 registros</option>
+            <option [value]="15">15 registros</option>
+            <option [value]="20">20 registros</option>
+        </select>
+    </div>
+</div>
+
+<br>
+<div class="accordion" id="accordionNotificaciones">
+    <div class="card" *ngFor="let notificacion of notificaciones$ | async; let i = index">
+        <div class="card-header" [id]="'headingNot'+i">
+            <h2 class="mb-0">
+                <button class="btn btn-link btn-block text-left" type="button" data-toggle="collapse" [attr.data-target]="'#collapseNot'+i" aria-expanded="false" [attr.aria-controls]="'collapseNot'+i" (click)="changeStyle(notificacion.id)">
+                    <span class="mr-1">
+                        <i class="fa" [ngClass]="getClass(notificacion.id)" aria-hidden="true"></i>
+                    </span>
+                    {{ notificacion.mensaje }}
+                    <span class="hora-notificaion">
+                        {{ notificacion.fecha }}
+                    </span>
+                </button>
+            </h2>
+        </div>
+  
+        <div [id]="'collapseNot'+i" class="collapse" [attr.aria-labelledby]="'headingNot'+i">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-4">
+                        <p>Sede:
+                            <span class="styles-texto">{{ notificacion.plan_docente.sede.nombre }}</span>
+                        </p>
+                    </div>
+                    <div class="col-md-4 text-center">
+                        <p>Año lectivo:
+                            <span class="styles-texto">{{ notificacion.plan_docente.anio_lectivo.anio_actual }}</span>
+                        </p>
+                    </div>
+                    <div class="col-md-4 text-right">
+                        <p>Periodo:
+                            <span class="styles-texto">{{ notificacion.plan_docente.periodo.numero }}</span>
+                        </p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-4">
+                        <p>Docente:
+                            <span class="styles-texto">
+                                {{ notificacion.plan_docente.docente.persona.primer_nombre }} {{ notificacion.plan_docente.docente.persona.segundo_nombre }}
+                                {{ notificacion.plan_docente.docente.persona.primer_apellido }} {{ notificacion.plan_docente.docente.persona.segundo_apellido }}
+                            </span>
+                        </p>
+                    </div>
+                    <div class="col-md-4 text-center">
+                        <p>Curso:
+                            <span class="styles-texto">{{ notificacion.plan_docente.curso.grado.grado }} - {{ notificacion.plan_docente.curso.grupo.descripcion }}</span>
+                        </p>
+                    </div>
+                    <div class="col-md-4 text-right">
+                        <p>Materia:
+                            <span class="styles-texto">{{ notificacion.plan_docente.materia.nombre }}</span>
+                        </p>
+                    </div>
+                </div>
+
+                <div *ngIf="notificacion.actividad" class="row">
+                    <div class="col-md-6">
+                        <p>Actividad:
+                            <span class="styles-texto">{{ notificacion.actividad.nombre }}</span>
+                        </p>
+                    </div>
+
+                    <div class="col-md-6 text-right">
+                        <p>Nota:
+                            <span class="styles-texto">{{ notificacion.nota_estudiante?.nota }}</span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<ng-container *ngIf="(notificaciones$ | async)?.length == 0">
+    <p>
+        <ngb-alert [type]="'info'" [dismissible]="false">
+            No hay notificaciones para mostrar.
+        </ngb-alert>
+    </p>
+</ng-container>
+
+<div class="d-flex justify-content-between p-2">
+    <ngb-pagination
+        [collectionSize]="collectionSize$ | async"
+        [(page)]="notificacionDocenteService.page"
+        [pageSize]="notificacionDocenteService.pageSize"
+        (pageChange)="onPageChange($event)"
+        [maxSize]="5"
+        [rotate]="true"
+        [ellipses]="false"
+        [boundaryLinks]="true">
+    </ngb-pagination>
+
+    <div *ngIf="(collectionSize$ | async) === 0; then thenBlock else elseBlock"></div>
+    <ng-template #thenBlock>
+        <div>Mostrando 0 a 0 de 0 resultados</div>
+    </ng-template>
+    <ng-template #elseBlock>
+        <div>Mostrando {{ (offset$ | async) + 1 }} a {{ validateOffset() }} de {{ collectionSize$ | async }} resultados</div>
+    </ng-template>
+</div>

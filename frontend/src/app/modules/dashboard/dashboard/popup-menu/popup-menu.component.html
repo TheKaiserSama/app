@@ -1,0 +1,102 @@
+<nav class="navbar navbar-expand-lg rounded">
+    <div class="collapse navbar-collapse" id="navbarSupportedContent" style="display: unset !important;">
+        <ul class="navbar__custom_menu-lista nav nav-pills mr-auto justify-content-end">
+            <li *ngIf="usuario && usuario.rol.nombre == ROL.ESTUDIANTE.nombre" class="nav-item dropdown">
+                <a class="nav-link text-light link-custom" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <i class="fa fa-bell" aria-hidden="true"></i>
+                </a>
+
+                <ul class="dropdown-menu">
+                    <li class="head text-light bg-dark">
+                        <div class="row">
+                            <div class="col-lg-12 col-sm-12 col-12">
+                                <span>Notificaciones</span>
+                                <a href="" class="float-right text-light">Marcar como leído</a> 
+                            </div>
+                        </div>
+                    </li>
+
+                    <li *ngFor="let notificacion of notificaciones" class="notification-box" (click)="seleccionarNotificacion(notificacion.id)">
+                        <div class="row m-0 p-0">
+                            <div class="col-2 m-0 p-0 style-bell">
+                                <i class="fa fa-bell" aria-hidden="true"></i>
+                            </div>    
+                            <div class="col-9 m-0 p-0">
+                                <p>
+                                    {{ notificacion.mensaje }}
+                                </p>
+                                <small class="text-warning">{{ notificacion.fecha }}</small>
+                            </div>
+                            <div class="col-1 m-0 p-0 style-point">
+                                <i *ngIf="!notificacion.visto" class="fa fa-circle" aria-hidden="true"></i>
+                            </div>
+                        </div>
+                    </li>
+
+                    <li *ngIf="notificaciones?.length == 0">
+                        <div class="row m-1 p-1">
+                            <div class="col-md-12 text-center">
+                                No se encontraron notificaciones
+                            </div>
+                        </div>
+                    </li>
+                    
+                    <li class="footer bg-dark text-center">
+                        <a routerLink="/dashboard/notificaciones/notificaciones" class="text-light">Ver todo</a>
+                    </li>
+                </ul>
+            </li>
+
+            <li>
+                <a class="nav-link text-light link-custom" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <i class="fa fa-user" aria-hidden="true"></i>
+                </a>
+
+                <ul class="dropdown-menu">
+                    <li class="head text-light bg-dark">
+                        <div class="row">
+                            <div class="col-lg-12 col-sm-12 col-12">
+                                <span>Cuenta</span>
+                            </div>
+                        </div>
+                    </li>
+
+                    <li>
+                        <div class="row m-0 p-2">
+                            <div class="col-4 m-0 p-0 center-xy">
+                                <i class="fa fa-user-circle fa-3x" aria-hidden="true"></i>
+                            </div>    
+                            <div class="col-8 m-0 p-0">
+                                <p class="rol_name">{{ usuario.rol.nombre }}</p>
+                                <p>{{ usuario.persona.primer_nombre }} {{ usuario.persona.segundo_nombre }} {{ usuario.persona.primer_apellido }} {{ usuario.persona.segundo_apellido }}</p>
+                            </div>
+                        </div>
+                    </li>
+
+                    <li class="item-box cambiar_clave">
+                        <div class="row m-0 p-1">
+                            <div class="col-1 m-0 p-0 center-xy">
+                                <i class="fa fa-key" aria-hidden="true"></i>
+                            </div>
+                            <div class="col-11 m-0 p-0">
+                                Cambiar contraseña
+                            </div>
+                        </div>
+                    </li>
+                    <hr>
+
+                    <li class="item-box" (click)="cerrarSesion()">
+                        <div class="row m-0 p-1">
+                            <div class="col-1 m-0 p-0 center-xy">
+                                <i class="fa fa-power-off" aria-hidden="true"></i>
+                            </div>
+                            <div class="col-11 m-0 p-0">
+                                Cerrar sesión
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+</nav>

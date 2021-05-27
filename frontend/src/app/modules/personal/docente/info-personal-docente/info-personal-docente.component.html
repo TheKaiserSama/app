@@ -1,0 +1,23 @@
+<div class="container">
+    <app-form-persona
+        [rolList]="roles$"
+        (statusForm)="handleStatusForm($event)"
+        [button]="button">
+    </app-form-persona>
+
+    <div class="form-row">
+        <button
+            *ngIf="docenteService.shouldCreate$ | async"
+            class="btn btn-danger col"
+            [ngClass]="{'mr-1': docenteService.shouldCreate$ | async}"
+            (click)="resetFormPersona()">
+            Limpiar formulario
+        </button>
+        <button
+            class="btn btn-primary col"
+            [disabled]="statusForm"
+            (click)="handleChangeTab()">
+            Siguiente
+        </button>
+    </div>
+</div>

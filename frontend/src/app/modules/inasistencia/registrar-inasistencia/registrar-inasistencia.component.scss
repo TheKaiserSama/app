@@ -1,0 +1,30 @@
+.contenido-tabla {
+    font-size: 14px;
+}
+
+/* Estilos tabla */
+.encabezados-tabla tr th {
+    color: white;
+    font-size: 14px;
+    background-color: #373A3C;
+    // height: 38px;
+}
+
+.tableFixHead { overflow-y: auto; height: 427px; }
+.tableFixHead thead th { position: sticky; top: 0; }
+
+.type-cursor {
+    cursor: pointer;
+}
+
+.detalles-inasistencia {
+    margin: 10px 0;
+    display: flex;
+    justify-content: space-between;
+}
+
+.acciones-inasistencia {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}

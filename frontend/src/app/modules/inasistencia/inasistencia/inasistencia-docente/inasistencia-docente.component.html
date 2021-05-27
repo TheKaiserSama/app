@@ -1,0 +1,210 @@
+<!-- Titulo y botón = 'Tomar inasistencia' -->
+<div class="administracion">
+    <div class="contenedor__titulo">
+        <h3 class="administracion__titulo">Lista de inasistencias</h3>
+    </div>
+
+    <div>
+        <button
+            class="btn btn-primary mr-1"
+            (click)="openTomarInasistencia()">
+            <i class="fa fa-list-alt" aria-hidden="true"></i> Tomar inasistencia
+        </button>
+    </div>
+</div>
+<hr>
+
+<!-- Filtros de busqueda -->
+<div class="form-row busqueda">
+    <div class="col-4 busqueda__campo">
+        <div class="input-group input-group-sm">
+            <div class="input-group-prepend">
+                <span class="input-group-text">
+                    <i class="fa fa-search" aria-hidden="true"></i>
+                </span>
+            </div>
+            <input
+                type="text"
+                class="form-control"
+                name="ctrFilter"
+                [formControl]="ctrFilter"
+                placeholder="Primer nombre, primer apellido o N° de documento">
+        </div>
+    </div>
+
+    <!-- <div class="col-2 seleccion">
+        <select
+            class="form-control form-control-sm"
+            name="ctrSede"
+            [formControl]="ctrSede"
+            (ngModelChange)="handleSede($event)">
+            <option value="null" selected>Todas las sedes</option>
+            <option
+                *ngFor="let sede of sedes$ | async"
+                [ngValue]="sede">
+                {{ sede.nombre }}
+            </option>
+        </select>
+    </div> -->
+
+    <div class="col-2 seleccion">
+        <select
+            class="form-control form-control-sm"
+            name="ctrAnioLectivo"
+            [formControl]="ctrAnioLectivo"
+            (ngModelChange)="handleAnioLectivo($event)">
+            <option value="null" selected>Todos los años lectivos</option>
+            <option
+                *ngFor="let anioLectivo of aniosLectivos$ | async" 
+                [ngValue]="anioLectivo">
+                {{ anioLectivo.anio_actual }}
+            </option>
+        </select>
+    </div>
+
+    <div class="col-2 seleccion">
+        <select
+            class="form-control form-control-sm"
+            name="ctrCurso"
+            [formControl]="ctrCurso"
+            (ngModelChange)="handleCurso($event)">
+            <option value="null" selected>Todos los curso</option>
+            <option
+                *ngFor="let curso of cursos$ | async" 
+                [ngValue]="curso">
+                {{ curso.grado.grado }}° {{ curso.grupo.descripcion }} - 
+                {{ curso.jornada.nombre }}
+            </option>
+        </select>
+    </div>
+
+    <div class="col-2 seleccion">
+        <select
+            class="form-control form-control-sm"
+            name="ctrMateria"
+            [formControl]="ctrMateria"
+            (ngModelChange)="handleMateria($event)">
+            <option value="null" selected>Todas las materias</option>
+            <option
+                *ngFor="let materia of materias$ | async" 
+                [ngValue]="materia">
+                {{ materia.nombre }}
+            </option>
+        </select>
+    </div>
+
+    <div class="col-2 seleccion">
+        <select
+            class="form-control form-control-sm"
+            [(ngModel)]="inasistenciaDocenteService.pageSize"
+            name="seleccion"
+            (change)="onChange($event.target.value)">
+            <option [value]="10">10 registros</option>
+            <option [value]="15">15 registros</option>
+            <option [value]="20">20 registros</option>
+        </select>
+    </div>
+</div>
+
+<!-- Tabla de inasistencias - docente -->
+<div class="table-responsive">
+	<table class="table table-sm table-striped">
+        <thead class="bg-dark encabezados-tabla">
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">N° documento</th>
+                <th scope="col">Nombres</th>
+                <th scope="col">Apellidos</th>
+                <th scope="col">Curso</th>
+                <th scope="col">Materia</th>
+                <th scope="col">Fecha</th>
+                <th scope="col">Falta justificada</th>
+                <th scope="col">Opciones</th>
+			</tr>
+        </thead>
+    
+        <tbody class="contenido-tabla" *ngIf="(inasistencias$ | async)?.length > 0">
+            <tr *ngFor="let inasistencia of (inasistencias$ | async); index as i">
+                <th scope="row">{{ inasistencia.index }}</th>
+                <td>
+                    <ngb-highlight
+                        [highlightClass]="'resaltar'"
+                        [result]="inasistencia.estudiante.persona.documento"
+                        [term]="ctrFilter.value">
+                    </ngb-highlight>
+                </td>
+                <td>
+                    <ngb-highlight
+                        [highlightClass]="'resaltar'"
+                        [result]="inasistencia.estudiante.persona.primer_nombre"
+                        [term]="ctrFilter.value">
+                    </ngb-highlight> {{ inasistencia.estudiante.persona.segundo_nombre }}
+                </td>
+                <td>
+                    <ngb-highlight
+                        [highlightClass]="'resaltar'"
+                        [result]="inasistencia.estudiante.persona.primer_apellido"
+                        [term]="ctrFilter.value">
+                    </ngb-highlight> {{ inasistencia.estudiante.persona.segundo_apellido }}
+                </td>
+                <td>
+                    {{ inasistencia.plan_docente.curso.grado.grado }}° 
+                    {{ inasistencia.plan_docente.curso.grupo.descripcion }} -
+                    {{ inasistencia.plan_docente.curso.jornada.nombre }}
+                </td>
+                <td>{{ inasistencia.plan_docente.materia.nombre }}</td>
+                <td>{{ inasistencia.fecha}}</td>
+                <td>
+                    <span
+                        class="badge"
+                        [ngClass]="{'badge-success': inasistencia.justificado, 'badge-danger': !inasistencia.justificado}">
+                        {{ inasistencia.justificado ? 'Si' : 'No' }}
+                    </span>
+                </td>
+                <td>
+                    <button
+                        class="btn btn-info btn-sm mr-1"
+                        (click)="updateInasistencias(inasistencia)"
+                        placement="top"
+                        ngbTooltip="Actualizar inasistencias">
+                        <i class="fa fa-pencil" aria-hidden="true"></i>
+                    </button>
+                </td>
+            </tr>  
+        </tbody>
+    </table>
+</div>
+
+<div class="d-flex flex-column justify-content-center align-items-center" *ngIf="inasistenciaDocenteService.loading$ | async">
+    <div class="spinner-border" role="status" aria-hidden="true"></div>
+    <strong class="text-dark">Cargando...</strong>
+</div>
+
+<ng-container *ngIf="(inasistencias$ | async)?.length == 0">
+    <p>
+        <ngb-alert [type]="'info'" [dismissible]="false">
+            Nota! No hay inasistencias para mostrar.
+        </ngb-alert>
+    </p>
+</ng-container>
+
+<div class="d-flex justify-content-between p-2">
+    <ngb-pagination
+        [collectionSize]="collectionSize$ | async"
+        [(page)]="inasistenciaDocenteService.page"
+        [pageSize]="inasistenciaDocenteService.pageSize"
+        (pageChange)="onPageChange($event)"
+        [maxSize]="5"
+        [rotate]="true"
+        [ellipses]="false"
+        [boundaryLinks]="true">
+    </ngb-pagination>
+
+    <div *ngIf="(collectionSize$ | async) === 0; then thenBlock else elseBlock"></div>
+    <ng-template #thenBlock>
+        <div>Mostrando 0 a 0 de 0 resultados</div>
+    </ng-template>
+    <ng-template #elseBlock>
+        <div>Mostrando {{ (offset$ | async) + 1 }} a {{ validateOffset() }} de {{ collectionSize$ | async }} resultados</div>
+    </ng-template>
+</div>

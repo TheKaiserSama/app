@@ -1,0 +1,26 @@
+.administracion {
+    padding: 5px;
+    margin: 0;
+    margin-bottom: 30px;
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
+
+.contenedor__titulo {
+    // margin-left: 0.9375rem;
+    display: flex;
+    align-items: center;
+}
+
+.administracion__titulo {
+    font-size: 1.125rem;
+    margin: 0;
+    padding: 0;
+}
+
+@media (min-width: 768px) {
+    .administracion__titulo {
+        font-size: 1.75rem;
+    }
+}

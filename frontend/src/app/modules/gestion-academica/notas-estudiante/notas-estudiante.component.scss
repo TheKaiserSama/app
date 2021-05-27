@@ -1,0 +1,131 @@
+.vertical-align {
+    vertical-align: middle;
+    text-align: center;
+}
+
+.text-center {
+    background-color: #ECECEC;
+    text-align: center;
+}
+
+.header-table {
+    background-color: #373A3C;
+    color: white;
+}
+
+.subheader-table {
+    background-color: #ECECEC;
+}
+
+.center-horizontally {
+    display: flex;
+    justify-content: space-between;
+}
+
+table, td {
+    border: 1px solid #CCC;
+    border-collapse: collapse;
+}
+
+// .busqueda {
+//     display: flex;
+//     flex-direction: column;
+//     align-items: center;
+//     margin: 0;
+// }
+
+// .busqueda__etiqueta {
+//     padding: 10px 0 5px 0;
+// }
+
+// .busqueda__campo {
+//     margin: 5px 0;
+//     width: 100%;
+// }
+
+// .seleccion {
+//     margin-bottom: 10px;
+//     width: 100%;
+// }
+
+// .container-control {
+//     margin: 5px 0;
+// }
+
+// .encabezados-tabla {
+//     color: white;
+//     font-size: 14px;
+// }
+
+// .contenido-tabla {
+//     font-size: 14px;
+// }
+
+// .paginacion {
+//     display: flex;
+//     flex-direction: column;
+//     align-items: center;
+//     margin-top: 10px;
+// }
+
+// .centrar_celda {
+//     display: flex;
+//     justify-content: center;
+// }
+
+// .contenedor-padre {
+//     display: flex;
+//     justify-content: space-between;
+//     margin-bottom: 10px;
+// }
+
+// .contenedor-busqueda {
+//     display: flex;
+//     flex-basis: 45%;
+// }
+
+// .contenedor-paginas {
+//     display: flex;
+//     flex-basis: 200px;
+// }
+
+// .nota {
+//     display: flex;
+//     justify-content: space-between;
+// }
+
+// .center-badge {
+//     display: flex;
+//     justify-content: center;
+//     align-items: center;
+// }
+
+// .nota-porcentaje {
+//     display: flex;
+//     justify-content: center;
+//     align-items: center;
+// }
+
+// @media (min-width: 758px) {
+//     .busqueda {
+//         flex-direction: row;
+//         justify-content: space-between;
+//         align-items: center;
+//         margin: 10px 0;
+//     }
+
+//     .busqueda__campo {
+//         width: 50%;
+//     }
+
+//     .seleccion {
+//         margin: 0;
+//         width: 30%;
+//     }
+
+//     .paginacion {
+//         flex-direction: row;
+//         justify-content: space-between;
+//         align-items: center;
+//     }
+// }

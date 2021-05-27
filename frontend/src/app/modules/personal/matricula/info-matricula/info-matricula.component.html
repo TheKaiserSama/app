@@ -1,0 +1,190 @@
+<div class="container">
+    <form
+        [formGroup]="formMatricula"
+        (ngSubmit)="sendFormMatricula()"
+        autocomplete="off">
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                <label for="sede">Sede</label>
+                <select 
+                    class="form-control form-control-sm"
+                    id="sede"
+                    name="sede"
+                    formControlName="sede"
+                    (ngModelChange)="handleSede($event)"
+                    [compareWith]="compareFn">
+                    <option value="null" selected disabled>Seleccione sede</option>
+                    <option
+                        *ngFor="let sede of sedes$ | async"
+                        [ngValue]="sede">
+                        {{ sede.nombre }}
+                    </option>
+                </select>
+            </div>
+            <div class="form-group col-md-6">
+                <label for="anio_lectivo">Año lectivo</label>
+                <select
+                    class="form-control form-control-sm"
+                    id="anio_lectivo"
+                    name="anio_lectivo"
+                    formControlName="anio_lectivo"
+                    [compareWith]="compareFn">
+                    <option
+                        *ngFor="let anioLectivo of aniosLectivos$ | async"
+                        [ngValue]="anioLectivo">
+                        {{ anioLectivo.anio_actual }}
+                    </option>
+                </select>
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                <label for="grado">Grado</label>
+                <select 
+                    class="form-control form-control-sm"
+                    id="grado"
+                    name="grado"
+                    formControlName="grado"
+                    (ngModelChange)="handleGrado($event)"
+                    [compareWith]="compareFn">
+                    <option value="null" selected disabled>Seleccione grado</option>
+                    <option
+                        *ngFor="let grado of grados$ | async"
+                        [ngValue]="grado">
+                        {{ grado.grado }}
+                    </option>
+                </select>
+            </div>
+
+            <div class="form-group col-md-6">
+                <label for="grupo">Grupo</label>
+                <select
+                    class="form-control form-control-sm"
+                    id="grupo"
+                    name="grupo"
+                    formControlName="grupo"
+                    [compareWith]="compareFn">
+                    <option value="null" selected disabled>Seleccione grupo</option>
+                    <option
+                        [ngClass]="{'grupo-lleno': grupo.cupo_utilizado == grupo.cupo_maximo}"
+                        *ngFor="let grupo of grupos$ | async"
+                        [disabled]="grupo.cupo_utilizado == grupo.cupo_maximo"
+                        [ngValue]="grupo">
+                            {{ grupo.grupo.descripcion }} - {{ grupo.cupo_utilizado }}/{{ grupo.cupo_maximo }} - {{ grupo.jornada.nombre }}
+                            <strong *ngIf="grupo.cupo_utilizado == grupo.cupo_maximo">- LLeno</strong>
+                    </option>
+                </select>
+            </div>
+        </div>
+        
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                <label for="fecha_registro">Fecha de registro</label>
+                <div class="input-group">
+                    <input
+                        type="text"
+                        class="form-control form-control-sm"
+                        placeholder="yyyy-mm-dd"
+                        ngbDatepicker
+                        #d="ngbDatepicker"
+                        id="fecha_registro"
+                        name="fecha_registro"
+                        formControlName="fecha_registro"
+                        (dateSelect)="onDateSelect($event)">
+                    <div class="input-group-append">
+                        <button 
+                            class="calendario btn btn-outline-primary form-control-sm"
+                            (click)="d.toggle()"
+                            type="button">
+                            <i class="fa fa-calendar"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group col-md-6">
+                <label for="fecha_ingreso">Fecha de ingreso</label>
+                <div class="input-group">
+                    <input
+                        type="text"
+                        class="form-control form-control-sm"
+                        placeholder="yyyy-mm-dd"
+                        ngbDatepicker
+                        #dp2="ngbDatepicker"
+                        id="fecha_ingreso"
+                        name="fecha_ingreso"
+                        formControlName="fecha_ingreso">
+                    <div class="input-group-append">
+                        <button 
+                            class="calendario btn btn-outline-primary form-control-sm"
+                            (click)="dp2.toggle()"
+                            type="button">
+                            <i class="fa fa-calendar"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                <label for="estado_matricula">Estado matricula</label>
+                <select 
+                    class="form-control form-control-sm"
+                    id="estado_matricula"
+                    name="estado_matricula"
+                    formControlName="estado_matricula"
+                    [compareWith]="compareFn">
+                    <option value="null" selected disabled>Seleccione estado de matricula</option>
+                    <option
+                        *ngFor="let estadoMatricula of estadosMatricula$ | async"
+                        [ngValue]="estadoMatricula">
+                        {{ estadoMatricula.descripcion }}
+                    </option>
+                </select>
+            </div>
+
+            <div class="form-group col-md-6">
+                <label for="estado_estudiante">Estado estudiante</label>
+                <select
+                    class="form-control form-control-sm"
+                    id="estado_estudiante"
+                    name="estado_estudiante"
+                    formControlName="estado_estudiante"
+                    [compareWith]="compareFn">
+                    <option value="null" selected disabled>Seleccione estado de estudiante</option>
+                    <option
+                        *ngFor="let estadoEstudiante of estadosEstudiante$ | async"
+                        [ngValue]="estadoEstudiante">
+                        {{ estadoEstudiante.descripcion }}
+                    </option>
+                </select>
+            </div>
+        </div>
+
+        <div class="row">
+            <button
+                class="btn btn-primary col"
+                [ngClass]="{'mr-1': !(matriculaService.shouldCreate$ | async)}"
+                type="button"
+                [disabled]="formMatricula.invalid"
+                (click)="previousTab()">
+                Anterior
+            </button>
+            <button
+                *ngIf="matriculaService.shouldCreate$ | async"
+                class="btn btn-danger col mx-1"
+                type="button"
+                (click)="resetFormMatricula()">
+                Limpiar formulario
+            </button>
+            <button
+                class="btn btn-primary col"
+                type="submit"
+                [disabled]="formMatricula.invalid">
+                {{ button.text }}
+            </button>
+        </div>
+    </form>
+</div>

@@ -1,0 +1,117 @@
+<form
+	[formGroup]="formPeriodo"
+	(ngSubmit)="sendFormPeriodo()"
+	autocomplete="off">
+    <div class="form-row">
+		<div class="form-group col-md-6">
+			<label for="anio_lectivo">Año lectivo</label>
+			<select
+				class="form-control form-control-sm"
+				id="anio_lectivo"
+				name="anio_lectivo"
+				formControlName="anio_lectivo"
+				[compareWith]="compareFn">
+				<option value="null" selected disabled>Seleccione año lectivo</option>
+				<option
+                    *ngFor="let anioLectivo of aniosLectivos$ | async"
+                    [ngValue]="anioLectivo">
+                    {{ anioLectivo.anio_actual }}
+                </option>
+			</select>
+        </div>
+
+        <div class="form-group col-md-6">
+			<label for="numero">Numero de periodo</label>
+			<input  
+				type="number"
+				class="form-control form-control-sm"
+				id="numero"
+				name="numero"
+                formControlName="numero"
+				placeholder="Número de periodo">
+			<div class="contenedor-error col-md-12">
+				<div
+					*ngIf="numero.invalid &&
+					(numero.dirty || numero.touched)">
+					<small *ngIf="numero.errors.noNegativeNumbers">
+						No se permiten valores negativos, cero o vacío
+					</small>
+				</div>
+			</div>
+        </div>
+    </div>
+	
+	<div class="form-row">
+		<div class="form-group col-md-6">
+			<label for="fecha_inicio">Fecha inicio</label>
+			<div class="input-group">
+				<input
+					type="text"
+					class="form-control form-control-sm"
+					placeholder="yyyy-mm-dd"
+					ngbDatepicker
+					#d="ngbDatepicker"
+					id="fecha_inicio"
+					name="fecha_inicio"
+					formControlName="fecha_inicio"
+					(dateSelect)="onDateSelect($event)">
+				<div class="input-group-append">
+					<button 
+						class="calendario btn btn-outline-primary form-control-sm"
+						(click)="d.toggle()"
+						type="button">
+						<i class="fa fa-calendar"></i>
+					</button>
+				</div>
+			</div>
+        </div>
+
+        <div class="form-group col-md-6">
+            <label for="fecha_finalizacion">Fecha finalización</label>
+			<div class="input-group">
+				<input
+					type="text"
+					class="form-control form-control-sm"
+					placeholder="yyyy-mm-dd"
+					ngbDatepicker
+					#d2="ngbDatepicker"
+					id="fecha_finalizacion"
+					name="fecha_finalizacion"
+					formControlName="fecha_finalizacion"
+					(dateSelect)="onDateSelect($event)">
+                <div class="input-group-append">
+                    <button 
+                        class="calendario btn btn-outline-primary form-control-sm"
+                        (click)="d2.toggle()"
+                        type="button">
+                        <i class="fa fa-calendar"></i>
+                    </button>
+                </div>
+			</div>
+        </div>
+	</div>
+	
+    <div class="form-row">
+		<div class="form-group col-md-12">
+			<label for="descripcion">Descripción</label>
+			<textarea
+                class="form-control"
+                id="descripcion"
+                name="descripcion"
+                formControlName="descripcion"
+                rows="2"
+                placeholder="Por favor, ingrese la descripción del periodo">
+            </textarea>
+        </div>
+    </div>
+
+	<div class="form-group">
+		<button
+			*ngIf="estilosBoton.show"
+            type="submit"
+            [disabled]="formPeriodo.invalid"
+            [ngClass]="estilosBoton.class">
+            {{ estilosBoton.text }}
+        </button>
+    </div>
+</form>

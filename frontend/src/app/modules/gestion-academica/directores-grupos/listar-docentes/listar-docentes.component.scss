@@ -1,0 +1,27 @@
+.container-control {
+    margin: 5px 0;
+}
+
+.encabezados-tabla {
+    color: white;
+    font-size: 14px;
+}
+
+.contenido-tabla {
+    font-size: 14px;
+}
+
+.paginacion {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 10px;
+}
+
+@media (min-width: 758px) {
+    .paginacion {
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+    }
+}

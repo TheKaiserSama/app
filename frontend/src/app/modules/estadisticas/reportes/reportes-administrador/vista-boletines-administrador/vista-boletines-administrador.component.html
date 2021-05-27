@@ -1,0 +1,115 @@
+<div class="modal-header">
+	<h5 class="modal-title">Imprimir/Descargar boletines</h5>
+	<button
+	  	type="button"
+	  	class="close"
+	  	aria-label="Close"
+	  	(click)="activeModal.dismiss('Cross click')">
+	  	<span aria-hidden="true">&times;</span>
+	</button>
+</div>
+
+<div class="modal-body">
+    <div class="info_institucion">
+        <p>
+            <span class="etiqueta">Sede: </span>
+            <span class="descripcion">
+                {{ directorGrupo.curso.sede.nombre }}
+            </span>
+        </p>
+        <p>
+            <span class="etiqueta">Curso: </span>
+            <span class="descripcion">
+                {{ directorGrupo.curso.grado.grado }}° {{ directorGrupo.curso.grupo.descripcion }}
+            </span>
+        </p>
+        <p>
+            <span class="etiqueta">Jornada: </span>
+            <span class="descripcion">
+                {{ directorGrupo.curso.jornada.nombre }}
+            </span>
+        </p>
+    </div>
+    <div class="info_docente">
+        <p>
+            <span class="etiqueta">Docente: </span>
+            <span class="descripcion">
+                {{ directorGrupo.docente.persona.primer_nombre }}
+                {{ directorGrupo.docente.persona.segundo_nombre }}
+                {{ directorGrupo.docente.persona.primer_apellido }}
+                {{ directorGrupo.docente.persona.segundo_apellido }}
+            </span>
+        </p>
+        <p>
+            <span class="etiqueta">Titulo: </span>
+            <span class="descripcion">{{ directorGrupo.docente.titulo }}</span>
+        </p>
+    </div>
+
+    <div class="container_controls">
+        <div class="form-group container-control">
+            <select
+                class="form-control form-control-sm"
+                name="ctrPeriodo"
+                [formControl]="ctrPeriodo"
+                (ngModelChange)="handlePeriodo($event)">
+                <option value="null" disabled selected>Seleccione boletín</option>
+                <option
+                    *ngFor="let periodo of periodos$ | async"
+                    [ngValue]="periodo">
+                    Boletín {{ periodo.numero }}
+                </option>
+                <option value="null">Boletín final</option>
+            </select>
+        </div>
+
+        <div class="container-btn">
+            <button
+                class="btn btn btn-primary mr-1"
+                [disabled]="!checkboxSelected()"
+                (click)="printBoletines()">
+                <i class="fa fa-print" aria-hidden="true"></i> Imprimir
+            </button>
+            <button
+                class="btn btn btn-success"
+                [disabled]="!checkboxSelected()"
+                (click)="downloadBoletines()">
+                <i class="fa fa-download" aria-hidden="true"></i> Descargar
+            </button>
+        </div>
+    </div>
+
+    <div class="table-responsive tableFixHead">
+        <table class="table table-sm table-hover">
+            <thead class="text-white encabezados-tabla">
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Documento</th>
+                    <th scope="col">Nombres</th>
+                    <th scope="col">Apellidos</th>
+                    <th scope="col" class="text-center">Selección</th>
+                </tr>
+            </thead>
+    
+            <tbody class="contenido-tabla">
+                <tr *ngFor="let boletin of boletines; index as i">
+                    <th scope="row">{{ i + 1 }}</th>
+                    <td>{{ boletin.estudiante.persona.documento }}</td>
+                    <td>{{ boletin.estudiante.persona.primer_nombre }} {{ boletin.estudiante.persona.segundo_nombre }}</td>
+                    <td>{{ boletin.estudiante.persona.primer_apellido }} {{ boletin.estudiante.persona.segundo_apellido }}</td>
+                    <td class="text-center">
+                        <input name="imprimirBoletines" type="checkbox"
+                               [(ngModel)]="getCheckBoxEstudiante(boletin.estudiante.id).checked">
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <ngb-alert
+            *ngIf="boletines.length == 0"
+            [type]="'info'"
+            [dismissible]="false">
+            Seleccione un boletin para continuar
+        </ngb-alert>
+    </div>
+</div>

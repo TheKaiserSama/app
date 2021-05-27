@@ -1,0 +1,36 @@
+.seleccion {
+    margin-bottom: 10px;
+    width: 100%;
+}
+
+.encabezados-tabla {
+    color: white;
+    font-size: 14px;
+}
+
+.contenido-tabla {
+    font-size: 14px;
+}
+
+.contenedor-padre {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+
+.contenedor-busqueda {
+    display: flex;
+    flex-basis: 55%;
+}
+
+.contenedor-paginas {
+    display: flex;
+    flex-basis: 200px;
+}
+
+@media (min-width: 758px) {
+    .seleccion {
+        margin: 0;
+        width: 30%;
+    }
+}

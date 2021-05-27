@@ -1,0 +1,43 @@
+<div class="table-responsive">
+	<table class="table table-sm table-hover">
+        <thead class="encabezados-tabla">
+            <tr>
+                <th scope="col" class="text-center">Grado</th>
+                <th scope="col" class="text-center">Vigente</th>
+			</tr>	
+        </thead>
+    
+        <tbody
+            class="contenido-tabla">
+            <tr
+                *ngFor="let grado of grados$ | async; index as i">
+                <td class="text-center">{{ grado.grado }}</td>
+                <td class="text-center">
+                    <mat-slide-toggle
+                        [color]="'primary'"
+                        [checked]="grado.vigente"
+                        (change)="toggleSlideToggle($event, grado)">
+                        <span 
+                            class="badge"
+                            [ngClass]="{'badge-success': grado.vigente, 'badge-danger': !grado.vigente}">
+                            {{ grado.vigente ? 'Si' : 'No' }}
+                        </span>
+                    </mat-slide-toggle>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<div *ngIf="(gradoService.loading$ | async)" class="d-flex w-100 flex-column justify-content-center align-items-center">
+    <div class="spinner-border" role="status" aria-hidden="true"></div>
+    <strong class="text-dark">Cargando...</strong>
+</div>
+
+<ng-container *ngIf="((grados$ | async)?.length == 0)">
+    <p>
+        <ngb-alert [type]="'info'" [dismissible]="false">
+            <strong>Nota!</strong> No hay grados para mostrar.
+        </ngb-alert>
+    </p>
+</ng-container>

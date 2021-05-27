@@ -1,0 +1,107 @@
+<div class="modal-header">
+    <h6 class="modal-title">Resumen de actividades por logro</h6>
+    <button
+        type="button"
+        class="close"
+        aria-label="Close"
+        (click)="activeModal.dismiss('Cross click')">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+    
+<div class="modal-body">
+    <div class="row">
+        <div class="col-md-4">
+            <app-widget-chart
+                [config]="configMax">
+            </app-widget-chart>
+        </div>
+        <div class="col-md-4">
+            <app-widget-chart
+                [config]="configPro">
+            </app-widget-chart>
+        </div>
+        <div class="col-md-4">
+            <app-widget-chart
+                [config]="configMin">
+            </app-widget-chart>
+        </div>
+    </div>
+    
+    <div class="table-responsive" *ngIf="(storeResumenActividades$ | async)[1]?.length > 0; else sinActividades">
+        <table class="table table-sm table-hover">
+            <thead class="text-white encabezados-tabla">
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Estudiante</th>
+                    <th
+                        class="text-center"
+                        scope="col"
+                        *ngFor="let encabezados of (storeResumenActividades$ | async)[1]; index as i">
+                        Act #{{ i + 1 }} <i class="fa fa-info-circle" aria-hidden="true" placement="top" [ngbTooltip]="encabezados.nombre"></i>
+                    </th>
+                    <th scope="col">Nota</th>
+                    <th scope="col">Logro</th>
+                </tr>	
+            </thead>
+        
+            <tbody
+                class="contenido-tabla"
+                *ngIf="(storeResumenActividades$ | async)?.length > 0">
+                <tr 
+                    *ngFor="let resumenAct of (storeResumenActividades$ | async)[0]; index as i">
+                    <th scope="row">{{ resumenAct.index }}</th>
+                    <td>
+                        {{ resumenAct.persona.primer_nombre }}
+                        {{ resumenAct.persona.segundo_nombre }}
+                        {{ resumenAct.persona.primer_apellido }}
+                        {{ resumenAct.persona.segundo_apellido }}
+                    </td>
+                    <td class="text-center" *ngFor="let actividad of resumenAct?.actividades">{{ actividad.nota || 0 }}</td>
+                    <td>{{ resumenAct.nota }}</td>
+                    <td>{{ resumenAct.logro }}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    
+    <div *ngIf="notaService.loading$ | async">
+        <div class="d-flex w-100 flex-column justify-content-center align-items-center" *ngIf="notaService.loading$ | async">
+            <div class="spinner-border" role="status" aria-hidden="true"></div>
+            <strong class="text-dark">Cargando...</strong>
+        </div>
+    </div>
+    
+    <ng-template #sinActividades>
+        <p>
+            <ngb-alert
+                [type]="'info'"
+                [dismissible]="false">
+                <strong>Nota!</strong> No hay actividades para el logro seleccionado.
+            </ngb-alert>
+        </p>
+    </ng-template>
+    
+    <div class="d-flex justify-content-between pt-2">
+        <ngb-pagination
+            [collectionSize]="collectionSize$ | async"
+            [(page)]="notaService.page"
+            [pageSize]="notaService.pageSize"
+            (pageChange)="onPageChange($event)"
+            [maxSize]="5"
+            [rotate]="true"
+            [ellipses]="false"
+            [boundaryLinks]="true">
+        </ngb-pagination>
+    
+        <div *ngIf="(collectionSize$ | async) === 0; then thenBlock else elseBlock"></div>
+        <ng-template #thenBlock>
+            <div>Mostrando 0 a 0 de 0 resultados</div>
+        </ng-template>
+        <ng-template #elseBlock>
+            <div>
+                Mostrando {{ (notaService.page - 1) * notaService.pageSize + 1 }} a {{ notaService.validateOffset() }} de {{ collectionSize$ | async }} resultados
+            </div>
+        </ng-template>
+    </div>
+</div>

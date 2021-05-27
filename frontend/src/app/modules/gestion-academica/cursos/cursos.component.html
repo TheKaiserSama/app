@@ -1,0 +1,130 @@
+<div class="administracion">
+	<div class="contenedor__titulo">
+		<h4 class="administracion__titulo">Administración de cursos</h4>
+	</div>
+	<div class="contenedor__agregar">
+		<button
+			class="btn btn-outline-dark administracion__agregar mr-1"
+			(click)="openModalGrado(contentGrado)">
+			<i class="fa fa-plus-circle" aria-hidden="true"></i> Gestionar grados
+		</button>
+		<button
+			class="btn btn-outline-dark administracion__agregar mr-1"
+			(click)="openModalGrupo(contentGrupo)">
+			<i class="fa fa-plus-circle" aria-hidden="true"></i> Gestionar grupos
+		</button>
+		<button
+			class="btn btn-outline-dark administracion__agregar mr-1"
+			(click)="openFormCurso(formCurso)">
+			<i class="fa fa-plus-circle" aria-hidden="true"></i> Crear curso
+		</button>
+		<button
+			class="btn btn-outline-dark administracion__agregar"
+			(click)="openCursoMateria(contentCursoMateria)">
+			<i class="fa fa-plus-circle" aria-hidden="true"></i> Agregar materia
+		</button>
+	</div>
+</div>
+<hr>
+
+<app-listar-cursos (editar)="editar($event, formCurso)"></app-listar-cursos>
+
+<ng-template #contentGrado let-modalGrado>
+	<div class="modal-header">
+		<h6 class="modal-title" id="modal-basic-title">
+			Administración de grados
+		</h6>
+		<button 
+			type="button"
+			class="close"
+			aria-label="Close"
+			(click)="modalGrado.dismiss()">
+			<span aria-hidden="true">&times;</span>
+		</button>
+	</div>
+		
+	<div class="modal-body">
+		<div class="row">
+			<div class="col-md-12">
+				<app-listar-grados></app-listar-grados>
+			</div>
+        </div>
+	</div>
+</ng-template>
+
+<ng-template #contentGrupo let-modalGrupo>
+	<div class="modal-header">
+		<h6 class="modal-title" id="modal-basic-title">
+			Administración de grupos
+		</h6>
+		<button 
+			type="button"
+			class="close"
+			aria-label="Close"
+			(click)="modalGrupo.dismiss()">
+			<span aria-hidden="true">&times;</span>
+		</button>
+	</div>
+		
+	<div class="modal-body">
+		<div class="row">
+            <div class="col-5">
+                <app-form-grupo></app-form-grupo>
+            </div>
+            <div class="col-7">
+				<app-listar-grupos></app-listar-grupos>
+            </div>
+        </div>
+	</div>
+</ng-template>
+
+<ng-template #formCurso let-modal>
+	<div class="modal-header">
+		<h6 class="modal-title" id="modal-basic-title">
+			Registro de cursos
+		</h6>
+		<button
+			type="button"
+			class="close"
+			aria-label="Close"
+			(click)="modal.dismiss()">
+			<span aria-hidden="true">&times;</span>
+		</button>
+	</div>
+		
+	<div class="modal-body">
+		<div *ngIf="(cursoService.shouldCreate$ | async); then crearCurso else editarCurso"></div>
+		<ng-template #crearCurso>
+			<app-crear-curso></app-crear-curso>
+		</ng-template>
+		<ng-template #editarCurso>
+			<app-editar-curso></app-editar-curso>
+		</ng-template>
+	</div>
+</ng-template>
+
+<ng-template #contentCursoMateria let-modalCursoMateria>
+	<div class="modal-header">
+		<h6 class="modal-title" id="modal-basic-title">
+			Asignación de materias a cursos
+		</h6>
+		<button 
+			type="button"
+			class="close"
+			aria-label="Close"
+			(click)="modalCursoMateria.dismiss()">
+			<span aria-hidden="true">&times;</span>
+		</button>
+	</div>
+		
+	<div class="modal-body">
+		<div class="row">
+            <div class="col-3">
+                <app-form-grado-materia></app-form-grado-materia>
+            </div>
+            <div class="col-9">
+				<app-listar-cursos-materias></app-listar-cursos-materias>
+            </div>
+        </div>
+	</div>
+</ng-template>

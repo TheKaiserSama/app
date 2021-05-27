@@ -1,0 +1,121 @@
+<form autocomplete="off">
+    <div class="form-row busqueda">
+        <div class="col-6 busqueda__campo">
+            <div class="input-group input-group-sm">
+                <div class="input-group-prepend">
+                    <span class="input-group-text">
+                        <i class="fa fa-search" aria-hidden="true"></i>
+                    </span>
+                </div>
+                <input
+                    type="text"
+                    class="form-control"
+                    [formControl]="filter"
+                    placeholder="Nombre de la materia">
+            </div>
+        </div>
+
+        <div class="col-3 seleccion">
+            <select
+                class="form-control form-control-sm"
+                [(ngModel)]="materiaService.pageSize"
+                name="seleccion"
+                (change)="onChange($event.target.value)">
+                <option [value]="10">10 registros</option>
+                <option [value]="15">15 registros</option>
+                <option [value]="20">20 registros</option>
+            </select>
+        </div>
+    </div>
+</form>
+
+<div class="table-responsive">
+	<table class="table table-sm table-striped">
+        <thead class="bg-dark encabezados-tabla">
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Materia</th>
+                <th scope="col">Area</th>
+                <th scope="col">Descripción</th>
+                <th class="text-center" scope="col">Acción</th>
+			</tr>	
+        </thead>
+    
+        <tbody class="contenido-tabla" *ngIf="(materias$ | async)?.length > 0">
+            <tr *ngFor="let materia of (materias$ | async); index as i">
+                <th scope="row">{{ materia.index }}</th>
+                <td>
+                    <ngb-highlight 
+                        [highlightClass]="'resaltar'"
+                        [result]="materia.nombre"
+                        [term]="filter.value">
+                    </ngb-highlight>
+                </td>
+                <th>
+                    <span 
+                        class="badge badge-info">
+                        {{ materia.area.nombre }}
+                    </span>
+                </th>
+                <td>{{ materia.descripcion }}</td>
+                <td class="text-center">
+                    <button
+                        class="btn btn-info btn-sm mr-1"
+                        (click)="updateMateria(materia)"
+                        placement="top"
+                        ngbTooltip="Actualizar materia">
+                        <i class="fa fa-pencil" aria-hidden="true"></i>
+                    </button>
+                    <button
+                        class="btn btn-danger btn-sm"
+                        (click)="destroyMateria(materia)"
+                        placement="top"
+                        ngbTooltip="Eliminar materia">
+                        <i class="fa fa-trash" aria-hidden="true"></i>
+                    </button>
+                </td>
+            </tr>  
+        </tbody>
+    </table>
+</div>
+
+<div class="d-flex flex-column justify-content-center align-items-center" *ngIf="materiaService.loading$ | async">
+    <div class="spinner-border" role="status" aria-hidden="true"></div>
+    <strong class="text-dark">Cargando...</strong>
+</div>
+
+<ng-container *ngIf="((materias$ | async)?.length == 0 && materiaService.searchTerm == '')">
+    <p>
+        <ngb-alert [type]="'info'" [dismissible]="false">
+            <strong>Nota!</strong> No hay materias para mostrar.
+        </ngb-alert>
+    </p>
+</ng-container>
+
+<ngb-alert
+    *ngIf="((collectionSize$ | async) === 0) && materiaService.searchTerm != ''"
+    [type]="'warning'"
+    [dismissible]="false">
+    No se encontraron resultados para el termino: "{{ materiaService.searchTerm }}"
+</ngb-alert>
+
+<div class="d-flex justify-content-between p-2">
+    <ngb-pagination
+        [collectionSize]="collectionSize$ | async"
+        [(page)]="materiaService.page"
+        [pageSize]="materiaService.pageSize"
+        (pageChange)="onPageChange($event)"
+        [maxSize]="5"
+        [rotate]="true"
+        [ellipses]="false"
+        [boundaryLinks]="true">
+    </ngb-pagination>
+
+    <div *ngIf="(collectionSize$ | async) === 0; then thenBlock else elseBlock"></div>
+    <ng-template #thenBlock>
+        <div>Mostrando 0 a 0 de 0 resultados</div>
+    </ng-template>
+    <ng-template #elseBlock>
+        <div>Mostrando {{ (offset$ | async) + 1 }} a {{ validateOffset() }} de {{ collectionSize$ | async }} resultados</div>
+    </ng-template>
+</div>

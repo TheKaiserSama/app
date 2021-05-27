@@ -1,0 +1,59 @@
+<div class="modal-header">
+	<h5 class="modal-title">Cursos disponibles</h5>
+	<button
+	  	type="button"
+	  	class="close"
+	  	aria-label="Close"
+	  	(click)="activeModal.dismiss('Cross click')">
+	  	<span aria-hidden="true">&times;</span>
+	</button>
+</div>
+
+<div class="modal-body">
+	<div class="table-responsive tableFixHead">
+        <table class="table table-sm table-hover">
+            <thead class="text-white encabezados-tabla">
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Sede</th>
+                    <th scope="col">Periodo</th>
+                    <th scope="col">Curso</th>
+                    <th scope="col">Materia</th>
+                    <th scope="col">Jornada</th>
+                    <th scope="col" class="text-center">Seleccionar</th>
+                </tr>	
+            </thead>
+        
+            <tbody class="contenido-tabla" *ngIf="(planesDocentes$ | async)?.length > 0">
+                <tr 
+                    *ngFor="let planDocente of planesDocentes$ | async; index as i">
+                    <th scope="row">{{ i + 1 }}</th>
+                    <td>{{ planDocente.sede.nombre }}</td>
+                    <td>{{ planDocente.anio_lectivo.anio_actual }} - Periodo: {{ planDocente.periodo.numero }}</td>
+                    <td>{{ planDocente.curso.grado.grado }}º {{ planDocente.curso.grupo.descripcion }}</td>
+                    <td>{{ planDocente.materia.nombre }}</td>
+                    <td>{{ planDocente.curso.jornada.nombre }}</td>
+                    <td class="text-center">
+                        <a>
+                            <i
+                                (click)="openTomarInasistencia(planDocente)"
+                                class="fa fa-check-circle fa-2x text-primary type-cursor"
+                                aria-hidden="true">
+                            </i>
+                        </a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>    
+</div>
+
+<ng-container *ngIf="((planesDocentes$ | async)?.length == 0)">
+    <p>
+        <ngb-alert
+            [type]="'info'"
+            [dismissible]="false">
+            <strong>Nota!</strong> No hay datos para mostrar.
+        </ngb-alert>
+    </p>
+</ng-container>

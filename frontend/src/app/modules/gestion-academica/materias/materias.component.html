@@ -1,0 +1,71 @@
+<div class="administracion">
+	<div class="contenedor__titulo">
+		<h4 class="administracion__titulo">Administración de areas y materias</h4>
+	</div>
+	<div class="contenedor__agregar">
+		<button
+			class="btn btn-outline-dark administracion__agregar mr-1"
+			(click)="openModalArea(contentArea)">
+			<i class="fa fa-plus-circle" aria-hidden="true"></i> Gestionar áreas
+		</button>
+		<button
+			class="btn btn-outline-dark administracion__agregar"
+			(click)="openModalMateria(content)">
+			<i class="fa fa-plus-circle" aria-hidden="true"></i> Crear materia
+		</button>
+	</div>
+</div>
+<hr>
+
+<app-listar-materias (editar)="editar($event, content)"></app-listar-materias>
+
+<ng-template #contentArea let-modal>
+	<div class="modal-header">
+		<h6 class="modal-title" id="modal-basic-title">
+			Administración de areas
+		</h6>
+		<button 
+			type="button"
+			class="close"
+			aria-label="Close"
+			(click)="modal.dismiss()">
+			<span aria-hidden="true">&times;</span>
+		</button>
+	</div>
+		
+	<div class="modal-body">
+		<div class="row">
+            <div class="col-4">
+                <app-form-area></app-form-area>
+            </div>
+            <div class="col-8">
+                <app-listar-areas></app-listar-areas>
+            </div>
+        </div>
+	</div>
+</ng-template>
+
+<ng-template #content let-modal>
+	<div class="modal-header">
+		<h6 class="modal-title" id="modal-basic-title">
+			Registro de materias
+		</h6>
+		<button 
+			type="button"
+			class="close"
+			aria-label="Close"
+			(click)="modal.dismiss()">
+			<span aria-hidden="true">&times;</span>
+		</button>
+	</div>
+		
+	<div class="modal-body">
+		<div *ngIf="(materiaService.shouldCreate$ | async); then crearMateria else editarMateria"></div>
+		<ng-template #crearMateria>
+			<app-crear-materia></app-crear-materia>
+		</ng-template>
+		<ng-template #editarMateria>
+			<app-editar-materia></app-editar-materia>
+		</ng-template>
+	</div>
+</ng-template>

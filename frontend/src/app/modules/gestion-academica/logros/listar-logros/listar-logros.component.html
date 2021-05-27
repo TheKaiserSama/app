@@ -1,0 +1,201 @@
+<div class="container-logro">
+    <div>
+        <h4>Listado de logros</h4>
+    </div>
+    <div *ngIf="!logroService.initListLogros">
+        <button
+            [disabled]="!logroService.selectedCarAcad || (collectionSize$ | async) > 0"
+            class="btn btn-primary btn mr-1"
+            (click)="openModalCrearLogro()">
+            <i class="fa fa-floppy-o" aria-hidden="true"></i><span> Crear</span>
+        </button>
+        <button
+            [disabled]="!logroService.selectedCarAcad || (collectionSize$ | async) == 0"
+            class="btn btn-info btn mr-1"
+            (click)="openModalEditarLogro()">
+            <i class="fa fa-edit" aria-hidden="true"></i><span> Editar</span>
+        </button>
+        <button
+            [disabled]="!logroService.selectedCarAcad || (collectionSize$ | async) == 0"
+            class="btn btn-danger btn mr-1"
+            (click)="destroyLogro()">
+            <i class="fa fa-trash" aria-hidden="true"></i><span> Eliminar</span>
+        </button>
+    </div>
+</div>
+
+<form autocomplete="off">
+    <div class="form-row busqueda">
+        <div class="col-md-4 busqueda__campo">
+            <div class="input-group input-group-sm">
+                <div class="input-group-prepend">
+                    <span class="input-group-text">
+                        <i class="fa fa-search" aria-hidden="true"></i>
+                    </span>
+                </div>
+                <input
+                    type="text"
+                    class="form-control"
+                    [formControl]="ctrFilter"
+                    placeholder="Descripción logro">
+            </div>
+        </div>
+
+        <div
+            *ngIf="logroService.initListLogros"
+            class="form-group col-md-2 container-control">
+            <select
+                class="form-control form-control-sm"
+                name="ctrGrado"
+                [formControl]="ctrGrado"
+                (ngModelChange)="handleGrado($event)">
+                <option value="null" selected disabled>Seleccione grado</option>
+                <option
+                    *ngFor="let grado of grados$ | async"
+                    [ngValue]="grado">
+                    {{ grado.grado }}
+                </option>
+                <option [ngValue]="{}">Todos</option>
+            </select>
+        </div>
+
+        <div
+            *ngIf="logroService.initListLogros"
+            class="form-group col-md-2 container-control">
+            <select
+                class="form-control form-control-sm"
+                name="ctrPeriodo"
+                [formControl]="ctrPeriodo"
+                (ngModelChange)="handlePeriodo($event)">
+                <option value="null" selected disabled>Seleccione periodo</option>
+                <option
+                    *ngFor="let periodo of periodos$ | async"
+                    [ngValue]="periodo">
+                    {{ periodo.numero }}
+                </option>
+                <option [ngValue]="{}">Todos</option>
+            </select>
+        </div>
+
+        <div
+            *ngIf="logroService.initListLogros"
+            class="form-group col-md-2 container-control">
+            <select
+                class="form-control form-control-sm"
+                name="ctrAnioLectivo"
+                [formControl]="ctrAnioLectivo"
+                (ngModelChange)="handleAnioLectivo($event)">
+                <option value="null" selected disabled>Seleccione año lectivo</option>
+                <option
+                    *ngFor="let anioLectivo of aniosLectivos$ | async"
+                    [ngValue]="anioLectivo">
+                    {{ anioLectivo.anio_actual }}
+                </option>
+            </select>
+        </div>
+
+        <div class="form-group col-md-2 ml-md-auto container-control">
+            <select
+                class="form-control form-control-sm"
+                [(ngModel)]="logroService.pageSize"
+                name="seleccion"
+                (change)="onChangePageSize($event.target.value)">
+                <option [value]="10">10 registros</option>
+                <option [value]="15">15 registros</option>
+                <option [value]="20">20 registros</option>
+            </select>
+        </div>
+    </div>
+</form>
+
+<div class="table-responsive">
+	<table class="table table-sm">
+        <thead class="text-white encabezados-tabla">
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Logro</th>
+                <th scope="col">Porcentaje</th>
+                <th scope="col">Materia</th>
+                <th scope="col">Curso</th>
+                <th scope="col">Periodo</th>
+                <th scope="col" *ngIf="logroService.initListLogros" class="text-center">Actividad</th>
+			</tr>	
+        </thead>
+    
+        <tbody
+            class="contenido-tabla"
+            *ngIf="(storeLogros$ | async)?.length > 0; else loading">
+            <tr [ngClass]="{'table-primary': actividadService.selectedLogro?.id == logro.id }"
+                *ngFor="let logro of storeLogros$ | async; index as i">
+                <th scope="row">{{ logro.index + 1 }}</th>
+                <td>
+                    <ngb-highlight
+                        [highlightClass]="'resaltar'"
+                        [result]="logro.descripcion"
+                        [term]="ctrFilter.value">
+                    </ngb-highlight>
+                </td>
+                <th>{{ logro.porcentaje | number:'1.2-2' | removeComma }}%</th>
+                <td>{{ logro.plan_docente.materia.nombre }}</td>
+                <td>{{ logro.plan_docente.curso.grado.grado }}°. {{ logro.plan_docente.curso.grupo.descripcion }}</td>
+                <td>{{ logro.plan_docente.periodo.numero }}</td>
+                <th *ngIf="logroService.initListLogros" class="text-center">
+                    <button
+                        class="btn btn-sm btn-primary"
+                        (click)="verLogro(logro)">
+                        <i class="fa fa-eye" aria-hidden="true"></i>
+                    </button>
+                </th>
+            </tr>  
+        </tbody>
+    </table>
+</div>
+
+<ng-template #loading>
+    <div class="d-flex w-100 flex-column justify-content-center align-items-center" *ngIf="logroService.loading$ | async">
+        <div class="spinner-border" role="status" aria-hidden="true"></div>
+        <strong class="text-dark">Cargando...</strong>
+    </div>
+</ng-template>
+
+<ng-container *ngIf="((storeLogros$ | async)?.length == 0) && logroService.searchTerm == ''">
+    <p>
+        <ngb-alert
+            [type]="'info'"
+            [dismissible]="false">
+            <strong>Nota!</strong> No hay logros para mostrar.
+        </ngb-alert>
+    </p>
+</ng-container>
+
+<ngb-alert
+    *ngIf="((collectionSize$ | async) === 0) && logroService.searchTerm != ''"
+    [type]="'warning'"
+    [dismissible]="false">
+    No se encontraron resultados para el termino: "{{ logroService.searchTerm }}"
+</ngb-alert>
+
+<div class="d-flex justify-content-between pt-2">
+    <ngb-pagination
+        [collectionSize]="collectionSize$ | async"
+        [(page)]="logroService.page"
+        [pageSize]="logroService.pageSize"
+        (pageChange)="onPageChange($event)"
+        [maxSize]="5"
+        [rotate]="true"
+        [ellipses]="false"
+        [boundaryLinks]="true">
+    </ngb-pagination>
+
+    <div *ngIf="(collectionSize$ | async) === 0; then thenBlock else elseBlock"></div>
+    <ng-template #thenBlock>
+        <div>Mostrando 0 a 0 de 0 resultados</div>
+    </ng-template>
+    <ng-template #elseBlock>
+        <div>
+            Mostrando {{ (offset$ | async) + 1 }} a {{ validateOffset() }} de {{ collectionSize$ | async }} resultados
+        </div>
+    </ng-template>
+</div>
+
+<app-modal-logros></app-modal-logros>

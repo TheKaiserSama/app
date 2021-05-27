@@ -1,0 +1,30 @@
+<ul 
+	ngbNav #nav="ngbNav"
+	[(activeId)]="tabActive"
+	class="nav-tabs">
+
+	<li [ngbNavItem]="1" [disabled]="true" [destroyOnHide]="true">
+		<a ngbNavLink>Información personal docente</a>
+		
+		<ng-template ngbNavContent>
+			<app-info-personal-docente></app-info-personal-docente>
+		</ng-template>
+	</li>
+
+	<li [ngbNavItem]="2" [disabled]="true" [destroyOnHide]="true">
+		<a ngbNavLink>Información academica docente</a>
+
+		<ng-template ngbNavContent>
+			<div *ngIf="(docenteService.shouldCreate$ | async); then crearDocente else editarDocente"></div>
+			<ng-template #crearDocente>
+				<app-crear-docente></app-crear-docente>
+			</ng-template>
+			<ng-template #editarDocente>
+				<app-editar-docente></app-editar-docente>
+			</ng-template>
+		</ng-template>
+	</li>
+	
+</ul>
+	
+<div [ngbNavOutlet]="nav" class="my-3 mx-5"></div>

@@ -1,0 +1,135 @@
+// Header institución
+.reset_p {
+    margin: 0;
+    padding: 0;
+}
+
+.mayusculas {
+    text-transform: uppercase;
+}
+
+.nombre_institucion {
+    font-family: 'Arial Bold';
+    font-size: 28pt;
+    display: flex;
+    justify-content: center;
+    color: #000;
+}
+
+.niveles_institucion {
+    font-family: 'Arial Bold';
+    font-size: 9pt;
+    display: flex;
+    justify-content: center;
+    color: #000;
+}
+
+.sedes_institucion {
+    font-family: 'Arial Bold';
+    font-size: 9pt;
+    display: flex;
+    justify-content: center;
+    color: #000;
+}
+
+.resolucion_institucion {
+    font-family: 'Arial Bold';
+    font-size: 7pt;
+    display: flex;
+    justify-content: center;
+    color: #000;
+}
+
+.nit_institucion {
+    font-family: 'Arial Bold';
+    font-size: 9pt;
+    display: flex;
+    justify-content: center;
+    color: #000;
+}
+
+.ubicacion_institucion {
+    font-family: 'Arial Bold';
+    font-size: 9pt;
+    display: flex;
+    justify-content: center;
+    color: #000;
+}
+
+.header_consolidado__nombre, .header_consolidado__ciclo, .header_consolidado__sede {
+    font-family: 'Arial Bold';
+    font-size: 12pt;
+    display: flex;
+    justify-content: center;
+    text-transform: uppercase;
+}
+
+// Header Consolidado
+.header_consolidado {
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.header_consolidado__nombre, .header_consolidado__anio {
+    font-family: 'Arial Bold';
+    font-size: 11pt;
+    display: flex;
+    justify-content: center;
+    text-transform: uppercase;
+}
+
+// Estilos tabla
+.contenido-tabla {
+    font-size: 14px;
+}
+
+.encabezados-tabla tr th {
+    color: white;
+    font-size: 12px;
+    background-color: #373A3C;
+    // height: 38px;
+}
+
+.tableFixHead { overflow-y: auto; height: 411px; }
+.tableFixHead thead th { position: sticky; top: 0; }
+
+// Observaciones
+.observaciones {
+    font-family: 'Arial Bold';
+    font-size: 10pt;
+    margin: 20px 0;
+}
+
+.button_observaciones {
+    background-color: #2780E3;
+    color: white;
+    width: 25px;
+    border: none;
+    border-color: #2780E3;
+    margin-left: 5px;
+}
+
+// Firma dinamizador de grupo
+.firma_dinamizador_contenedor {
+    display: flex;
+}
+
+.firma_dinamizador_titulo {
+    font-family: 'Arial Bold';
+    font-size: 10pt;
+    margin-top: 10px;
+    text-transform: uppercase;
+}
+
+.firma_dinamizador_linea {
+    display: block;
+    width: 300px;
+    border-bottom: 1px solid #000;
+    margin-left: 5px;
+}
+
+.contenedor_firma_acciones {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}

@@ -1,0 +1,36 @@
+<form
+    [formGroup]="formGrado"
+    (ngSubmit)="sendFormGrado()"
+    autocomplete="off">
+
+    <div class="form-group">
+        <label for="descripcion">Descripción</label>
+        <input
+            type="number"
+            class="form-control"
+            id="descripcion"
+            aria-describedby="emailHelp"
+            placeholder="Numero del grado"
+            id="descripcion"
+            name="descripcion"
+            formControlName="descripcion">    
+        <div class="contenedor-error col-md-12">
+            <div
+                *ngIf="descripcion.invalid &&
+                (descripcion.dirty || descripcion.touched)">
+                <small *ngIf="descripcion.errors.noNegativeNumbers">
+                    No se permiten valores negativos
+                </small>
+            </div>
+        </div>
+    </div>
+    
+    <div class="form-group">
+        <button
+            type="submit"
+            [disabled]="formGrado.invalid"
+            class="btn btn-primary col-md-12">
+            Guardar
+        </button>
+    </div>
+</form>

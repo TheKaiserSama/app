@@ -1,0 +1,114 @@
+<div class="container_boletin">
+    <div class="filtros">
+        <div class="form-group col-md-6 container-control">
+            <select
+                class="form-control form-control-sm"
+                name="ctrCurso"
+                [formControl]="ctrCurso"
+                (ngModelChange)="handleCurso($event)">
+                <option value="null" disabled selected>Seleccione curso</option>
+                <option
+                    *ngFor="let curso of cursos$ | async"
+                    [ngValue]="curso">
+                    {{ curso.grado.grado }}° {{ curso.grupo.descripcion }} -
+                    {{ curso.anio_lectivo.anio_actual }} -
+                    {{ curso.sede.nombre }} -
+                    {{ curso.jornada.nombre }}
+                </option>
+            </select>
+        </div>
+    
+        <div class="form-group col-md-6 container-control">
+            <select
+                class="form-control form-control-sm"
+                name="ctrPeriodo"
+                [formControl]="ctrPeriodo"
+                (ngModelChange)="handlePeriodo($event)">
+                <option value="null" disabled selected>Seleccione boletín</option>
+                <option
+                    *ngFor="let periodo of periodos$ | async"
+                    [ngValue]="periodo">
+                    Boletín {{ periodo.numero }}
+                </option>
+                <option value="null">Boletín final</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="inprimir_varios">
+        <button
+            [disabled]="boletines.length === 0"
+            class="btn btn-primary"
+            (click)="printOrDownloadBoletines()">
+            <i class="fa fa-floppy-o" aria-hidden="true"></i>
+            Imprimir/Descargar
+        </button>
+    </div>
+</div>
+
+<div class="table-responsive tableFixHead">
+    <table class="table table-sm table-hover">
+        <thead class="text-white encabezados-tabla">
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Documento</th>
+                <th scope="col">Nombres</th>
+                <th scope="col">Apellidos</th>
+                <th scope="col">Opciones</th>
+            </tr>
+        </thead>
+
+        <tbody class="contenido-tabla">
+            <tr *ngFor="let matricula of matriculas$ | async; index as i">
+                <th scope="row">{{ i + 1 }}</th>
+                <td>{{ matricula.estudiante.persona.documento }}</td>
+                <td>{{ matricula.estudiante.persona.primer_nombre }} {{ matricula.estudiante.persona.segundo_nombre }}</td>
+                <td>{{ matricula.estudiante.persona.primer_apellido }} {{ matricula.estudiante.persona.segundo_apellido }}</td>
+                <td>
+                    <div>
+                        <button
+                            [disabled]="showCreateButton(matricula.id_estudiante)"
+                            class="btn btn-sm btn-primary mr-1"
+                            placement="top"
+                            ngbTooltip="Crear boletín"
+                            (click)="createBoletin(matricula)">
+                            <i class="fa fa-plus"></i>
+                        </button>
+                        <button
+                            [disabled]=showUpdateDeletePrintButton(matricula.id_estudiante)
+                            class="btn btn-sm btn-info mr-1"
+                            placement="top"
+                            ngbTooltip="Editar boletín"
+                            (click)="updateBoletin(matricula)">
+                            <i class="fa fa-pencil"></i>
+                        </button>
+                        <button
+                            [disabled]=showUpdateDeletePrintButton(matricula.id_estudiante)
+                            class="btn btn-sm btn-danger mr-1"
+                            placement="top"
+                            ngbTooltip="Eliminar boletín"
+                            (click)="deleteBoletin(matricula)">
+                            <i class="fa fa-trash"></i>
+                        </button>
+                        <button
+                            [disabled]=showUpdateDeletePrintButton(matricula.id_estudiante)
+                            class="btn btn-sm btn-warning mr-1"
+                            placement="top"
+                            ngbTooltip="Imprimir boletín"
+                            (click)="printBoletin(matricula)">
+                            <i class="fa fa-print"></i>
+                        </button>
+                        <button
+                            [disabled]=showUpdateDeletePrintButton(matricula.id_estudiante)
+                            class="btn btn-sm btn-success mr-1"
+                            placement="top"
+                            ngbTooltip="Descargar boletín"
+                            (click)="downloadBoletin(matricula)">
+                                <i class="fa fa-download" aria-hidden="true"></i>
+                        </button>
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>

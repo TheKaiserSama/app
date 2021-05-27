@@ -1,0 +1,84 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    padding: 0 15px;
+    margin: 0 auto;
+}
+
+.grid {
+    display: grid;
+    grid-template: {
+        columns: 1fr;
+        areas:
+            "titulo"
+            "direccion"
+            "contacto"
+            "horario";
+    }
+    @media (min-width: 768px) {
+        & {
+            grid-template: {
+                columns: repeat(3, 1fr);
+                areas:
+                    "titulo titulo titulo"
+                    "direccion contacto horario";
+            }
+            
+        }
+    }
+}
+
+.titulo { 
+    grid-area: titulo;
+    grid-column: {
+        start: 1;
+        end: 4;
+    }
+    padding: 20px 0 30px 0;
+    text-transform: uppercase;
+    border-bottom: 1px solid #FFF;
+}
+.direccion { grid-area: direccion; }
+.contacto { grid-area: contacto; }
+.horario { grid-area: horario; }
+
+.icono {
+    border: 3px solid #2C88B2;
+    border-radius: 50%;
+    width: 100px;
+    height: 100px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.color-icono {
+    color: #2C88B2;
+    font-size: 50px;
+}
+
+p {
+    padding: 15px;
+    text-align: justify;
+}
+
+.footer {
+    color: white;
+}
+
+.direccion {
+    text-transform: uppercase;
+    text-align: center;
+}
+
+.contacto_celular {
+    padding: 15px 15px 10px 15px;
+}
+
+.contacto_correo {
+    padding: 0 15px 10px 15px;
+}

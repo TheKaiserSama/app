@@ -1,0 +1,13 @@
+.container-space-between {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 50px;
+}
+
+.contenedor-error {
+    padding-top: 3px;
+    height: 17px;
+    color: red;
+    font-size: 15px;
+}

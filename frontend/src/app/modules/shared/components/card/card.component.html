@@ -1,0 +1,25 @@
+<div class="card-custom">
+    <div class="icon" [style.backgroundColor]="styles?.color">
+        <i class="{{ styles?.icono }}" aria-hidden="true"></i>
+    </div>
+    <div class="card-content">
+        <div class="titulo">
+            <span>{{ styles?.titulo }}</span>
+            <span
+                class="badge badge-pill badge-primary badge-custom"
+                [style.backgroundColor]="styles?.color"
+                placement="left" [ngbTooltip]="tipContent">
+                {{ values?.length || 0 }}
+            </span>
+            <ng-template #tipContent>
+                <div *ngFor="let value of values">
+                    {{ value?.persona.primer_nombre }} {{ value?.persona.primer_apellido }}
+                </div>
+            </ng-template>
+        </div>
+        <span class="resaltar-nota" *ngIf="values">
+            {{ values[0]?.persona.primer_nombre }} {{ values[0]?.persona.primer_apellido }}
+        </span>
+        <span class="resaltar-nota" *ngIf="values">{{ values[0]?.nota.nota }}</span>
+    </div>
+</div>

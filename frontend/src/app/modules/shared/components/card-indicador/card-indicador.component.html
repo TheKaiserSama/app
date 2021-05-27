@@ -1,0 +1,18 @@
+<div class="card-custom">
+    <div class="icono" [style.backgroundColor]="styles?.color">
+        <i class="{{ styles?.icono }}" aria-hidden="true"></i>
+    </div>
+    <div class="card-content">
+        <span>{{ styles.titulo }}</span>
+        <span class="resaltar-nota">{{ values?.promedio }}</span>
+        <p>
+            <ngb-progressbar
+                type="warning"
+                textType="white"
+                [value]="values?.promedio | roundNumber"
+                [showValue]="true"
+                height="15px">
+            </ngb-progressbar>
+        </p>
+    </div>
+</div>

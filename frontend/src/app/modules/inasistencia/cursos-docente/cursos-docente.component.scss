@@ -1,0 +1,18 @@
+.contenido-tabla {
+    font-size: 14px;
+}
+
+/* Estilos tabla */
+.encabezados-tabla tr th {
+    color: white;
+    font-size: 14px;
+    background-color: #373A3C;
+    // height: 38px;
+}
+
+.tableFixHead { overflow-y: auto; height: 427px; }
+.tableFixHead thead th { position: sticky; top: 0; }
+
+.type-cursor {
+    cursor: pointer;
+}

@@ -1,0 +1,29 @@
+<div class="container-fluid bg-dark" *ngIf="footerService.visible$ | async">
+    <div class="container grid text-white text-center">
+        <h3 class="titulo">Datos de contacto</h3>
+        <div class="direccion">
+            <h5 class="my-3">Dirección</h5>
+            <div class="icono">
+                <i class="color-icono fa fa-map-marker"></i>
+            </div>
+            <p class="direccion">{{ FOOTER_INSTITUCION.direccion }}</p>
+        </div>
+        <div class="contacto">
+            <h5 class="my-3">Contacto</h5>
+            <div class="icono">
+                <i class="color-icono fa fa-phone"></i>
+            </div>
+            <p class="contacto_celular text-center">CELULAR: {{ FOOTER_INSTITUCION.celular }}</p>
+            <p class="contacto_correo text-center">CORREO: {{ FOOTER_INSTITUCION.correo }}</p>
+        </div>
+        <div class="horario">
+            <h5 class="my-3">Niveles</h5>
+            <div class="icono">
+                <i class="color-icono fa fa-bar-chart"></i>
+            </div>
+            <p class="niveles text-center">
+                {{ HEADER_INSTITUCION.niveles }}
+            </p>
+        </div>
+    </div>
+</div>

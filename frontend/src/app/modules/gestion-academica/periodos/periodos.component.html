@@ -1,0 +1,71 @@
+<div class="administracion">
+	<div class="contenedor__titulo">
+		<h4 class="administracion__titulo">Administración de periodos</h4>
+	</div>
+	<div class="contenedor__agregar">
+		<button
+			class="btn btn-outline-dark administracion__agregar mr-1"
+			(click)="openModalAnioLectivo(contentAnioLectivo)">
+			<i class="fa fa-plus-circle" aria-hidden="true"></i> Gestionar años lectivos
+		</button>
+		<button
+			class="btn btn-outline-dark administracion__agregar"
+			(click)="openFormPeriodo(formPeriodo)">
+			<i class="fa fa-plus-circle" aria-hidden="true"></i> Crear periodo
+		</button>
+	</div>
+</div>
+<hr>
+
+<app-listar-periodos (editar)="editar($event, formPeriodo)"></app-listar-periodos>
+
+<ng-template #contentAnioLectivo let-modalAnioLectivo>
+	<div class="modal-header">
+		<h6 class="modal-title" id="modal-basic-title">
+			Administración de años lectivos
+		</h6>
+		<button 
+			type="button"
+			class="close"
+			aria-label="Close"
+			(click)="modalAnioLectivo.dismiss()">
+			<span aria-hidden="true">&times;</span>
+		</button>
+	</div>
+		
+	<div class="modal-body">
+		<div class="row">
+            <div class="col-4">
+                <app-form-anio-lectivo></app-form-anio-lectivo>
+            </div>
+            <div class="col-8">
+				<app-listar-anios-lectivos></app-listar-anios-lectivos>
+            </div>
+        </div>
+	</div>
+</ng-template>
+
+<ng-template #formPeriodo let-modal>
+	<div class="modal-header">
+		<h6 class="modal-title" id="modal-basic-title">
+			Registro de periodos
+		</h6>
+		<button
+			type="button"
+			class="close"
+			aria-label="Close"
+			(click)="modal.dismiss()">
+			<span aria-hidden="true">&times;</span>
+		</button>
+	</div>
+		
+	<div class="modal-body">
+		<div *ngIf="(periodoService._shouldCreate$ | async); then crearPeriodo else editarPeriodo"></div>
+		<ng-template #crearPeriodo>
+			<app-crear-periodo></app-crear-periodo>
+		</ng-template>
+		<ng-template #editarPeriodo>
+			<app-editar-periodo></app-editar-periodo>
+		</ng-template>
+	</div>
+</ng-template>

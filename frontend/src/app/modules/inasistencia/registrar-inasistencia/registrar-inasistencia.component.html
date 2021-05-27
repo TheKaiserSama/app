@@ -1,0 +1,53 @@
+<div class="modal-header">
+	<h5 class="modal-title">Listado de estudiantes</h5>
+	<button
+	  	type="button"
+	  	class="close"
+	  	aria-label="Close"
+	  	(click)="activeModal.dismiss('Cross click')">
+	  	<span aria-hidden="true">&times;</span>
+	</button>
+</div>
+
+<div class="modal-body">
+    <div class="detalles-inasistencia">
+        <span><strong>Curso: </strong>{{ planDocente.curso.grado.grado }}° {{ planDocente.curso.grupo.descripcion }}: {{ planDocente.anio_lectivo.anio_actual }}</span>
+        <span><strong>Materia: </strong>{{ planDocente.materia.nombre }}</span>
+        <span><strong>Fecha: </strong>{{ fecha }}</span>
+    </div>
+	<div class="table-responsive tableFixHead">
+        <table class="table table-sm table-hover">
+            <thead class="text-white encabezados-tabla">
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Documento</th>
+                    <th scope="col">Estudiante</th>
+                    <th scope="col">Falta</th>
+                    <th scope="col">Justifición</th>
+                </tr>	
+            </thead>
+        
+            <tbody class="contenido-tabla" *ngIf="estudiantesPorCurso.length > 0">
+                <tr 
+                    *ngFor="let matricula of estudiantesPorCurso; index as i">
+                    <th scope="row">{{ i + 1 }}</th>
+                    <td>{{ matricula.estudiante.persona.documento }}</td>
+                    <td>{{ matricula.estudiante.persona.primer_nombre }} {{ matricula.estudiante.persona.segundo_nombre }} {{ matricula.estudiante.persona.primer_apellido }} {{ matricula.estudiante.persona.segundo_apellido }}</td>
+                    <td>
+                        <mat-checkbox [(ngModel)]="matricula.falta"></mat-checkbox>
+                    </td>
+                    <td>
+                        <mat-checkbox *ngIf="matricula.falta" [color]="'primary'" [(ngModel)]="matricula.justificado"></mat-checkbox>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="acciones-inasistencia">
+        <span>Acciones</span>
+        <button [disabled]="loading" class="btn btn-sm btn-primary" (click)="guardarInasistencias()">
+            <i class="fa" [ngClass]="{'fa-check': !loading, 'fa-spinner': loading}" aria-hidden="true"></i> Guardar
+        </button>
+    </div>
+</div>

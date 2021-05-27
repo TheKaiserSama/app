@@ -1,0 +1,20 @@
+.container_controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.container-control {
+    margin: 0;
+    padding: 0;
+}
+
+.info_institucion, .info_docente {
+    display: flex;
+    justify-content: space-between;
+}
+
+.descripcion {
+    color: #666666;
+}

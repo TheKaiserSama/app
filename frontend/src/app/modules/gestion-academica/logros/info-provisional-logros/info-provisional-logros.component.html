@@ -1,0 +1,73 @@
+<div class="container-space-between" *ngIf="selectedCarAcad">
+    <div>
+        <h4>Logros agregados</h4>
+    </div>
+    <div>
+        <button type="button" class="btn btn-sm btn-light mr-1 no-pointer">
+            Materia: <span class="badge badge-light">{{ selectedCarAcad.materia.nombre }}</span>
+        </button>
+
+        <button type="button" class="btn btn-sm btn-light no-pointer">
+            Curso: <span class="badge badge-light">
+                {{ selectedCarAcad.curso.grado.grado }}º 
+                {{ selectedCarAcad.curso.grupo.descripcion }}
+            </span>
+        </button>
+    </div>
+</div>
+
+<div
+    class="table-responsive tableFixHead">
+	<table class="table table-sm">
+        <thead class="encabezados-tabla">
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Descripcion</th>
+                <th scope="col" class="text-center">Porcentaje</th>
+                <th scope="col" class="text-center">Accion</th>
+			</tr>	
+        </thead>
+    
+        <tbody class="contenido-tabla">
+            <tr
+                [ngClass]="{'table-success': (logroService.logro$ | async)?.index == i }"
+                *ngFor="let logro of logroService.listLogros$ | async; index as i">
+                <th scope="row">{{ i + 1 }}</th>
+                <td>{{ logro.descripcion }}</td>
+                <td class="text-center">{{ logro.porcentaje | number:'1.2-2' | removeComma }}%</td>
+                <td class="text-center">
+                    <button
+                        class="btn btn-success btn-sm mr-1"
+                        (click)="editLogro(logro)">
+                        <i class="fa fa-pencil" aria-hidden="true"></i>
+                    </button>
+                    <button
+                        class="btn btn-danger btn-sm mr-1"
+                        (click)="removeLogro(logro)">
+                        <i class="fa fa-times" aria-hidden="true"></i>
+                    </button>
+                </td>
+            </tr>  
+        </tbody>
+    </table>
+</div>
+
+<ng-container *ngIf="(logroService.listLogros$ | async)?.length == 0">
+    <p>
+        <ngb-alert
+            [type]="'ligth'"
+            [dismissible]="false">
+            <strong>Nota!</strong> No hay datos para mostrar.
+        </ngb-alert>
+    </p>
+</ng-container>
+
+<p>
+    <ngb-alert
+        [type]="'success'"
+        [dismissible]="false"
+        class="container-space-between">
+        <div><strong>Nota!</strong> La suma total de los logros debe ser 100%.</div>
+        <div><span>{{ logroService.porcentaje }}% / 100%</span></div>
+    </ngb-alert>
+</p>

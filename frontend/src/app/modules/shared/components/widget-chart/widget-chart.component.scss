@@ -1,0 +1,37 @@
+.widget-chart {
+    height: 155px;
+    margin-bottom: 30px;
+    padding: 16px;
+    box-shadow: 3px 3px 15px #C3C3C3;
+    border-bottom: 5px solid red;
+}
+
+.icon-wrapper {
+    color: white;
+    font-size: 30px;
+    width: 52px;
+    height: 52px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid #EEEEEE;
+    border-radius: 3px;
+    margin: 0 auto;
+}
+
+.widget-numbers {
+    font-weight: bold;
+    color: #495057;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 30px;
+}
+
+.widget-subheading {
+    font-size: 14px;
+    color: #495057;
+    height: 21px;
+    display: flex;
+    justify-content: center;
+}

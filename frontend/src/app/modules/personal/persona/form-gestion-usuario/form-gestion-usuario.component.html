@@ -1,0 +1,27 @@
+<ul 
+    ngbNav #nav="ngbNav"
+    [(activeId)]="tabActive"
+    class="nav-tabs">
+    
+    <li [ngbNavItem]="1" [disabled]="true" [destroyOnHide]="true">
+        <a ngbNavLink>Información de persona</a>
+        
+        <ng-template ngbNavContent>
+            <app-info-persona></app-info-persona>
+        </ng-template>
+    </li>
+
+    <li [ngbNavItem]="2" [disabled]="true" [destroyOnHide]="true"
+        *ngIf="personaService.rol?.nombre.toLowerCase() != 'otro' && (personaService.shouldCreate$ | async)">
+        <a ngbNavLink>Información de usuario</a>
+
+        <ng-template ngbNavContent>
+            <div *ngIf="(personaService.shouldCreate$ | async); then crearPersona"></div>
+            <ng-template #crearPersona>
+                <app-crear-usuario></app-crear-usuario>
+            </ng-template>
+        </ng-template>
+    </li>
+</ul>
+
+<div [ngbNavOutlet]="nav" class="my-3 mx-5"></div>

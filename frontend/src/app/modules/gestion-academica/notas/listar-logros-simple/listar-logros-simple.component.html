@@ -1,0 +1,63 @@
+<div class="table-responsive">
+	<table class="table table-sm table-hover">
+        <thead class="text-white encabezados-tabla">
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Logro</th>
+                <th scope="col">Porcentaje</th>
+                <th scope="col" class="text-center">Acciones</th>
+			</tr>	
+        </thead>
+    
+        <tbody
+            class="contenido-tabla"
+            *ngIf="(logros$ | async)?.length > 0; else loading">
+            <tr [ngClass]="{'table-primary': calificarActividadesService.selectedLogro?.id == logro.id }"
+                *ngFor="let logro of logros$ | async; index as i">
+                <th scope="row">{{ i + 1 }}</th>
+                <td>{{ logro.descripcion }}</td>
+                <th>{{ logro.porcentaje | number:'1.2-2' | removeComma }}%</th>
+                <td class="text-center">
+                    <button
+                        class="btn btn-sm btn-success p-0 mr-1"
+                        placement="left"
+                        ngbTooltip="Cargar actividades">
+                        <i
+                            (click)="getActividades(logro)"
+                            class="fa fa-check-circle custom-icon"
+                            aria-hidden="true">
+                        </i>
+                    </button>
+                    <button
+                        class="btn btn-sm btn-primary p-0"
+                        placement="right" ngbTooltip="Ver notas logro">
+                        <i
+                            (click)="openModalResumenActividades(logro)"
+                            class="fa fa-eye custom-icon"
+                            aria-hidden="true">
+                        </i>
+                    </button>
+                </td>
+            </tr>  
+        </tbody>
+    </table>
+</div>
+
+<ng-template #loading>
+    <div
+        class="d-flex w-100 flex-column justify-content-center align-items-center"
+        *ngIf="calificarActividadesService.loading$ | async">
+        <div class="spinner-border" role="status" aria-hidden="true"></div>
+        <strong class="text-dark">Cargando...</strong>
+    </div>
+</ng-template>
+
+<ng-container *ngIf="((logros$ | async)?.length == 0)">
+    <p>
+        <ngb-alert
+            [type]="'info'"
+            [dismissible]="false">
+            <strong>Nota!</strong> No hay logros para mostrar.
+        </ngb-alert>
+    </p>
+</ng-container>

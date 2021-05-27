@@ -1,0 +1,73 @@
+<div class="modal-header">
+	<h5 class="modal-title">Asignar director de grupo</h5>
+	<button
+	  	type="button"
+	  	class="close"
+	  	aria-label="Close"
+	  	(click)="activeModal.dismiss('Cross click')">
+	  	<span aria-hidden="true">&times;</span>
+	</button>
+</div>
+
+<div class="modal-body">
+    <div class="row">
+        <div class="col-12">
+            <h5>Directores de grupo para el año {{ currentYear }}</h5>
+        </div>
+    </div>
+
+    <br>
+    <div class="table-responsive tableFixHead">
+        <table class="table table-sm table-hover">
+            <thead class="text-white encabezados-tabla">
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Sede</th>
+                    <th scope="col">Curso</th>
+                    <th scope="col">Jornada</th>
+                    <th scope="col" class="text-center">Director de grupo</th>
+                </tr>
+            </thead>
+        
+            <tbody class="contenido-tabla">
+                <tr 
+                    *ngFor="let directorGrupo of directoresGrupoAsiganados$ | async; index as i">
+                    <th scope="row">{{ i + 1 }}</th>
+                    <td>{{ directorGrupo.curso.sede.nombre }}</td>
+                    <td>{{ directorGrupo.curso.grado.grado }}° {{ directorGrupo.curso.grupo.descripcion }}</td>
+                    <td>{{ directorGrupo.curso.jornada.nombre }}</td>
+                    <td class="director-grupo">
+                        <div>
+                            <div *ngIf="directorGrupo.docente; then existeDirector else noExisteDirector"></div>
+                            <ng-template #existeDirector>
+                                {{ directorGrupo.docente.persona.primer_nombre }}
+                                {{ directorGrupo.docente.persona.segundo_nombre }}
+                                {{ directorGrupo.docente.persona.primer_apellido }}
+                                {{ directorGrupo.docente.persona.segundo_apellido }}
+                            </ng-template>
+                            <ng-template #noExisteDirector>Sin asignar</ng-template>
+                        </div>
+                        <div>
+                            <button
+                                [disabled]="directorGrupo.docente"
+                                class="btn btn-sm btn-primary mr-1"
+                                (click)="asignarDirector(directorGrupo)"
+                                placement="right"
+                                ngbTooltip="Asignar director">
+                                <i class="fa fa-plus" aria-hidden="true"></i>
+                            </button>
+                            <button
+                                class="btn btn-sm btn-danger"
+                                [disabled]="!directorGrupo.id"
+                                (click)="eliminarDirector(directorGrupo)"
+                                placement="right"
+                                ngbTooltip="Quitar director">
+                                <i class="fa fa-trash" aria-hidden="true"></i>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

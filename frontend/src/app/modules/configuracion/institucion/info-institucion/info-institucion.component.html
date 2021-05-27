@@ -1,0 +1,156 @@
+<div class="administracion">
+	<div class="contenedor_titulo">
+		<h4 class="administracion__titulo">Información institucional</h4>
+	</div>
+	<div class="contenedor_agregar">
+		<button
+			class="administracion__agregar btn btn-outline-dark mr-1"
+			(click)="openModalValoracionFormativa(contentValoracionFormativa)">
+			<i class="fa fa-cog" aria-hidden="true"></i> Criterios boletín
+		</button>
+		<button
+			class="administracion__agregar btn btn-outline-dark"
+			(click)="openModalSede(contentSede)">
+			<i class="fa fa-university" aria-hidden="true"></i> Gestionar sedes
+		</button>
+	</div>
+</div>
+<hr>
+
+<div class="d-flex">
+	<ul ngbNav
+		#nav="ngbNav"
+		[(activeId)]="tabActive"
+		class="nav-pills"
+		orientation="vertical"
+		[formGroup]="formInstitucion">
+		<li [ngbNavItem]="1">
+			<a ngbNavLink class="width-title">Nombre</a>
+			<ng-template ngbNavContent>
+				<div class="form-group width-control">
+					<label for="crtNombre">Nombre de la institución</label>
+					<input type="email" class="form-control" id="crtNombre" formControlName="nombre">
+					<div
+						class="contenedor-error"
+						*ngIf="nombre.invalid && (nombre.dirty || nombre.touched)">
+						<small *ngIf="nombre.errors.required">
+							*Campo obligatorio
+						</small>
+					</div>
+				</div>
+			</ng-template>
+		</li>
+		
+		<li [ngbNavItem]="2">
+			<a ngbNavLink class="width-title">Descripción</a>
+			<ng-template ngbNavContent>
+				<div class="form-group width-control">
+					<label for="ctrDescripcion">Descripción de la institución</label>
+					<textarea class="form-control" id="ctrDescripcion" rows="8" formControlName="descripcion"></textarea>
+				</div>
+			</ng-template>
+		</li>
+
+		<li [ngbNavItem]="3">
+			<a ngbNavLink class="width-title">Misión</a>
+			<ng-template ngbNavContent>
+				<div class="form-group width-control">
+					<label for="ctrMision">Misión de la institución</label>
+					<textarea class="form-control" id="ctrMision" rows="8" formControlName="mision"></textarea>
+				</div>
+			</ng-template>
+		</li>
+
+		<li [ngbNavItem]="4">
+			<a ngbNavLink class="width-title">Visión</a>
+			<ng-template ngbNavContent>
+				<div class="form-group width-control">
+					<label for="crtVision">Visión de la institución</label>
+					<textarea class="form-control" id="crtVision" rows="8" formControlName="vision"></textarea>
+				</div>
+			</ng-template>
+		</li>
+
+		<li [ngbNavItem]="5">
+			<a ngbNavLink class="width-title">Himno</a>
+			<ng-template ngbNavContent>
+				<div class="form-group width-control">
+					<label for="crtHimno">Himno de la institución</label>
+					<textarea class="form-control" id="crtHimno" rows="8" formControlName="himno"></textarea>
+				</div>
+			</ng-template>
+		</li>
+
+		<li [ngbNavItem]="6">
+			<a ngbNavLink class="width-title">Lema</a>
+			<ng-template ngbNavContent>
+				<div class="form-group width-control">
+					<label for="crtLema">Lema de la institución</label>
+					<textarea class="form-control" id="crtLema" rows="8" formControlName="lema"></textarea>
+				</div>
+			</ng-template>
+		</li>
+
+		<li>
+			<button
+				class="btn btn-outline-secondary btn-block"
+				(click)="submitForm()">
+				<i class="fa fa-floppy-o" aria-hidden="true"></i> Guardar cambios
+			</button>
+		</li>
+	</ul>
+	
+	<div [ngbNavOutlet]="nav" class="width-full"></div>
+</div>
+
+<ng-template #contentValoracionFormativa let-modalValoracionFormativa>
+	<div class="modal-header">
+		<h6 class="modal-title" id="modal-basic-title">
+			Administración de valoraciones formativas
+		</h6>
+		<button 
+			type="button"
+			class="close"
+			aria-label="Close"
+			(click)="modalValoracionFormativa.dismiss()">
+			<span aria-hidden="true">&times;</span>
+		</button>
+	</div>
+		
+	<div class="modal-body">
+		<div class="row">
+			<div class="col-md-4">
+				<app-form-valoracion-formativa></app-form-valoracion-formativa>
+			</div>
+			<div class="col-md-8">
+				<app-listar-valoraciones-formativas></app-listar-valoraciones-formativas>
+			</div>
+		</div>
+	</div>
+</ng-template>
+
+<ng-template #contentSede let-modalSede>
+	<div class="modal-header">
+		<h6 class="modal-title" id="modal-basic-title">
+			Administración de sedes
+		</h6>
+		<button 
+			type="button"
+			class="close"
+			aria-label="Close"
+			(click)="modalSede.dismiss()">
+			<span aria-hidden="true">&times;</span>
+		</button>
+	</div>
+		
+	<div class="modal-body">
+		<div class="row">
+            <div class="col-3">
+                <app-form-sede></app-form-sede>
+            </div>
+            <div class="col-9">
+				<app-listar-sedes></app-listar-sedes>
+            </div>
+        </div>
+	</div>
+</ng-template>

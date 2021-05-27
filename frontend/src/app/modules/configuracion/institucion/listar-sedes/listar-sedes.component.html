@@ -1,0 +1,52 @@
+<div class="table-responsive tableFixHead">
+	<table class="table table-sm table-hover">
+        <thead class="text-white encabezados-tabla">
+            <tr>
+                <th scope="col" class="text-center">Nombre</th>
+                <th scope="col" class="text-center">Direccion</th>
+                <th scope="col" class="text-center">Telefono</th>
+                <th scope="col" class="text-center">Descripción</th>
+                <th scope="col" class="text-center">Acciones</th>
+			</tr>	
+        </thead>
+    
+        <tbody
+            class="contenido-tabla">
+            <tr 
+                *ngFor="let sede of sedes$ | async; index as i">
+                <td class="text-center">{{ sede.nombre }}</td>
+                <td class="text-center">{{ sede.direccion }}</td>
+                <td class="text-center">{{ sede.telefono }}</td>
+                <td class="text-center">{{ sede.descripcion }}</td>
+                <td class="text-center">
+                    <button
+                        (click)="updateSede(sede)"
+                        class="btn btn-sm btn-info mr-1"
+                        placement="left"
+                        ngbTooltip="Actualizar sede">
+                        <i class="fa fa-pencil" aria-hidden="true"></i>
+                    </button>
+                    <button
+                        (click)="destroySede(sede)"
+                        class="btn btn-sm btn-danger"
+                        placement="right" ngbTooltip="Eliminar sede">
+                        <i class="fa fa-trash" aria-hidden="true"></i>
+                    </button>
+                </td>
+            </tr>  
+        </tbody>
+    </table>
+</div>
+
+<div *ngIf="(sedeService.loading$ | async)" class="d-flex w-100 flex-column justify-content-center align-items-center">
+    <div class="spinner-border" role="status" aria-hidden="true"></div>
+    <strong class="text-dark">Cargando...</strong>
+</div>
+
+<ng-container *ngIf="((sedes$ | async)?.length == 0)">
+    <p>
+        <ngb-alert [type]="'info'" [dismissible]="false">
+            <strong>Nota!</strong> No hay sedes para mostrar.
+        </ngb-alert>
+    </p>
+</ng-container>

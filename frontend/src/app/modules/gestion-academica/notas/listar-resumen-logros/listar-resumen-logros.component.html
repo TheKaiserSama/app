@@ -1,0 +1,92 @@
+<div class="row">
+    <div class="col-md-4">
+        <app-widget-chart
+            [config]="configMax">
+        </app-widget-chart>
+    </div>
+    <div class="col-md-4">
+        <app-widget-chart
+            [config]="configPro">
+        </app-widget-chart>
+    </div>
+    <div class="col-md-4">
+        <app-widget-chart
+            [config]="configMin">
+        </app-widget-chart>
+    </div>
+</div>
+
+<div class="table-responsive" *ngIf="(storeResumenActividades$ | async)[1]?.length > 0; else sinActividades">
+	<table class="table table-sm table-hover">
+        <thead class="text-white encabezados-tabla">
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Estudiante</th>
+                <th
+                    class="text-center"
+                    scope="col"
+                    *ngFor="let encabezados of (storeResumenActividades$ | async)[1]; index as i">
+                    Logro #{{ i + 1 }} <i class="fa fa-info-circle" aria-hidden="true" placement="top" [ngbTooltip]="encabezados.descripcion"></i>
+                </th>
+                <th scope="col">Nota final</th>
+			</tr>	
+        </thead>
+    
+        <tbody
+            class="contenido-tabla"
+            *ngIf="(storeResumenActividades$ | async)?.length > 0">
+            <tr 
+                *ngFor="let resumenLogro of (storeResumenActividades$ | async)[0]; index as i">
+                <th scope="row">{{ resumenLogro.index }}</th>
+                <td>
+                    {{ resumenLogro.persona.primer_nombre }}
+                    {{ resumenLogro.persona.segundo_nombre }}
+                    {{ resumenLogro.persona.primer_apellido }}
+                    {{ resumenLogro.persona.segundo_apellido }}
+                </td>
+                <td class="text-center" *ngFor="let logro of resumenLogro?.logros">{{ logro.nota || 0 }}</td>
+                <td>{{ resumenLogro.nota }}</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<div *ngIf="notaService.loading$ | async">
+    <div class="d-flex w-100 flex-column justify-content-center align-items-center" *ngIf="notaService.loading$ | async">
+        <div class="spinner-border" role="status" aria-hidden="true"></div>
+        <strong class="text-dark">Cargando...</strong>
+    </div>
+</div>
+
+<ng-template #sinActividades>
+    <p>
+        <ngb-alert
+            [type]="'info'"
+            [dismissible]="false">
+            <strong>Nota!</strong> No hay actividades para el logro seleccionado.
+        </ngb-alert>
+    </p>
+</ng-template>
+
+<div class="d-flex justify-content-between pt-2">
+    <ngb-pagination
+        [collectionSize]="collectionSize$ | async"
+        [(page)]="notaService.page"
+        [pageSize]="notaService.pageSize"
+        (pageChange)="onPageChange($event)"
+        [maxSize]="5"
+        [rotate]="true"
+        [ellipses]="false"
+        [boundaryLinks]="true">
+    </ngb-pagination>
+
+    <div *ngIf="(collectionSize$ | async) === 0; then thenBlock else elseBlock"></div>
+    <ng-template #thenBlock>
+        <div>Mostrando 0 a 0 de 0 resultados</div>
+    </ng-template>
+    <ng-template #elseBlock>
+        <div>
+            Mostrando {{ (notaService.page - 1) * notaService.pageSize + 1 }} a {{ notaService.validateOffset() }} de {{ collectionSize$ | async }} resultados
+        </div>
+    </ng-template>
+</div>

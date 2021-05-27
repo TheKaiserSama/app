@@ -1,0 +1,25 @@
+.contenido-tabla {
+    font-size: 14px;
+}
+
+.encabezados-tabla tr th {
+    color: white;
+    font-size: 14px;
+    background-color: #373A3C;
+    // height: 38px;
+}
+
+.tableFixHead { overflow-y: auto; height: 411px; }
+.tableFixHead thead th { position: sticky; top: 0; }
+
+.contenedor-filtros {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.contenedor-filtros__titulo, .contenedor-filtros__control {
+    display: block;
+    width: 100px;
+}

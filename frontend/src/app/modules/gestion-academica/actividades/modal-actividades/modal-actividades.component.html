@@ -1,0 +1,27 @@
+<ng-template #content let-modal>
+	<div class="modal-header">
+		<h6
+			class="modal-title"
+			id="modal-basic-title">
+			Administración de actividades
+		</h6>
+		<button
+			type="button"
+			class="close"
+			aria-label="Close"
+			(click)="closeModal(modal)">
+			<span aria-hidden="true">&times;</span>
+		</button>
+	</div>
+		
+	<div class="modal-body">
+		<div class="row">
+            <div class="col-4">
+                <app-form-actividad></app-form-actividad>
+            </div>
+            <div class="col-8">
+                <app-info-provisional-actividades></app-info-provisional-actividades>
+            </div>
+        </div>
+	</div>
+</ng-template>

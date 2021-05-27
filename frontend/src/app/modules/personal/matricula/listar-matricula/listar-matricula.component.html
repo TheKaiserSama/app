@@ -1,0 +1,220 @@
+<div class="filtros">
+    <div class="row">
+        <div class="col-md-12">
+            <h5 class="h5">Filtros de busqueda</h5>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="form-group col-md-4 container-control">
+            <label for="anio_lecivo">Año de matricula</label>
+            <select
+                class="form-control form-control-sm"
+                name="anio_lecivo"
+                id="anio_lecivo"
+                [formControl]="anio_lecivo"
+                (ngModelChange)="handleAnioMatricula($event)">
+                <option value="null" selected>Todos los años</option>
+                <option
+                    *ngFor="let anioLectivo of aniosLectivos$ | async"
+                    [ngValue]="anioLectivo">
+                    {{ anioLectivo.anio_actual }}
+                </option>
+            </select>
+        </div>
+        
+        <div class="form-group col-md-4 container-control">
+            <label for="grado">Grado</label>
+            <select
+                class="form-control form-control-sm"
+                name="grado"
+                [formControl]="grado"
+                id="grado"
+                (ngModelChange)="handleGrado($event)">
+                <option value="null" selected>Todos los grados</option>
+                <option
+                    *ngFor="let grado of grados$ | async"
+                    [ngValue]="grado">
+                    {{ grado.grado }}
+                </option>
+            </select>
+        </div>
+
+        <div class="form-group col-md-4 container-control">
+            <label for="grupo">Grupo</label>
+            <select
+                class="form-control form-control-sm"
+                name="grupo"
+                id="grupo"
+                [formControl]="grupo"
+                (ngModelChange)="handleGrupo($event)">
+                <option value="null" selected>Todos los grupos</option>
+                <option
+                    *ngFor="let grupo of grupos$ | async"
+                    [ngValue]="grupo">
+                    {{ grupo.descripcion }}
+                </option>
+            </select>
+        </div>
+
+        <!-- <div class="form-group col-md-3 container-control">
+            <label for="vigente">Vigente</label>
+            <select
+                class="form-control form-control-sm"
+                name="seleccion"
+                id="vigente"
+                (change)="onChangeVigente($event.target.value)">
+                <option value="null" disabled selected>Seleccione vigente</option>
+                <option [value]="true">Si</option>
+                <option [value]="false">No</option>
+            </select>
+        </div> -->
+    </div>
+</div>
+
+<form autocomplete="off">
+    <div class="form-row">
+        <div class="col-6 busqueda__campo">
+            <div class="input-group input-group-sm">
+                <div class="input-group-prepend">
+                    <span class="input-group-text">
+                        <i class="fa fa-search" aria-hidden="true"></i>
+                    </span>
+                </div>
+                <input
+                    type="text"
+                    class="form-control"
+                    [formControl]="filter"
+                    placeholder="Primer nombre, primer apellido o N° de documento">
+            </div>
+        </div>
+        
+        <div class="form-group col-md-3 ml-md-auto container-control">
+            <select
+                class="form-control form-control-sm"
+                [(ngModel)]="matriculaService.pageSize"
+                name="seleccion"
+                (change)="onChangePageSize($event.target.value)">
+                <option [value]="10">10 registros</option>
+                <option [value]="15">15 registros</option>
+                <option [value]="20">20 registros</option>
+            </select>
+        </div>
+    </div>
+</form>
+
+<div class="table-responsive">
+	<table class="table table-sm table-striped">
+        <thead class="bg-dark encabezados-tabla">
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">N° documento</th>
+                <th scope="col">Nombres</th>
+                <th scope="col">Apellidos</th>
+                <th scope="col">Fecha matricula</th>
+                <th scope="col" class="text-center">Grado/Grupo</th>
+                <th scope="col">N° Celular</th>
+                <th scope="col">Dirección</th>
+                <th scope="col">Estado matricula</th>
+                <th scope="col">Estado estudiante</th>
+                <th scope="col">Acción</th>
+			</tr>	
+        </thead>
+    
+        <tbody class="contenido-tabla" *ngIf="(matriculas$ | async)?.length > 0">
+            <tr *ngFor="let matricula of (matriculas$ | async); index as i">
+                <th scope="row">{{ matricula.index }}</th>
+                <td>
+                    <ngb-highlight 
+                        [highlightClass]="'resaltar'"
+                        [result]="matricula.estudiante['persona'].documento"
+                        [term]="filter.value">
+                    </ngb-highlight>
+                </td>
+                <td>
+                    <ngb-highlight
+                        [highlightClass]="'resaltar'"
+                        [result]="matricula.estudiante['persona'].primer_nombre"
+                        [term]="filter.value">
+                    </ngb-highlight> {{ matricula.estudiante['persona'].segundo_nombre }}
+                </td>
+                <td>
+                    <ngb-highlight
+                        [highlightClass]="'resaltar'"
+                        [result]="matricula.estudiante['persona'].primer_apellido"
+                        [term]="filter.value">
+                    </ngb-highlight> {{ matricula.estudiante['persona'].segundo_apellido }}
+                </td>
+                <td>{{ matricula.fecha_registro }}</td>
+                <td class="text-center">
+                    {{ matricula.curso.grado.grado }}° {{ matricula.curso.grupo.descripcion }}
+                </td>
+                <td>{{ matricula.estudiante['persona'].numero_celular }}</td>
+                <td>{{ matricula.estudiante['persona'].direccion }}</td>
+                <td>{{ matricula.estado_matricula.descripcion }}</td>
+                <td>
+                    <span class="badge badge-primary">{{ matricula.estudiante.estado_estudiante.descripcion }}</span>
+                </td>
+                <td>
+                    <button
+                        class="btn btn-info btn-sm mr-1"
+                        (click)="updateMatricula(matricula)"
+                        placement="top"
+                        ngbTooltip="Actualizar matricula">
+                        <i class="fa fa-pencil" aria-hidden="true"></i>
+                    </button>
+                    <button
+                        class="btn btn-danger btn-sm"
+                        (click)="destroyMatricula(matricula)"
+                        placement="top"
+                        ngbTooltip="Eliminar matricula">
+                        <i class="fa fa-times" aria-hidden="true"></i>
+                    </button>
+                </td>
+            </tr>  
+        </tbody>
+    </table>
+</div>
+
+<div class="d-flex flex-column justify-content-center align-items-center" *ngIf="matriculaService.loading$ | async">
+    <div class="spinner-border" role="status" aria-hidden="true"></div>
+    <strong class="text-dark">Cargando...</strong>
+</div>
+
+<ng-container *ngIf="((matriculas$ | async)?.length == 0 && matriculaService.searchTerm == '')">
+    <p>
+        <ngb-alert [type]="'info'" [dismissible]="false">
+            <strong>Nota!</strong> No hay matriculas para mostrar.
+        </ngb-alert>
+    </p>
+</ng-container>
+
+<ngb-alert
+    *ngIf="((collectionSize$ | async) === 0) && matriculaService.searchTerm != ''"
+    [type]="'primary'"
+    [dismissible]="false">
+    No se encontraron resultados para el termino: "{{ matriculaService.searchTerm }}"
+</ngb-alert>
+
+<div class="d-flex justify-content-between p-2">
+    <ngb-pagination
+        [collectionSize]="collectionSize$ | async"
+        [(page)]="matriculaService.page"
+        [pageSize]="matriculaService.pageSize"
+        (pageChange)="onPageChange($event)"
+        [maxSize]="5"
+        [rotate]="true"
+        [ellipses]="false"
+        [boundaryLinks]="true">
+    </ngb-pagination>
+
+    <div *ngIf="(collectionSize$ | async) === 0; then thenBlock else elseBlock"></div>
+    <ng-template #thenBlock>
+        <div>Mostrando 0 a 0 de 0 resultados</div>
+    </ng-template>
+    <ng-template #elseBlock>
+        <div>
+            Mostrando {{ (offset$ | async) + 1 }} a {{ validateOffset() }} de {{ collectionSize$ | async }} resultados
+        </div>
+    </ng-template>
+</div>

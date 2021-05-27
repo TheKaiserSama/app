@@ -1,0 +1,54 @@
+<h3 class="mb-4">Notas</h3>
+
+<div class="form-row busqueda mb-2">
+    <div class="col-md-4">
+        <select
+            class="form-control form-control-sm mr-2"
+            name="ctrCurso"
+            [formControl]="ctrCurso"
+            (ngModelChange)="handleCurso($event)"
+            [compareWith]="compareFn">
+            <option [ngValue]="null" disabled selected>Seleccione un curso</option>
+            <option 
+                *ngFor="let matricula of matriculasPorEstudiante$ | async"
+                [ngValue]="matricula">
+                {{ matricula.curso.grado.grado }}º {{ matricula.curso.grupo.descripcion }} -
+                {{ matricula.curso.anio_lectivo.anio_actual }} -
+                {{ matricula.curso.jornada.nombre }}
+            </option>
+        </select>
+    </div>
+</div>
+
+<table class="table table-sm">
+    <thead class="text-center">
+        <tr class="header-table">
+            <th>Materia</th>
+            <th>N° Logro</th>
+            <th *ngFor="let encabezado of encabezadosTabla">{{ encabezado }}</th>
+        </tr>
+    </thead>
+
+    <ng-container *ngFor="let materia of (notasPorMateria$ | async); let idx = index;">
+        <tr>
+            <td class="vertical-align" [attr.rowspan]="materia.longitud + 1">{{ materia.materia }}</td>
+        </tr>
+
+        <div *ngIf="logrosPorPeriodo[idx].length > 0; then showLogros else defaultTemplate"></div>
+        
+        <ng-template #showLogros>
+            <tr 
+                *ngFor="let contador of logrosPorPeriodo[idx]; let i = index;"
+                my-tr [index]="i" [materia]="materia">
+            </tr>
+        </ng-template>
+
+        <ng-template #defaultTemplate>
+            <tr>
+                <td class="text-center">Sin asignar</td>
+                <td *ngFor="let encabezado of encabezadosTabla"></td>
+            </tr>
+        </ng-template>
+        
+    </ng-container>
+</table>
